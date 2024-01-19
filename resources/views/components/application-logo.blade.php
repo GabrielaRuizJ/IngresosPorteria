@@ -1,0 +1,1 @@
+<img src="{{ asset('/build/assets/images/loogopv.webp') }}" {{ $attributes }}>
