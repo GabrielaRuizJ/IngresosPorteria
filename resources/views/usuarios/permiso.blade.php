@@ -11,9 +11,7 @@
 $heads = [
     'ID',
     'Nombre',
-    'Acciones',
 ];
-
 
 @endphp
 
@@ -24,26 +22,19 @@ $heads = [
             <tr>
                 <td>{{$role->id}}</td>
                 <td>{{$role->name}}</td>
-                {{$role->id}}
-                <td>
-                    
-                    <a href="{{route('role.edit')}}" class="btn btn-xs btn-default text-primary mx-1 shadow">
-                        <i class="fa fa-lg fa-fw fa-pen"></i>
-                    </a>
-                </td>
             </tr>
         @endforeach
     </x-adminlte-datatable>
 
-<x-adminlte-modal id="myModal" title="Nuevo registro de roles" theme="primary"
+<x-adminlte-modal id="myModal" title="Nuevo registro de permisos" theme="primary"
     icon="fas fa-bolt" size='lg' disable-animations>
-    <form action="{{route('role.create')}}" method="POST">
+    <form action="{{route('permiso.create')}}" method="POST">
         @csrf
         <div class="row">
-            <x-adminlte-input name="nombrerol" label="Nombre del rol" placeholder="Administrador"
+            <x-adminlte-input name="nombrepermiso" label="Nombre del rol" placeholder="Especificar el permiso"
                 fgroup-class="col-md-6" disable-feedback/>
         </div>
-        <x-adminlte-button type="submit" label="Guardar rol" theme="primary" icon="fas fa-key"/>
+        <x-adminlte-button type="submit" label="Guardar permiso" theme="primary" icon="fas fa-key"/>
     </form>
 </x-adminlte-modal>
 

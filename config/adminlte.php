@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -311,17 +311,44 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
-        ['header' => 'Usuarios'],
-        [
-            'text'        => 'Usuarios',
-            'route'         => 'user',
-            'icon'        => 'far fa-fw fa-file',
+        ['text' => 'Usuarios',
+            'submenu'=>[
+                [
+                    'text'        => 'Usuarios',
+                    'route'         => 'user',
+                    'icon'        => 'far fa-fw fa-file',
+                ],[
+                    'text'        => 'Roles',
+                    'route'         => 'role',
+                    'icon'        => 'far fa-fw fa-file',
+                ],[
+                    'text'        => 'Permisos',
+                    'route'         => 'permiso',
+                    'icon'        => 'far fa-fw fa-file',
+                ],
+            ],
         ],
         [
-            'text'        => 'Roles',
-            'route'         => 'role',
-            'icon'        => 'far fa-fw fa-file',
-        ],
+            'text'=>'Parámetros del sistema',
+            'icon'=>'fas fa-cogs',
+            'submenu'=>[
+                [
+                    'text'=>'Clubes',
+                    'route'=>'clubes',
+                    'icon'=>'fas fa-tasks',
+                ],
+                [
+                    'text'=>'Paises',
+                    'route'=>'paises',
+                    'icon'=>'fas fa-flag',
+                ],
+                [
+                    'text'=>'Ciudades',
+                    'route'=>'ciudades',
+                    'icon'=>'fas fa-city',
+                ],
+            ],
+        ],        
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
