@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:30'],
             'cedula' => ['required', 'string', 'max:30'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['required','string', 'email', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -44,12 +44,14 @@ class RegisteredUserController extends Controller
             'cedula' => $request->cedula,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'estado'=> $request->estado,
         ]);
 
-        event(new Registered($user));
+        //event(new Registered($user));
 
-        Auth::login($user);
+        //Auth::login($user);
+        //return redirect(RouteServiceProvider::HOME);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('user');
     }
 }

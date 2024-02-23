@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre',120)->unique();
             $table->unsignedBigInteger('id_pais');
-            $table->foreign('id_pais')->references('id')->on('pais');
+            $table->foreign('id_pais')->references('id')->on('pais')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -28,12 +30,9 @@ return new class extends Migration
      * @return void
      */
     public function down()
-    {        
-        Schema::table('ciudad', function (Blueprint $table) {
-            $table->dropForeign(['id_pais']);
-            $table->dropColumn('id_pais');
-        });
+    {   
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Schema::dropIfExists('ciudad');
-
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 };

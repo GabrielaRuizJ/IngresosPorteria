@@ -211,7 +211,7 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
+    'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
@@ -311,20 +311,22 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
-        ['text' => 'Usuarios',
+        [   'text' => 'Usuarios',
+            'icon' => 'fas fa-users-cog',
+            'can'  => 'user',
             'submenu'=>[
                 [
                     'text'        => 'Usuarios',
                     'route'         => 'user',
-                    'icon'        => 'far fa-fw fa-file',
+                    'icon'        => 'fas fa-users',
                 ],[
                     'text'        => 'Roles',
                     'route'         => 'role',
-                    'icon'        => 'far fa-fw fa-file',
+                    'icon'        => 'fas fa-people-arrows',
                 ],[
                     'text'        => 'Permisos',
                     'route'         => 'permiso',
-                    'icon'        => 'far fa-fw fa-file',
+                    'icon'        => 'fas fa-user-lock',
                 ],
             ],
         ],
@@ -333,23 +335,50 @@ return [
             'icon'=>'fas fa-cogs',
             'submenu'=>[
                 [
-                    'text'=>'Clubes',
-                    'route'=>'clubes',
-                    'icon'=>'fas fa-tasks',
-                ],
-                [
                     'text'=>'Paises',
                     'route'=>'paises',
                     'icon'=>'fas fa-flag',
+                    'can' =>'paises'
                 ],
                 [
                     'text'=>'Ciudades',
                     'route'=>'ciudades',
                     'icon'=>'fas fa-city',
                 ],
+                [
+                    'text'=>'Clubes',
+                    'route'=>'clubes',
+                    'icon'=>'fas fa-hotel',
+                ],
+                [
+                    'text'=>'Tipos de ingreso',
+                    'route'=>'tipo_ingreso',
+                    'icon'=>'fas fa-door-open',
+                    'can' =>'tipo_ingreso'
+                ],
+                [
+                    'text'=>'Tipos de vehiculos',
+                    'route'=>'tipo_vehiculo',
+                    'icon'=>'fas fa-car',
+                    'can' =>'tipo_vehiculo'
+                ],
             ],
-        ],        
-        ['header' => 'account_settings'],
+        ],  
+        [
+            'text'=>'Ingresos',
+            'icon'=>'fas fa-sign-in-alt',
+            'submenu'=>[
+
+            ]
+        ],
+        [
+            'text'=>'Reportes',
+            'icon'=>'fas fa-file-download',
+            'submenu'=>[
+                
+            ]
+        ],
+        /*['header' => 'account_settings'],
         [
             'text' => 'profile',
             'url'  => 'admin/settings',
@@ -413,7 +442,7 @@ return [
             'text'       => 'information',
             'icon_color' => 'cyan',
             'url'        => '#',
-        ],
+        ],*/
     ],
 
     /*
@@ -497,12 +526,17 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css',
                 ],
             ],
         ],
@@ -518,6 +552,16 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'BsCustomFileInput' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
                 ],
             ],
         ],

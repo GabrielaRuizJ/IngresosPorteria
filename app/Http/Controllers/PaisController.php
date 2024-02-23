@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\Pais;
+use App\Imports\PaisImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaisController extends Controller
 {
@@ -25,11 +28,49 @@ class PaisController extends Controller
 
     public function store(Request $request)
     {
-        // Lógica para guardar un nuevo elemento
-        $pais = Pais::create(['nombre_pais' => $request->input('nombre_pais')]);
-        return back();
+        if ($request->hasFile('paises_import')) {
+            try{
+                $validator = Validator::make($request->all(), [
+                    'paises_import' => 'required|mimes:csv,txt|max:10240',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()
+                        ->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }else{
+                    try{
+                        $file  = $request->file('paises_import');
+                        Excel::import(new PaisImport,$file);  
+                        $mensaje = "Los datos fueron importados con exito";
+                        session()->flash('mensaje',$mensaje);
+                        return redirect()->route('paises');
+                    }catch (\Exception $e) {
+                        dd($e->getMessage());
+                    }
+                }
+                
+            }catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+            
+        }else{
+            $validator = Validator::make($request->all(), [
+                'nombre_pais' => 'required|unique:pais,nombre_pais',
+            ]);
+            if ($validator->fails()) {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }else{
+                
+                $pais = Pais::create(['nombre_pais' => $request->input('nombre_pais')]);
+                $mensaje = "Pais creado correctamente";
+                return redirect()->route('paises')->with('mensaje',$mensaje);
+            }
+        }
     }
-
     public function edit($id)
     {
         // Lógica para mostrar el formulario de edición

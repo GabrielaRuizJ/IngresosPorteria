@@ -4,11 +4,11 @@
     <h1>Administración de ciudades</h1>
 @endsection
 @section('content')
-    <form action="ciudad.update" method="post">
+    <form action="{{route('ciudad.update',3)}}" method="post">
         @csrf
         <div class="row">
             @foreach ($ciudades as $ciudad)
-                <x-adminlte-input style="width:100%Qimportant" name="nombre" value="{{$ciudad->nombreciudad}}" required label="Nombre de la ciudad"/>
+                <x-adminlte-input style="width:100%!important" name="nombre" value="{{$ciudad->nombreciudad}}" required label="Nombre de la ciudad"/>
             @endforeach
             <select name="id_pais" class="form-control">
                 @foreach ($ciudades as $ciudad1)

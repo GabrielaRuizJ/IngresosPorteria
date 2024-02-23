@@ -1,14 +1,18 @@
 @extends('adminlte::page')
 @section('title','Dashboard')
 @section('content_header')
-    <h1>Administración de ciudades</h1>
+@can('ciudad.create')
+    <x-adminlte-button label="Nueva ciudad" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalciudad" class="float-right" />
+@endcan
+
+    <h1><li class="fas fa-city"></li> Administración de ciudades</h1>
 @endsection
 @section('content')
     @php
         $heads = [
             'ID','nombre del la ciudad','pais','' ];
     @endphp
-<x-adminlte-button label="Nueva ciudad" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalciudad" class="float-right" />
+
 <x-adminlte-datatable id="table1" :heads="$heads">
     @foreach ($ciudades as $ciudad)
     <tr>
@@ -33,13 +37,20 @@
             </select>
         </div>
         <hr>
-        <x-adminlte-button type="submit" label="Guardar pais" theme="primary" icon="fas fa-key"/>
+        <x-adminlte-button type="submit" label="Guardar ciudad" theme="primary" icon="fas fa-city"/>
     </form>
 </x-adminlte-modal>
 @endsection
-@section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
-@endsection
-@section('js')
 
-@endsection
+
+@section('js')
+    @if (isset($mensaje))
+    <script>
+        Swal.fire({
+            title:'Correcto',
+            icon:'success',
+            text:"{{$mensaje}}"
+        });
+    </script>
+    @endif
+@stop
