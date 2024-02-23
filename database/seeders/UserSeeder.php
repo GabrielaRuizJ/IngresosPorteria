@@ -25,11 +25,20 @@ class UserSeeder extends Seeder
         ])->assignRole('Admin');
 
         User::create([
-            'name'=>'Gabriela Ruiz J',
-            'username'=>'gabydev',
-            'cedula'=>'1000127737',
-            'email'=>'gabrielazenm@gmail.com',
-            'password'=>bcrypt('1000127737'),
+            'name'=>'Administrador del sistema',
+            'username'=>'administrador',
+            'cedula'=>'832002372',
+            'email'=>'sistemas@clubpuebloviejo.com',
+            'password'=>bcrypt('832002372'),
+            'estado'=>true
+        ])->assignRole('Admin');
+
+        User::create([
+            'name'=>'Gerencia',
+            'username'=>'gerencia',
+            'cedula'=>'832002372',
+            'email'=>'sistemas@clubpuebloviejo.com',
+            'password'=>bcrypt('832002372'),
             'estado'=>true
         ])->assignRole('Gerencia');
         
