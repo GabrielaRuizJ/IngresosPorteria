@@ -34,7 +34,9 @@
                     </div> 
             @endforeach
         <hr>
+        @role('Admin')
         <x-adminlte-button type="submit" label="Actualizar datos del permiso" theme="primary" icon="fas fa-key"/>
+        @endrole
     </form>
 @endsection
 

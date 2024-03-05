@@ -25,8 +25,8 @@ class TipoVehiculoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
             }else{
-                $request->session()->flash('mensaje', 'Tipo de vehiculo creado correctamente');
                 $tipoingreso = Tipo_vehiculo::create(['nombre_vehiculo'=>$request->input('nombre_vehiculo')]);
+                $request->session()->flash('mensaje', 'Tipo de vehiculo creado correctamente');
                 return redirect()->route('tipo_vehiculo');
             }
         } catch (\Exception $e) {

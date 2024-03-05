@@ -35,7 +35,9 @@
                 @endforeach
             </div>        
         <hr>
-        <x-adminlte-button type="submit" label="Actualizar datos del rol" theme="primary" icon="fas fa-key"/>
+        @role('Admin')
+            <x-adminlte-button type="submit" label="Actualizar datos del rol" theme="primary" icon="fas fa-key"/>
+        @endrole
     </form>
 @endsection
 

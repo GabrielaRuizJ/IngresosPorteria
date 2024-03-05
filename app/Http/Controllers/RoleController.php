@@ -17,35 +17,6 @@ class RoleController extends Controller
         return view('usuarios.role',compact('roles','permisos'));
     }
 
-    public function create(Request $request){
-        try{
-            $validator = Validator::make($request->all(), [
-                'nombre' => 'required|unique:roles,name',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }else{
-                $permisos_add = $request->input('id_permiso',[]);
-                $role = Role::create(['name' => $request->input('nombre')]);
-                if($permisos_add){
-                    $role->syncPermissions($permisos_add);
-                }
-
-                $roles = Role::all();
-                $permisos = Permission::all();
-                $mensaje = "Se agregó el dato correctamente";
-                return view('usuarios.role',compact('roles','permisos','mensaje'));
-            }
-            
-            
-        }catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-    }
 
     public function edit($id){
 
@@ -87,8 +58,32 @@ class RoleController extends Controller
         }
     }
 
-    public function store(){
+    public function store(Request $request){
+        try{
+            $validator = Validator::make($request->all(), [
+                'nombre' => 'required|unique:roles,name',
+            ]);
 
+            if ($validator->fails()) {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }else{
+                $permisos_add = $request->input('id_permiso',[]);
+                $role = Role::create(['name' => $request->input('nombre')]);
+                if($permisos_add){
+                    $role->syncPermissions($permisos_add);
+                }
+                
+                $request->session()->flash('mensaje', 'Rol creado correctamente');
+                return redirect()->route('role');
+            }
+            
+            
+        }catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
     public function show(){

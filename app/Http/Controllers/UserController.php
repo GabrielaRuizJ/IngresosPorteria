@@ -81,9 +81,8 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                     'estado'=> $request->estado,
                 ]);
-
-                $mensaje = "Usuario creado correctamente";
-                return view('usuarios.user',compact('mensaje', 'datos'));
+                $request->session()->flash('mensaje', 'Usuario creado correctamente');
+                return redirect()->route('user');
         }
     }
 

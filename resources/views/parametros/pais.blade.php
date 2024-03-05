@@ -9,7 +9,7 @@
             'ID','nombre del país', ];
     @endphp
     @section('plugins.BsCustomFileInput', true)
-@role('Admin')
+@role('pais.create')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Nuevo pais" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalpais" class="float-right" />
     &nbsp;&nbsp;
@@ -52,12 +52,12 @@
 
 @endsection
 @section('js')
-    @if (isset($mensaje))
+    @if(session()->has('mensaje'))
     <script>
         Swal.fire({
             title:'Correcto',
             icon:'success',
-            text:"{{$mensaje}}"
+            text:"{{session('mensaje')}}"
         });
     </script>
     @endif

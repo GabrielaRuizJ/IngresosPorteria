@@ -316,17 +316,20 @@ return [
             'can'  => 'user',
             'submenu'=>[
                 [
-                    'text'        => 'Usuarios',
-                    'route'         => 'user',
-                    'icon'        => 'fas fa-users',
+                    'text'      => 'Usuarios',
+                    'route'     => 'user',
+                    'icon'      => 'fas fa-users',
+                    'can'       => 'user',
                 ],[
-                    'text'        => 'Roles',
-                    'route'         => 'role',
-                    'icon'        => 'fas fa-people-arrows',
+                    'text'      => 'Roles',
+                    'route'     => 'role',
+                    'icon'      => 'fas fa-people-arrows',
+                    'can'       => 'role',
                 ],[
-                    'text'        => 'Permisos',
-                    'route'         => 'permiso',
-                    'icon'        => 'fas fa-user-lock',
+                    'text'      => 'Permisos',
+                    'route'     => 'permiso',
+                    'icon'      => 'fas fa-user-lock',
+                    'can'       => 'permiso',
                 ],
             ],
         ],
@@ -368,7 +371,11 @@ return [
             'text'=>'Ingresos',
             'icon'=>'fas fa-sign-in-alt',
             'submenu'=>[
-
+                [
+                    'text'=>'Realizar ingresos',
+                    'route'=>'ingresos',
+                    'icon'=>'fas fa-door-open',
+                ],
             ]
         ],
         [

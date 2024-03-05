@@ -24,8 +24,9 @@ class TipoIngresoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
             }else{
-                $request->session()->flash('mensaje', 'Tipo de ingreso creado correctamente');
                 $tipoingreso = Tipo_Ingreso::create(['nombre_ingreso'=>$request->input('nombre_ingreso')]);
+                
+                $request->session()->flash('mensaje', 'Tipo de ingreso creado correctamente');
                 return redirect()->route('tipo_ingreso');
             }
         } catch (\Exception $e) {

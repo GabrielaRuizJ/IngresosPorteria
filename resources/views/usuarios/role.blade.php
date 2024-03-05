@@ -72,9 +72,10 @@ $heads = [
                         </div>
                     </div> 
                 @endif
-                   
             @endforeach
-        <x-adminlte-button type="submit" label="Guardar rol" theme="primary" icon="fas fa-people-arrows"/>
+        @role('Admin')
+            <x-adminlte-button type="submit" label="Guardar rol" theme="primary" icon="fas fa-people-arrows"/>
+        @endrole
     </form>
 </x-adminlte-modal>
 
@@ -82,12 +83,12 @@ $heads = [
 @stop
 
 @section('js')
-    @if (isset($mensaje))
+    @if(session()->has('mensaje'))
     <script>
         Swal.fire({
             title:'Correcto',
             icon:'success',
-            text:"{{$mensaje}}"
+            text:"{{session('mensaje')}}"
         });
     </script>
     @endif

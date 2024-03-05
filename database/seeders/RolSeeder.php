@@ -29,12 +29,14 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'permiso.create'])->assignRole($role1);
         
         Permission::create(['name'=>'paises'])->syncRoles([$role1,$role2]);
+        Permission::create(['name'=>'paise.create'])->syncRoles([$role1,$role2]);
 
         Permission::create(['name'=>'ciudades'])->syncRoles([$role1,$role2]);
         Permission::create(['name'=>'ciudad.create'])->assignRole($role1);
         Permission::create(['name'=>'ciudad.edit'])->assignRole($role1);
 
         Permission::create(['name'=>'clubes'])->syncRoles([$role1,$role2]);
+        Permission::create(['name'=>'club.create'])->syncRoles([$role1,$role2]);
         
     }
 }

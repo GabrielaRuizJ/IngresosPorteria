@@ -44,12 +44,12 @@
 
 
 @section('js')
-    @if (isset($mensaje))
+    @if(session()->has('mensaje'))
     <script>
         Swal.fire({
             title:'Correcto',
             icon:'success',
-            text:"{{$mensaje}}"
+            text:"{{session('mensaje')}}"
         });
     </script>
     @endif

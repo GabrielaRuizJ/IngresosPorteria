@@ -9,6 +9,7 @@ use App\Http\Controllers\PaisController;
 use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\TipoIngresoController;
 use App\Http\Controllers\TipoVehiculoController;
+use App\Http\Controllers\IngresoController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,9 +54,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/usuarios/permiso/{id}',[PermissionController::class,'edit'])->name('permiso.edit');
     Route::post('/usuarios/permiso/{id}',[PermissionController::class,'update'])->name('permiso.update');
 
-    Route::get('/parametros/club',[ClubController::class,'index'])->name('clubes');
-    Route::post('/parametros/club',[ClubController::class,'store'])->name('club.create');
-
     Route::get('/parametros/pais',[PaisController::class,'index'])->name('paises');
     Route::post('/parametros/pais',[PaisController::class,'store'])->name('pais.store');
     
@@ -64,17 +62,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/parametros/ciudadEdit/{idc}{idp}',[CiudadController::class,'edit'])->name('ciudad.edit');
     Route::post('/parametros/ciudadEdit/{id}',[CiudadController::class,'update'])->name('ciudad.update');
 
+    
+    Route::get('/parametros/club',[ClubController::class,'index'])->name('clubes');
+    Route::post('/parametros/club',[ClubController::class,'store'])->name('club.create');
+
     Route::get('/parametros/tipoIngreso',[TipoIngresoController::class,'index'])->name('tipo_ingreso');
     Route::post('/parametros/tipoIngreso',[TipoIngresoController::class,'store'])->name('tipo_ingreso.create');
 
     Route::get('/parametros/tipoVehiculo',[TipoVehiculoController::class,'index'])->name('tipo_vehiculo');
     Route::post('/parametros/tipoVehiculo',[TipoVehiculoController::class,'store'])->name('tipo_vehiculo.create');
 
+    Route::get('/ingresos/ingreso',[IngresoController::class,'index'])->name('ingresos');
+    Route::post('/ingresos/ingreso',[IngresoController::class,'store'])->name('ingresos');
 });
-/*Route::middleware('Role')->group(function () {
-   
-    //Route::get('/usuarios',[RoleController::class,'user'])->name('user');
-});*/
 
 
 require __DIR__.'/auth.php';

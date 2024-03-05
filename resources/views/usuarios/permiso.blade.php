@@ -3,9 +3,9 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-@can('permiso.create')
+@role('Admin')
     <x-adminlte-button label="Nuevo permiso" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#myModal" class="float-right"/>
-@endcan
+@endrole
     <h1><li class="fas fa-user-lock"></li> Listado de permisos</h1>
 @stop
 
@@ -48,7 +48,9 @@ $heads = [
                 <div class="row">
                     <x-adminlte-input name="nombrepermiso" required label="Nombre del permiso" fgroup-class="col-md-6" disable-feedback/>
                 </div>
-            <x-adminlte-button type="submit" label="Guardar permiso" theme="primary" icon="fas fa-key"/>
+            @role('Admin')
+                <x-adminlte-button type="submit" label="Guardar permiso" theme="primary" icon="fas fa-key"/>
+            @endrole
         </form>
     </x-adminlte-modal>
 

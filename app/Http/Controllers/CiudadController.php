@@ -31,8 +31,10 @@ class CiudadController extends Controller
             ]);
             
             $ciudad = Ciudad::create(['nombre'=>$request->input('nombre'),'id_pais'=>$request->input('id_pais')]);
-            $mensaje = "El registro se ha hecho correctamente";
-            return view("parametros.ciudad",compact('ciudades','paises','mensaje'));
+            
+            
+            $request->session()->flash('mensaje', 'Ciudad creada correctamente');
+            return redirect()->route('ciudades');
         
         } catch (\Exception $e) {
             dd($e->getMessage());

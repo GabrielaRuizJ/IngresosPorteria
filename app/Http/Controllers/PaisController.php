@@ -42,8 +42,7 @@ class PaisController extends Controller
                     try{
                         $file  = $request->file('paises_import');
                         Excel::import(new PaisImport,$file);  
-                        $mensaje = "Los datos fueron importados con exito";
-                        session()->flash('mensaje',$mensaje);
+                        session()->flash('mensaje',"Los datos fueron importados con exito");
                         return redirect()->route('paises');
                     }catch (\Exception $e) {
                         dd($e->getMessage());
@@ -67,7 +66,8 @@ class PaisController extends Controller
                 
                 $pais = Pais::create(['nombre_pais' => $request->input('nombre_pais')]);
                 $mensaje = "Pais creado correctamente";
-                return redirect()->route('paises')->with('mensaje',$mensaje);
+                session()->flash('mensaje',"Pais creado correctamente");
+                return redirect()->route('paises');
             }
         }
     }
