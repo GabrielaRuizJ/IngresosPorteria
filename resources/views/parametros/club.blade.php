@@ -6,14 +6,14 @@
 @section('content')
     @php
         $heads = [
-            'ID','nombre','direccion','telefono','email principal','ciudad', ];
+            'ID','nombre','direccion','telefono','email principal','ciudad','' ];
     @endphp
-@role('Admin')
+@can('club.create')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Nuevo club" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalClub" class="float-right" />
 </div>
+@endcan
 
-@endrole('Admin')
     <x-adminlte-datatable id="tableclub" :heads="$heads">
         @foreach ($clubes as $club)
         <tr>
@@ -23,6 +23,12 @@
             <td>{{$club->telefono}}</td>
             <td>{{$club->email1}}</td>
             <td>{{$club->ciudad}}</td>
+            <td>
+                @can('club.edit')
+                <a href="{{route('club.edit',['id'=>$club->id])}}" class="btn btn-xs btn-default text-primary mx-1 shadow">
+                    <i class="fa fa-lg fa-fw fa-pen"></i></a>
+                @endcan
+            </td>
         </tr>
         @endforeach
     </x-adminlte-datatable>
@@ -95,7 +101,9 @@
                     </x-adminlte-select>
                 </div-col>
             </div>
-            <x-adminlte-button type="submit" label="Guardar club" theme="primary" icon="fas fa-hotel" />
+            @can('club.create')
+                <x-adminlte-button type="submit" label="Guardar club" theme="primary" icon="fas fa-hotel" />
+            @endcan
         </form>
     </x-adminlte-modal>
 @endsection

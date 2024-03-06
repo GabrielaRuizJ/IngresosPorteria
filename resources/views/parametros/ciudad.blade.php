@@ -19,9 +19,12 @@
         <td>{{$ciudad->ciudad}}</td>
         <td>{{$ciudad->nombreciudad}}</td>
         <td>{{$ciudad->pais}}</td>
-        <td><a href="{{route('ciudad.edit',['idc'=>$ciudad->ciudad,'idp'=>$ciudad->idpais])}}" class="btn btn-xs btn-default text-primary mx-1 shadow">
-            <i class="fa fa-lg fa-fw fa-pen"></i>
-        </a></td>
+        <td>
+            @can('ciudad.edit')
+            <a href="{{route('ciudad.edit',['idc'=>$ciudad->ciudad,'idp'=>$ciudad->idpais])}}" class="btn btn-xs btn-default text-primary mx-1 shadow">
+            <i class="fa fa-lg fa-fw fa-pen"></i></a>
+            @endcan
+        </td>
     </tr>
     @endforeach
 </x-adminlte-datatable>
@@ -37,7 +40,9 @@
             </select>
         </div>
         <hr>
-        <x-adminlte-button type="submit" label="Guardar ciudad" theme="primary" icon="fas fa-city"/>
+        @can('ciudad.create')
+            <x-adminlte-button type="submit" label="Guardar ciudad" theme="primary" icon="fas fa-city"/>
+        @endcan
     </form>
 </x-adminlte-modal>
 @endsection

@@ -15,7 +15,7 @@
     </div>
     <form action="{{route('role.update',['id'=>$role->name])}}" method="post">
         @csrf
-            <div class="row">
+            <div class="col">
                 <x-adminlte-input readonly name="nombre" value="{{$role->name}}" required label="Nombre del rol"/>
             </div>
             <hr>

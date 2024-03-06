@@ -15,7 +15,7 @@
     </div>
     <form action="{{route('permiso.update',['id'=>$permiso->id])}}" method="post">
         @csrf
-            <div class="row">
+            <div class="col">
                 <x-adminlte-input readonly name="nombre" value="{{$permiso->name}}" required label="Nombre del permiso"/>
             </div>
             <hr>

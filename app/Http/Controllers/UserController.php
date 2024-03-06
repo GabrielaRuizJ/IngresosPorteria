@@ -128,10 +128,9 @@ class UserController extends Controller
 
                 $user = User::findOrFail($id);
                 $roles = Role::all();
-                $mensaje = 'Los datos se actualizaron de manera correcta';
-
                 $roles_usuario  = $user->roles->pluck('id')->toArray();
-                return view('usuarios.userEdit',compact('user','roles','roles_usuario','mensaje'));
+                $request->session()->flash('mensaje', 'Datos modificados correctamente');
+                return redirect()->route('user')->with('user','roles','roles_usuario');
             }
 
         } catch (\Exception $e) {

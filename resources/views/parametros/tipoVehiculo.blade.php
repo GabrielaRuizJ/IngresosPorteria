@@ -13,7 +13,7 @@
 @endrole
     @php
         $heads = [
-            'ID','nombre del tipo de ingreso','' ];
+            'ID','nombre del tipo de vehiculo','' ];
     @endphp
 
 <x-adminlte-datatable id="table1" :heads="$heads">
@@ -21,7 +21,10 @@
     <tr>
         <td>{{$tipovehiculo->id}}</td>
         <td>{{$tipovehiculo->nombre_vehiculo}}</td>
-        <td></td>
+        <td>
+            @can('tipo_vehiculo.edit')
+            @endcan
+        </td>
     </tr>
     @endforeach
 </x-adminlte-datatable>

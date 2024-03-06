@@ -30,7 +30,7 @@ class PermissionController extends Controller
         $rolesDisponibles = $roles->reject(function ($rol) use ($rolesAsignados) {
             return $rolesAsignados->has($rol->id);
         });
-        return redirect()->route('usuarios.permisoEdit')->with('permiso','rolesAsignados','rolesDisponibles');
+        return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
     }
     public function update(Request $request,$id){
         try{
@@ -53,7 +53,6 @@ class PermissionController extends Controller
                 $rolesAsignados = $permiso->roles;
                 $rolesDisponibles = Role::all()->diff($rolesAsignados);
                 $mensaje = 'Los datos se actualizaron de manera correcta';
-
                 return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
             }
 

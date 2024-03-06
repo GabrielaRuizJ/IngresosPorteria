@@ -21,7 +21,9 @@
             </select>
         </div>
         <hr>
-        <x-adminlte-button type="submit" label="Guardar cambios" theme="primary" icon="fas fa-key"/>
+        @can('ciudad.edit')
+            <x-adminlte-button type="submit" label="Guardar cambios" theme="primary" icon="fas fa-key"/>
+        @endcan
     </form>
 @endsection
 @section('css')

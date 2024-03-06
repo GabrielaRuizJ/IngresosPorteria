@@ -15,11 +15,11 @@ $heads = [
     'Acciones',
 ];
 @endphp
-@role("Admin")
+@can('role.create')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Nuevo rol" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#myModal" class="float-right"/>
 </div>
-@endrole
+@endcan
 <div class="container">
     @if ($errors->any())
         <div class="alert alert-warning" role="alert">
@@ -36,9 +36,11 @@ $heads = [
                 <td>{{$role->id}}</td>
                 <td>{{$role->name}}</td>
                 <td>
+                @can('role.edit')
                     <a href="{{route('role.edit',['id'=>$role->name])}}" class="btn btn-xs btn-default text-primary mx-1 shadow">
                         <i class="fa fa-lg fa-fw fa-pen"></i>
                     </a>
+                @endcan
                 </td>
             </tr>
         @endforeach
@@ -73,9 +75,9 @@ $heads = [
                     </div> 
                 @endif
             @endforeach
-        @role('Admin')
+        @can('role.edit')
             <x-adminlte-button type="submit" label="Guardar rol" theme="primary" icon="fas fa-people-arrows"/>
-        @endrole
+        @endcan
     </form>
 </x-adminlte-modal>
 

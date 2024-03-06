@@ -19,13 +19,13 @@ $heads = [
 
 @endphp
 @section('plugins.BsCustomFileInput', true)
-@role('Admin')
+@can('user.create')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Nuevo usuario" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalusuario" class="float-right" />
     &nbsp;&nbsp;
     <x-adminlte-button label="Cargar usuarios por CSV" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalimport" class="float-right" />
 </div>
-@endrole
+@endcan
 {{-- Minimal example / fill data using the component slot --}}
 <x-adminlte-datatable id="table1" :heads="$heads">
     @foreach($datos as $dato)
@@ -36,9 +36,11 @@ $heads = [
             <td>{{ $dato->cedula }}</td>
             <td>{{ $dato->email }}</td>
             <td>
+                @can('user.edit')
                 <a href="{{route('user.edit',['id'=>$dato->id])}}" class="btn btn-xs btn-default text-primary mx-1 shadow">
                     <i class="fa fa-lg fa-fw fa-pen"></i>
                 </a>
+                @endcan
             </td>
         </tr>
     @endforeach
@@ -135,9 +137,10 @@ $heads = [
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
         </div>
-
         <div class="row-md-12">
+            @can('user.create')
             <x-adminlte-button type="submit" label="Registrar usuario" theme="primary" icon="fas fa-user-plus"/>
+            @endcan
         </div>
     </form>
 
@@ -155,7 +158,9 @@ $heads = [
                 </x-slot>
             </x-adminlte-input-file>
         </div>
+        @can('user.create')
         <x-adminlte-button type="submit" label="Importar datos" theme="primary" icon="fas fa-file-import"/>
+        @endcan
     </form>
 </x-adminlte-modal>
 @stop

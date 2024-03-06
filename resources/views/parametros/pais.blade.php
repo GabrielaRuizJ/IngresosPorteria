@@ -6,22 +6,26 @@
 @section('content')
     @php
         $heads = [
-            'ID','nombre del país', ];
+            'ID','nombre del país','' ];
     @endphp
     @section('plugins.BsCustomFileInput', true)
-@role('pais.create')
+@can('pais.create')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Nuevo pais" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalpais" class="float-right" />
     &nbsp;&nbsp;
     <x-adminlte-button label="Cargar archivo con paises" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalimport" class="float-right" />
 </div>
-@endrole
+@endcan
 
 <x-adminlte-datatable id="table1" :heads="$heads">
     @foreach ($paises as $pais)
         <tr>
             <td>{{$pais->id}}</td>
             <td>{{$pais->nombre_pais}}</td>
+            <td>
+                @can('pais.edit')
+                @endcan
+            </td>
         </tr>
     @endforeach
 </x-adminlte-datatable>
@@ -46,7 +50,9 @@
                 </x-slot>
             </x-adminlte-input-file>
         </div>
-        <x-adminlte-button type="submit" label="Guardar listado de paises" theme="primary" icon="fas fa-key"/>
+        @can('pais.create')
+            <x-adminlte-button type="submit" label="Guardar listado de paises" theme="primary" icon="fas fa-key"/>
+        @endcan
     </form>
 </x-adminlte-modal>
 

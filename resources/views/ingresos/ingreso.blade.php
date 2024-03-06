@@ -40,41 +40,21 @@
                         <x-input-error :messages="$errors->get('placa_v')" class="mt-2" />
                 </div>
             </div>
-            <div class="row" id="ocupantes">
-
+            <div class="row" >
+                <hr>
+                <x-adminlte-input name="cedula" id="cedula" required label="Cedula del ocupante" fgroup-class="col-md-6"/>
+                <x-adminlte-input name="nombre" id="nombre" required label="Nombre del ocupante" fgroup-class="col-md-6"/>
+                <hr>
             </div>
-            <x-adminlte-button label="Agregar ocupante" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#myModal"/>
+            <x-adminlte-button icon="fas fa-plus" theme="primary" label="Agregar ocupante" />
         </form>
     </div>
 
-    <x-adminlte-modal id="myModal" title="Agregar datos del ocupante" theme="primary"
-        icon="fas fa-user-lock" size='lg' disable-animations>
-        <label>Tipo de ingreso:</label>    
-        <div class="row">
-                  
-                @foreach ($ingresos as $ingreso)
-                    <div class="col">
-                            <input type="radio" name="tipoingreso" value="{{ $ingreso->id }}">
-                        <label>{{ $ingreso->nombre_ingreso}}</label>&nbsp;&nbsp;&nbsp;
-                    </div>
-                @endforeach
-            
-        </div>
-        <div class="row">
-            <x-adminlte-input name="cedula" id="cedula" required label="Cedula del ocupante" fgroup-class="col-md-6"/>
-            <x-adminlte-input name="nombre" id="nombre" required label="Nombre del ocupante" fgroup-class="col-md-6"/>
-            <x-adminlte-button icon="fas fa-plus" theme="primary" onclick="h()" label="Agregar ocupante" />
-        </div>
-
-    </x-adminlte-modal>
 
 @stop
 
 @section('js')
     <script>
-        function h(){
-            alert("hola");
-        }
      /*   $.ajax({
                 url: 'http://servicio-externo.com/ruta',
                 type: 'POST',

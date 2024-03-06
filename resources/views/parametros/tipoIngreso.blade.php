@@ -7,10 +7,10 @@
     <h1><li class="fas fa-door-open"></li> Administración de tipos de ingreso</h1>
 @endsection
 @section('content')
-@role('Admin')
+@can('tipo_ingreso')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Nuevo tipo de ingreso" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalpais" class="float-right" /></div>
-@endrole
+@endcan
     @php
         $heads = [
             'ID','nombre del tipo de ingreso','' ];
@@ -21,7 +21,10 @@
     <tr>
         <td>{{$tipoingreso->id}}</td>
         <td>{{$tipoingreso->nombre_ingreso}}</td>
-        <td></td>
+        <td>
+            @can('tipo_ingreso.edit')
+            @endcan
+        </td>
     </tr>
     @endforeach
 </x-adminlte-datatable>
@@ -31,7 +34,9 @@
         <div class="row-md-12">
             <x-adminlte-input required name="nombre_ingreso" label="Nombre del tipo de ingreso"/>
         </div>
-        <x-adminlte-button type="submit" label="Guardar tipo de ingreso" theme="primary" icon="fas fa-door-open"/>
+        @can('tipo_ingreso.create')
+            <x-adminlte-button type="submit" label="Guardar tipo de ingreso" theme="primary" icon="fas fa-door-open"/>
+        @endcan
     </form>
 </x-adminlte-modal>
 @endsection

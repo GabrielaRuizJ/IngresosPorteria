@@ -48,9 +48,8 @@ class RoleController extends Controller
 
                 $permisosAsignados = $role->permissions;
                 $permisosDisponibles = Permission::all()->diff($permisosAsignados);
-                $mensaje = 'Los datos se actualizaron de manera correcta';
-
-                return view('usuarios.roleEdit',compact('role','permisosAsignados','permisosDisponibles'));
+                $request->session()->flash('mensaje', 'Datos modificados correctamente');
+                return redirect()->route('role');
             }
 
         } catch (\Exception $e) {

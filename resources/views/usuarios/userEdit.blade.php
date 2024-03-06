@@ -15,23 +15,35 @@
     </div>
     <form action="{{route('user.update',['id'=>$user->id])}}" method="post">
         @csrf
-            <div class="row">
-                <x-adminlte-input name="nombre" value="{{$user->name}}" required label="Nombre del usuario"/>&nbsp;&nbsp;                             
-                <x-adminlte-input name="username" value="{{$user->username}}" required label="Usuario"/>            
+            
+            <div class="col">
+                    <div class="row">
+                    <x-adminlte-input name="nombre" value="{{$user->name}}" required label="Nombre del usuario"/>&nbsp;&nbsp;                             
+                    <x-adminlte-input name="username" value="{{$user->username}}" required label="Usuario"/>            
+                </div>
             </div>
-            <div class="row">
-                <x-adminlte-input name="cedula" value="{{$user->cedula}}" required label="Cedula del usuario"/>&nbsp;&nbsp;           
-                <x-adminlte-input name="email" value="{{$user->email}}" required label="Email del usuario"/>    
+            <div class="col">
+                <div class="row">
+                    <x-adminlte-input name="cedula" value="{{$user->cedula}}" required label="Cedula del usuario"/>&nbsp;&nbsp;           
+                    <x-adminlte-input name="email" value="{{$user->email}}" required label="Email del usuario"/>    
+                </div>
             </div>
-            <div class="row">
-                <div class="form-check">
-                    <input type="checkbox" name="estado" 
-                        @if ( $user->estado == 1)
-                            {{'checked '}}
-                        @endif
-                        >
-                    <label>{{'Activo/Inactivo'}}</label>        
-                </div>  
+            <div class="col">
+                <div class="row">
+                    <div class="form-check">
+                        <input type="checkbox" name="estado" 
+                            @if ( $user->estado == 1)
+                                {{'checked '}}
+                            @endif
+                            >
+                            @if ( $user->estado == 1)
+                                <label>{{'Activo'}}</label>   
+                            @else    
+                                <label>{{'Inactivo'}}</label> 
+                            @endif
+                         
+                    </div>  
+                </div>
             </div>
             <hr>
             <label>*Roles disponibles*</label>
@@ -46,21 +58,8 @@
                 @endforeach
             </div>        
         <hr>
-        @role('Admin')
+        @can('user.edit')
             <x-adminlte-button type="submit" label="Actualizar usuario" theme="primary" icon="fas fa-key"/>
-        @endrole
+        @endcan
     </form>
-@endsection
-
-
-@section('js')
-    @if (isset($mensaje))
-    <script>
-        Swal.fire({
-            title:'Correcto',
-            icon:'success',
-            text:"{{$mensaje}}"
-        });
-    </script>
-    @endif
 @endsection
