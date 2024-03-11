@@ -65,7 +65,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/parametros/club',[ClubController::class,'index'])->name('clubes');
     Route::post('/parametros/club',[ClubController::class,'store'])->name('club.create');
-    Route::get('/parametros/clubEdit{id}',[ClubController::class,'edit'])->name('club.edit');
+    Route::get('/parametros/clubEdit/{id}',[ClubController::class,'edit'])->name('club.edit');
+    Route::post('/parametros/clubEdit/{id}',[ClubController::class,'edit'])->name('club.update');
 
     Route::get('/parametros/tipoIngreso',[TipoIngresoController::class,'index'])->name('tipo_ingreso');
     Route::post('/parametros/tipoIngreso',[TipoIngresoController::class,'store'])->name('tipo_ingreso.create');

@@ -53,4 +53,17 @@ class ClubController extends Controller
         }
     }
 
+    public function edit($id){
+        $club = DB::table('club')
+        ->join('ciudad','ciudad.id','=','club.id_ciudad')
+        ->where('club.id',$id)
+        ->select('ciudad.nombre as ciudad','club.id as id','club.nombre_club as nombre_club','club.direccion as direccion','club.telefono as telefono','club.email1 as email1')
+        ->get();
+        return view('parametros.clubEdit',compact('club'));
+    }
+
+    public function update(Request $request,$id){
+        
+    }
+
 }
