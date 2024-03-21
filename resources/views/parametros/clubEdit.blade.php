@@ -16,6 +16,7 @@
         @endif
     </div>
     <form action="" method="post">
+        {{$club}}{{$id}}
         @csrf
         @foreach ($club as $clubdat)
             <div class="col">
@@ -33,7 +34,7 @@
         @endforeach             
         <hr>
         @can('user.edit')
-            <x-adminlte-button type="submit" label="Actualizar club" theme="primary" icon="fas fa-key"/>
+            <x-adminlte-button type="submit" label="Actualizar datos del club" theme="primary" icon="fas fa-key"/>
         @endcan
     </form>
 @endsection

@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         User::create([
             'name'=>'Administrador del sistema',
             'username'=>'administrador',
-            'cedula'=>'832002372',
+            'cedula'=>'8320023721',
             'email'=>'sistemas@clubpuebloviejo.com',
             'password'=>bcrypt('832002372'),
             'estado'=>true

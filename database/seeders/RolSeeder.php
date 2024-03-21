@@ -52,7 +52,7 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'tipo_ingreso'])->syncRoles([$role1,$role2]);
         Permission::create(['name'=>'tipo_ingreso.create'])->syncRoles([$role1]);
         Permission::create(['name'=>'tipo_ingreso.edit'])->syncRoles([$role1]);
-        Permission::create(['name'=>'tipo_ingreso.edit'])->syncRoles([$role1]);
+        Permission::create(['name'=>'tipo_ingreso.destroy'])->syncRoles([$role1]);
 
         Permission::create(['name'=>'tipo_vehiculo'])->syncRoles([$role1,$role2]);
         Permission::create(['name'=>'tipo_vehiculo.create'])->syncRoles([$role1]);
