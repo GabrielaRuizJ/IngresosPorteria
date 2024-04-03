@@ -59,14 +59,14 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/parametros/ciudad',[CiudadController::class,'index'])->name('ciudades');
     Route::post('/parametros/ciudad',[CiudadController::class,'store'])->name('ciudad.create');
-    Route::get('/parametros/ciudadEdit/{idc}{idp}',[CiudadController::class,'edit'])->name('ciudad.edit');
+    Route::get('/parametros/ciudadEdit/{idc}',[CiudadController::class,'edit'])->name('ciudad.edit');
     Route::post('/parametros/ciudadEdit/{id}',[CiudadController::class,'update'])->name('ciudad.update');
 
     
     Route::get('/parametros/club',[ClubController::class,'index'])->name('clubes');
     Route::post('/parametros/club',[ClubController::class,'store'])->name('club.create');
     Route::get('/parametros/clubEdit/{id}',[ClubController::class,'edit'])->name('club.edit');
-    Route::post('/parametros/clubEdit/{id}',[ClubController::class,'edit'])->name('club.update');
+    Route::post('/parametros/clubEdit/{id}',[ClubController::class,'update'])->name('club.update');
 
     Route::get('/parametros/tipoIngreso',[TipoIngresoController::class,'index'])->name('tipo_ingreso');
     Route::post('/parametros/tipoIngreso',[TipoIngresoController::class,'store'])->name('tipo_ingreso.create');
@@ -75,7 +75,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/parametros/tipoVehiculo',[TipoVehiculoController::class,'store'])->name('tipo_vehiculo.create');
 
     Route::get('/ingresos/ingreso',[IngresoController::class,'index'])->name('ingresos');
-    Route::post('/ingresos/ingreso',[IngresoController::class,'store'])->name('ingresos');
+    Route::post('/ingresos/ingreso',[IngresoController::class,'store'])->name('ingreso.create');
+
 });
 
 

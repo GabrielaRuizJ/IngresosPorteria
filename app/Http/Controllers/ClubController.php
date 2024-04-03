@@ -54,16 +54,53 @@ class ClubController extends Controller
     }
 
     public function edit($id){
-        $club = DB::table('club')
+        $clubdat = DB::table('club')
         ->join('ciudad','ciudad.id','=','club.id_ciudad')
         ->where('club.id',$id)
-        ->select('club.id as id','ciudad.nombre as ciudad','club.nombre_club as nombre_club','club.direccion as direccion','club.telefono as telefono','club.email1 as email1')
+        ->select('club.id as id','club.id_ciudad as idciudad','ciudad.nombre as ciudad','club.nombre_club as nombre_club','club.direccion as direccion','club.telefono as telefono','club.email1 as email1')
         ->get();
-        return view('parametros.clubEdit',compact('club'));
+        $ciudades = Ciudad::all();
+        $club = club::find($id);
+        return view('parametros.clubEdit',compact('club','clubdat','ciudades'));
     }
 
     public function update(Request $request,$id){
-        
+        try{
+            $validator = Validator::make($request->all(), [
+                'nombre'=>'required',
+                'direccion'=>'required',
+                'telefono'=>'required',
+                'email1'=>'required',
+                'ciudad'=>'required',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }else{
+
+                $club = Club::findOrFail($id);
+                $club->nombre_club =$request->input('nombre');
+                $club->direccion =$request->input('direccion');
+                $club->telefono =$request->input('telefono');
+                $club->email1 =$request->input('email1');
+                $club->id_ciudad =$request->input('ciudad');
+                $club->save();
+
+                $clubes = DB::table('club')
+                ->join('ciudad','ciudad.id','=','club.id_ciudad')
+                ->select('ciudad.nombre as ciudad','club.id as id','club.nombre_club as nombre_club','club.direccion as direccion','club.telefono as telefono','club.email1 as email1')
+                ->get();
+                $ciudades = Ciudad::all();
+                $request->session()->flash('mensaje', 'Datos modificados correctamente');
+                return redirect()->route('clubes')->with('clubes','ciudades');
+            }
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
 }

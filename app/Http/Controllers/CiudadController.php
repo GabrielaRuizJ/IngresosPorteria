@@ -58,25 +58,24 @@ class CiudadController extends Controller
             ->select('ciudad.id as ciudad','ciudad.nombre as nombreciudad','pais.nombre_pais as pais','pais.id as idpais')
             ->get();
             $paises = Pais::all();
-            return view("parametros.ciudad",compact('ciudades','paises'));
+            $request->session()->flash('mensaje', 'Datos modificados correctamente');
+            return redirect()->route('ciudades')->with('ciudades','paises');
                     
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
     }
 
-    public function edit($idciudad,$idpais){
+    public function edit($idciudad){
         try {
             $ciudades = DB::table('ciudad')
             ->join('pais','ciudad.id_pais','=','pais.id')
             ->select('ciudad.id as ciudad','ciudad.nombre as nombreciudad','pais.nombre_pais as pais','pais.id as idpais')
             ->where('ciudad.id','=',$idciudad)
             ->get();
-            $paises =DB::table('pais')
-            ->where('pais.id','!=',$idpais)
-            ->get();
-            $idc=$idciudad;
-            return view("parametros.ciudadEdit",compact("ciudades","paises","idc"));
+            $ciudad = Ciudad::findOrFail($idciudad);
+            $paises = Pais::all();
+            return view("parametros.ciudadEdit",compact("ciudad",'ciudades','paises'));
         
         } catch (\Exception $e) {
             dd($e->getMessage());

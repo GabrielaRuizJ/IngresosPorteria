@@ -1,24 +1,24 @@
 @extends('adminlte::page')
 @section('title','Dashboard')
 @section('content_header')
-    <h1>Administración de ciudades</h1>
+    <h1>Editar ciudad</h1>
 @endsection
 @section('content')
-    <form action="{{route('ciudad.update',3)}}" method="post">
+    <form action="{{route('ciudad.update',['id'=>$ciudad->id])}}" method="post">
         @csrf
         <div class="row">
             @foreach ($ciudades as $ciudad)
-                <x-adminlte-input style="width:100%!important" name="nombre" value="{{$ciudad->nombreciudad}}" required label="Nombre de la ciudad"/>
+                <x-adminlte-input fgroup-class="col-md-12"  style="width:100%!important" name="nombre" value="{{$ciudad->nombreciudad}}" required label="Nombre de la ciudad"/>
+                <select name="id_pais" class="form-control">
+                    @foreach ($paises as $pais)
+                        @if ($pais->id == $ciudad->idpais)
+                            <option selected value="{{$pais->id}}">{{$pais->nombre_pais}}</option>
+                        @else
+                            <option value="{{$pais->id}}">{{$pais->nombre_pais}}</option>
+                        @endif
+                    @endforeach
+                </select>
             @endforeach
-            <select name="id_pais" class="form-control">
-                @foreach ($ciudades as $ciudad1)
-                    <option selected value="{{$ciudad1->idpais}}">{{$ciudad1->pais}}</option>
-                 @endforeach 
-                
-                @foreach ($paises as $pais)
-                    <option value="{{$pais->id}}">{{$pais->nombre_pais}}</option>
-                @endforeach
-            </select>
         </div>
         <hr>
         @can('ciudad.edit')

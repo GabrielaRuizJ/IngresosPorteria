@@ -32,6 +32,7 @@ class PermissionController extends Controller
         });
         return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
     }
+
     public function update(Request $request,$id){
         try{
             $validator = Validator::make($request->all(), [
@@ -52,7 +53,7 @@ class PermissionController extends Controller
 
                 $rolesAsignados = $permiso->roles;
                 $rolesDisponibles = Role::all()->diff($rolesAsignados);
-                $mensaje = 'Los datos se actualizaron de manera correcta';
+                $request->session()->flash('mensaje', 'Datos modificados correctamente');
                 return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
             }
 
