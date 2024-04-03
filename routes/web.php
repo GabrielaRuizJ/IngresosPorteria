@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/ingresos/ingreso',[IngresoController::class,'index'])->name('ingresos');
     Route::post('/ingresos/ingreso',[IngresoController::class,'store'])->name('ingreso.create');
+    Route::get('/ingresos/salida',[IngresoController::class,'select'])->name('ingreso.select');
 
 });
 

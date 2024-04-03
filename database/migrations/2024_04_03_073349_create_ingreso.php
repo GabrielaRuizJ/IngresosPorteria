@@ -27,8 +27,15 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->string('cedula',30);
             $table->string('nombre',150);
-            $table->boolean('estado')->default(true);
-            $table->unsignedBigInteger('id_usuario')->references('id')->on('users')
+            $table->boolean('estado')->default(true)->nullable();
+            $table->date('fecha_salida')->nullable();
+            $table->time('hora_salida')->nullable();
+            $table->unsignedBigInteger('id_usuario_create');
+            $table->foreign('id_usuario_create')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->unsignedBigInteger('id_usuario_update')->nullable();
+            $table->foreign('id_usuario_update')->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->timestamps();

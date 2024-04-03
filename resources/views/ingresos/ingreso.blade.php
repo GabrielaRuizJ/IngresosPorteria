@@ -41,6 +41,9 @@
             <div id="ocupantes">
 
             </div>
+            <div>
+                <input type="hidden" id="cantidadocp"  name="cantidadocp" value="">
+            </div>
             <div class="row">
                 <div class="col">
                     @can('ingreso.create')
@@ -49,7 +52,7 @@
                 </div>
                 <div class="col">
                     @can('ingreso.create')
-                        <x-adminlte-button style="width: 100%;height:5em" data-toggle="modal" icon="fas fa-save" theme="success" label="Registrar ingreso" />
+                        <x-adminlte-button style="width: 100%;height:5em" type="submit" icon="fas fa-save" theme="success" label="Registrar ingreso" />
                     @endcan
                 </div>
             </div>
@@ -74,7 +77,7 @@
         </div>
         <div class="col">
             @can('ingreso.create')
-                <x-adminlte-button style="width: 100%;height:5em" id="btn-consulta"  type="submit" label="Validar datos" theme="primary" icon="fas fa-save" />
+                <x-adminlte-button style="width: 100%;height:5em" id="btn-consulta"   label="Validar datos" theme="primary" icon="fas fa-save" />
             @endcan
         </div>
     </x-adminlte-modal>
@@ -83,4 +86,13 @@
 
 @section('js')
     <script src="{{asset('/js/validacionIngreso.js') }}"></script>
+    @if(session()->has('mensaje'))
+    <script>
+        Swal.fire({
+            title:'Correcto',
+            icon:'success',
+            text:"{{session('mensaje')}}"
+        });
+    </script>
+@endif
 @stop

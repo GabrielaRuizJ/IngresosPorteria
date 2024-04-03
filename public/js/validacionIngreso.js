@@ -93,23 +93,25 @@ btn.addEventListener("click", (e) =>{
                         nuevoCampo1.setAttribute('readonly','');
                         nuevoCampo1.setAttribute('type', 'number');
                         nuevoCampo1.classList.add('form-control','form-group','cedulaacompa');
-                        nuevoCampo1.id = 'cedulaacompa'+cantidad;
+                        nuevoCampo1.name = 'cedulaacompa'+cantidad;
                         nuevoCampo1.value = document.getElementById("cedulaOcp").value;
 
                         var nuevoCampo2 = document.createElement('input');
                         nuevoCampo2.setAttribute('readonly','');
                         nuevoCampo2.setAttribute('type', 'text');
                         nuevoCampo2.classList.add('form-control','form-group');
-                        nuevoCampo2.id = 'nombreacompa'+cantidad;
+                        nuevoCampo2.name = 'nombreacompa'+cantidad;
                         nuevoCampo2.value = document.getElementById("nombreOcp").value;
                         
                         var nuevoCampo3 = document.createElement('input');
-                        nuevoCampo3.setAttribute('disabled','');
+                        nuevoCampo3.setAttribute('readonly','');
                         nuevoCampo3.setAttribute('type', 'radio');
                         nuevoCampo3.setAttribute('checked', '');
-                        nuevoCampo3.id = "tipoi"+cantidad;
-                        nuevoCampo3.id = 'tipoingresoacompa'+cantidad;
+                        nuevoCampo3.name = 'tipoingresoacompa'+cantidad;
+
                         nuevoCampo3.classList.add('form-group');
+
+                        var saltol = document.createElement('hr');
 
                         var checkboxes3 = document.getElementsByName('tipoi');
                         var valorCheckboxSeleccionado = null;
@@ -121,12 +123,14 @@ btn.addEventListener("click", (e) =>{
                                 idCheckboxSeleccionado =checkboxes3[i].id;
                                 break;  }
                         }
+
                         nuevoCampo3.value = valorCheckboxSeleccionado;                             
                         var labecheckl = document.createElement('label');
                         labecheckl.htmlFor = idCheckboxSeleccionado;
                         labecheckl.textContent = " -- "+document.querySelector('label[for="'+idCheckboxSeleccionado+'"]').textContent;
 
                         nuevoDiv2.appendChild(titulo);
+                        nuevoDiv2.appendChild(saltol);
                         nuevoDiv2.appendChild(nuevoCampo3);
                         nuevoDiv2.appendChild(labecheckl);                                
                         nuevoDiv2.appendChild(nuevoCampo1);
@@ -142,6 +146,7 @@ btn.addEventListener("click", (e) =>{
                             timer: 900,
                             text:"El acompañante fue agregado correctamente"
                         }).then((result) => {
+                            document.getElementById("cantidadocp").value= cantidad;
                             document.getElementById("cedulaOcp").value = '';
                             document.getElementById("nombreOcp").value = '';
                             var radioButtons = document.getElementsByName('tipoi');

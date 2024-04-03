@@ -375,6 +375,13 @@ return [
                     'text'=>'Realizar ingresos',
                     'route'=>'ingresos',
                     'icon'=>'fas fa-door-open',
+                    'can' =>'ingresos'
+                ],
+                [
+                    'text'=>'Realizar salida',
+                    'route'=>'ingreso.select',
+                    'icon'=>'fas fa-door-closed',
+                    'can' =>'salidas'
                 ],
             ]
         ],
