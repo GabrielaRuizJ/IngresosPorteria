@@ -39,6 +39,8 @@ class IngresoController extends Controller
     public function store(Request $request){
         try {
 
+            $url = env('URL_SERVER_API','http://localhost');
+
             $tipovehiculo =$request->input('tipov');
             $placa =$request->input('placa');
             $tipoingreso =$request->input('tipoi');
@@ -51,9 +53,21 @@ class IngresoController extends Controller
             $datOculto2 =$request->input('dtOct2');
 
             $ingresos = Tipo_ingreso::findOrFail($tipoingreso);
+            $tipo_ingreso = $ingresos->nombre_ingreso;
+            $data;
+            if($tipo_ingreso == "Socios"){
+                $data = json_encode("Socios");
+            }else if($tipo_ingreso == "Invitados" ){
+                $response = Http::get('http://localhost/prueba/apiInvitado.php?documento='.$cedula);
+                $data = $response->json();
+            }else if($tipo_ingreso == "Proveedor" ){
+                $data = json_encode("Proveedor");
+            }else if($tipo_ingreso == "Canje" ){
+                $data = json_encode("Canje");
+            }else if($tipo_ingreso == "Autorizado" ){
+                $data = json_encode("Autorizado");
+            }
             
-
-            $data = json_encode($ingresos);
             return $data;
         } catch (\Exception $e) {
             return $e;
