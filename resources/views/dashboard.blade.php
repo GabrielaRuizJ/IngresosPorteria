@@ -18,7 +18,7 @@
                         <h3>Ingresos</h3>
                     </div>
                     <div class="card-body">
-                        <x-adminlte-button label="Realizar ingresos" icon="fas fa-door-open" theme="primary" />
+                        <a href="{{ route('ingresos') }}" class="btn btn-primary"><li class="fas fa-door-open"></li> Realizar ingresos</a>
                     </div>
                 </div>
             </div>

@@ -37,41 +37,26 @@ class IngresoController extends Controller
         
     }
     public function store(Request $request){
-        try{
-            $validator = Validator::make($request->all(),[
-                'tipov'=>'required',
-                'placa'=>'required',
-            ]);
+        try {
 
-            if($validator->fails()){
-                return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-            }else{
-                $idUsuario = Auth::id();
-                $contador = 0;
-                for($i=1;$i<=$request->input('cantidadocp');$i++){
-                    $contador++;
-                    $ingreso = Ingreso::create([
-                        'fecha_ingreso'=>Carbon::now()->toDateString(),
-                        'hora_ingreso'=>Carbon::now()->toTimeString(),
-                        'id_tipo_vehiculo'=>$request->input('tipov'),
-                        'id_tipo_ingreso'=>$request->input('tipoingresoacompa'.$i),
-                        'cedula'=>$request->input('cedulaacompa'.$i),
-                        'nombre'=>$request->input('nombreacompa'.$i),
-                        'id_usuario_create'=>$idUsuario
-                    ]);
-                }
-                if($request->input('cantidadocp') == $contador ){
-                    $request->session()->flash('mensaje', 'Ingreso registrado correctamente');
-                }else{
-                    $request->session()->flash('mensaje', 'Se registraron '.$contador.' de '.$request->input('cantidadocp').' registros recibidos');
-                }                  
-                return redirect()->route('ingresos');
-            }
-        }catch(\Exception $e){
-            dd($e->getMessage());
+            $tipovehiculo =$request->input('tipov');
+            $placa =$request->input('placa');
+            $tipoingreso =$request->input('tipoi');
+            $cedula =$request->input('cedula');
+            $primerApellido =$request->input('primAp');
+            $segundoApellido =$request->input('segAp');
+            $primerNombre =$request->input('primNm');
+            $segundoNombre =$request->input('segNm');
+            $datOculto1 =$request->input('dtOct1');
+            $datOculto2 =$request->input('dtOct2');
+
+            $ingresos = Tipo_ingreso::findOrFail($tipoingreso);
+            
+
+            $data = json_encode($ingresos);
+            return $data;
+        } catch (\Exception $e) {
+            return $e;
         }
     }
 
@@ -89,5 +74,16 @@ class IngresoController extends Controller
         ->get();
 
         return view('ingresos.salida',compact('ingresos'));
+    }
+
+    public function consultaCanje(){
+        try {
+            $url = env('URL_SERVER_API','http://localhost');
+            $response = Http::get('http://localhost/prueba/apiCanje.php');
+            $data = $response->json();
+            return $data;
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 }

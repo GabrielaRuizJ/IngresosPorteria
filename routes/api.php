@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });*/
 
 Route::get('/apiInv',[IngresoController::class,'consultarIngreso'])->name('apiInv');
+Route::get('/apiCanje',[IngresoController::class,'consultaCanje'])->name('apiCanje');
+Route::post('/guardarIngreso',[IngresoController::class,'store'])->name('guardarIngreso');
