@@ -13,7 +13,7 @@ checkboxes.forEach(function(checkbox) {
     });
 });
 
-
+/*
 var checkboxesTi = document.getElementsByName('tipoi');
 
 checkboxesTi.forEach(function(checkbox) {
@@ -48,7 +48,7 @@ checkboxesTi.forEach(function(checkbox) {
         }
     });
 });
-
+*/
 function agregarClub(){
 
     fecha1 = document.getElementById("rango1canje").value;
