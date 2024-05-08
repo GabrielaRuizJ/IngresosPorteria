@@ -5,15 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Club extends Model
+class Bloqueo extends Model
 {
-    protected $table="clubes_canje";
     use HasFactory;
+    protected $table = 'bloqueo';
     protected $fillable = [
-        'id',
-        'club',
-        'pbx',
-        'correo',
-        'estado'
+        'nombre_bloqueo'
     ];
 }

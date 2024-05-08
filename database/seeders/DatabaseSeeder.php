@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(RolSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(tipo_ingresoSeeder::class);
+        $this->call(Tipo_VehiculoSeeder::class);
+        $this->call(BloqueoSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

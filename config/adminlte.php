@@ -379,9 +379,39 @@ return [
                 ],
                 [
                     'text'=>'Realizar salida',
-                    'route'=>'ingreso.select',
+                    'route'=>'salidas',
                     'icon'=>'fas fa-door-closed',
                     'can' =>'salidas'
+                ],
+            ]
+        ],
+        [
+            'text'=>'Tipos de terceros',
+            'icon'=>'fas fa-users-cog',
+            'submenu'=>[
+                [
+                    'text'=>'Socios',
+                    'route'=>'socios',
+                    'icon'=>'fas fa-users',
+                    'can' =>'socios'
+                ],
+            ]
+        ],
+        [
+            'text'=>'Bloqueos',
+            'icon'=>'fas fa-users-slash',
+            'submenu'=>[
+                [
+                    'text'=>'Bloqueos',
+                    'route'=>'bloqueos',
+                    'icon'=>'fas fa-user-slash',
+                    'can' =>'bloqueos'
+                ],
+                [
+                    'text'=>'Bloqueos x Socio',
+                    'route'=>'bloqueo_socio',
+                    'icon'=>'fas fa-user-lock',
+                    'can' =>'bloqueo_socio'
                 ],
             ]
         ],
@@ -389,7 +419,12 @@ return [
             'text'=>'Reportes',
             'icon'=>'fas fa-file-download',
             'submenu'=>[
-                
+                [
+                    'text'=>'Búsqueda de ingresos',
+                    'route'=>'listadoIngresos',
+                    'icon'=>'fas fa-search',
+                    'can' =>'ingreso.find'
+                ],
             ]
         ],
         /*['header' => 'account_settings'],

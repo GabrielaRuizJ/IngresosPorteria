@@ -51,10 +51,14 @@ class PermissionController extends Controller
                 $permiso_rol = $request->input('id_rol',[]);
                 $permiso->syncRoles($permiso_rol);
 
-                $rolesAsignados = $permiso->roles;
-                $rolesDisponibles = Role::all()->diff($rolesAsignados);
+                //$rolesAsignados = $permiso->roles;
+                //$rolesDisponibles = Role::all()->diff($rolesAsignados);
+
+                $permisos = Permission::all()->sortByDesc("id");
                 $request->session()->flash('mensaje', 'Datos modificados correctamente');
-                return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
+                return redirect()->route('permiso')->with('permisos');
+
+                //return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
             }
 
         } catch (\Exception $e) {

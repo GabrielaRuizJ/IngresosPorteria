@@ -18,6 +18,7 @@ class RolSeeder extends Seeder
     {
         $role1 = Role::create(['name'=>'Admin']);
         $role2 = Role::create(['name'=>'Gerencia']);
+        $role3 = Role::create(['name'=>'Porteria']);
         
         Permission::create(['name'=>'user'])->assignRole($role1);
         Permission::create(['name'=>'user.create'])->assignRole($role1);
@@ -33,22 +34,7 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'permiso.create'])->assignRole($role1);
         Permission::create(['name'=>'permiso.edit'])->assignRole($role1);
         Permission::create(['name'=>'permiso.destroy'])->assignRole($role1);
-        
-        Permission::create(['name'=>'pais'])->syncRoles([$role1,$role2]);
-        Permission::create(['name'=>'pais.create'])->syncRoles([$role1,$role2]);
-        Permission::create(['name'=>'pais.edit'])->syncRoles([$role1,$role2]);
-        Permission::create(['name'=>'pais.destroy'])->syncRoles([$role1,$role2]);
-
-        Permission::create(['name'=>'ciudades'])->syncRoles([$role1,$role2]);
-        Permission::create(['name'=>'ciudad.create'])->assignRole($role1);
-        Permission::create(['name'=>'ciudad.edit'])->assignRole($role1);
-        Permission::create(['name'=>'ciudad.destroy'])->assignRole($role1);
-
-        Permission::create(['name'=>'clubes'])->syncRoles([$role1,$role2]);
-        Permission::create(['name'=>'club.create'])->syncRoles([$role1]);
-        Permission::create(['name'=>'club.edit'])->syncRoles([$role1]);
-        Permission::create(['name'=>'club.destroy'])->syncRoles([$role1]);
-
+     
         Permission::create(['name'=>'tipo_ingreso'])->syncRoles([$role1,$role2]);
         Permission::create(['name'=>'tipo_ingreso.create'])->syncRoles([$role1]);
         Permission::create(['name'=>'tipo_ingreso.edit'])->syncRoles([$role1]);
@@ -68,6 +54,16 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'salida.create'])->syncRoles([$role1]);
         Permission::create(['name'=>'salida.edit'])->syncRoles([$role1]);
         Permission::create(['name'=>'salida.destroy'])->syncRoles([$role1]);
+
+        Permission::create(['name'=>'ingreso.find'])->syncRoles([$role1,$role2]);
+
+        Permission::create(['name'=>'socios'])->syncRoles([$role1,$role2]);
+        
+        Permission::create(['name'=>'bloqueos'])->syncRoles([$role1,$role2]);
+        Permission::create(['name'=>'bloqueo.create'])->syncRoles([$role1]);
+        
+        Permission::create(['name'=>'bloqueo_socio'])->syncRoles([$role1,$role2]);
+        Permission::create(['name'=>'bloqueo_socio.create'])->syncRoles([$role1]);
         
     }
 }

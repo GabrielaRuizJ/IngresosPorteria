@@ -28,7 +28,7 @@
                         <h3>Salidas</h3>
                     </div>
                     <div class="card-body">
-                        <x-adminlte-button label="Realizar salidas" icon="fas fa-sign-out-alt" theme="primary" />
+                        <a href="{{ route('salidas') }}" class="btn btn-primary"><li class="fas fa-door-open"></li> Realizar salidas</a>
                     </div>
                 </div>
             </div>

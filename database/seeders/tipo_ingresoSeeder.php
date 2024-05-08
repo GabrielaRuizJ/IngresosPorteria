@@ -16,6 +16,12 @@ class tipo_ingresoSeeder extends Seeder
     public function run()
     {
         Tipo_Ingreso::create([
+            'nombre_ingreso'=>'Socio'
+        ]);
+        Tipo_Ingreso::create([
+            'nombre_ingreso'=>'Invitado'
+        ]);
+        Tipo_Ingreso::create([
             'nombre_ingreso'=>'Canje'
         ]);
         Tipo_Ingreso::create([

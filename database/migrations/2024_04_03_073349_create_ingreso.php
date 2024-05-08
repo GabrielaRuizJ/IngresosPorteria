@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreign('id_tipo_ingreso')->references('id')->on('tipo_ingreso')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->string('placa',10);
             $table->string('cedula',30);
             $table->string('nombre',150);
             $table->boolean('estado')->default(true)->nullable();

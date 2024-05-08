@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Club extends Model
+class Socio extends Model
 {
-    protected $table="clubes_canje";
     use HasFactory;
+    protected $table = 'socios';
     protected $fillable = [
-        'id',
-        'club',
-        'pbx',
-        'correo',
-        'estado'
+        'cedula',
+        'nombre',
+        'accion',
+        'email',
+        'secuencia'
     ];
 }

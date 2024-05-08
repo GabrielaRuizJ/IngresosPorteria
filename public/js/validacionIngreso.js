@@ -13,73 +13,15 @@ checkboxes.forEach(function(checkbox) {
     });
 });
 
-/*
-var checkboxesTi = document.getElementsByName('tipoi');
+var checkboxesTingreso = document.getElementsByName('tipoi');
 
-checkboxesTi.forEach(function(checkbox) {
+checkboxesTingreso.forEach(function(checkbox) {
     checkbox.addEventListener('change', function(event) {
         if (checkbox.checked) {
-            var idcheck = checkbox.id;
-            var label = document.querySelector('label[for="'+idcheck+'"]').textContent;
-            if(label == 'Canje'){
-                fetch('/ingresos/public/api/apiCanje').then(response => {
-                    if (!response.ok) { throw new Error('La solicitud no fue exitosa'); }
-                    return response.json();
-                })
-                .then(data => {
-                    if (Object.keys(data).length === 0 && data.constructor === Object) {
-                        console.log('La respuesta está vacía');
-                    } else {
-                        tabla = document.getElementById("bodytablecanje");
-                        modal = document.getElementById("modalCanje");
-                        fila=""
-                        data['datos'].forEach(function(dato) {
-                            nuevoCampo = "<input type='radio' style='width:3em;height:3em;' id='opcclub"+dato.id_club+"' name='opcclub' value='"+dato.id_club+"' /> "
-                            fila += "<tr><td>"+dato.id_club+"</td><td><label for='opcclub"+dato.id_club+"'>"+dato.club+"</label></td><td>"+nuevoCampo+"</td></tr>";
-                        });
-                        tabla.innerHTML = fila;
-                        $(modal).modal('show');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al obtener datos:', error);
-                });
-            }
+            limpiarCampos()
         }
     });
 });
-*/
-function agregarClub(){
-
-    fecha1 = document.getElementById("rango1canje").value;
-    fecha2 = document.getElementById("rango2canje").value;
-
-    if(fecha1 > fecha2){
-        Swal.fire({
-            title:'Error',
-            icon:'error',
-            text:"Por favor elija un rango valido de fechas"
-        });
-    }else{
-        club =  document.getElementsByName('opcclub');
-        var valorCheckboxSeleccionado = null;
-        var labelCheckboxSeleccionado = null;
-        for (var i = 0; i < club.length; i++) {
-            if (club[i].checked) {
-                valorCheckboxSeleccionado = club[i].value;
-                labelCheckboxSeleccionado = document.querySelector('label[for="opcclub'+valorCheckboxSeleccionado+'"]').textContent;
-                break;  
-            }
-        }
-        nuevoCampo = "<hr><div class='col'><input hidden class='form-control' type='text' name='idclub' value='"+valorCheckboxSeleccionado+"'/></div>"
-        nuevoCampo2 = "<div class='col'><input hidden class='form-control' type='date' name='fecha1' value='"+fecha1+"' /></div>"
-        nuevoCampo3 = "<div class='col'><input hidden class='form-control' type='date' name='fecha2' value='"+fecha2+"' /></div>"
-        nuevoCampo3 = "<div class='col'><input disabled class='form-control' type='text' name='clubcanje' value='"+labelCheckboxSeleccionado+"' /></div><hr>"
-        divcampos = document.getElementById("detalles")
-        divcampos.innerHTML = nuevoCampo+nuevoCampo2+nuevoCampo3
-        $(modal).modal('hide');
-    }
-}
 
 const btn = document.querySelector("#guardarIngreso");
 const form = document.querySelector("#formIng");
@@ -112,7 +54,7 @@ btn.addEventListener("click", (e) =>{
         
         const formData = new FormData(document.getElementById('formIng'));
 
-        fetch('/ingresos/public/api/guardarIngreso', {
+        fetch('/IngresosPorteria/public/api/guardarIngreso', {
             method: 'POST',  body: formData
         }).then(response => {
             if (!response.ok) { throw new Error('La solicitud no fue exitosa'); }
@@ -122,7 +64,39 @@ btn.addEventListener("click", (e) =>{
             if (Object.keys(data).length === 0 && data.constructor === Object) {
                 console.log('La respuesta está vacía');
             } else {
-                console.log(data)
+                if(data.respuesta == 404){
+                    crearCamposCanje();
+                }else if(data.respuesta == 300){
+                    Swal.fire({
+                        title:'Error',
+                        icon: 'error',
+                        text: data.datos
+                    });
+                }else if(data.respuesta == 301){
+                    Swal.fire({
+                        title: "El rango de fechas de canje ya ha vencido ",
+                        text:'Registrar nuevo rango de rechas',
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "Si",
+                        denyButtonText: "No"
+                      }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            crearCamposCanje()
+                        }else{
+                            limpiarCampos()
+                        }
+                    });
+                }else if(data.respuesta == 200){
+                    Swal.fire({
+                        title:'Correcto',
+                        icon: 'success',
+                        text: "Ingreso registrado correctamente"
+                    });
+                    limpiarCampos()
+                }
+                console.log(data.respuesta)
             }
         })
         .catch(error => {
@@ -140,3 +114,57 @@ btn.addEventListener("click", (e) =>{
 });
     
 
+function crearCamposCanje(){
+    fetch('/IngresosPorteria/public/api/apiCanje').then(response => {
+        if (!response.ok) { throw new Error('La solicitud no fue exitosa'); }
+        return response.json();
+    })
+    .then(data => {
+        if (Object.keys(data).length === 0 && data.constructor === Object) {
+            console.log('La respuesta está vacía');
+        } else {
+            var fechainput = new Date();
+            var dia1 = ('0' + fechainput.getDate()).slice(-2);  
+            var mes1 = ('0' + (fechainput.getMonth() + 1)).slice(-2);
+            fechainput = fechainput.getFullYear()+"-"+mes1+"-"+dia1;
+
+            var fechainput2 = new Date();
+            fechainput2.setDate(fechainput2.getDate() + 1);
+            var dia2 = ('0' + fechainput2.getDate()).slice(-2); 
+            var mes2 = ('0' + (fechainput2.getMonth() + 1)).slice(-2); 
+            fechainput2 = fechainput2.getFullYear()+"-"+mes2+"-"+dia2;
+            
+            divclub = document.getElementById("dat_canje");
+            var newRow = "<div class='row'><label>Club del canje:</label> <select id='idclubcanje' name='idclubcanje' class='form-control'>";
+            var theOptions = "";
+            data['datos'].forEach(function(dato) {
+                theOptions += '<option value="'+dato.id_club+'">'+dato.club+'</option>';
+            });
+            newRow += theOptions;
+            newRow += "</select></div><div class='row'><div class='col'><label>Fecha inicio:</label>";
+            newRow += "<input class='form-control' type='date' id='finiciocanje' name='finiciocanje' value='"+fechainput+"'>";
+            newRow += "</div><div class='col'><label>Fecha fin:</label>";
+            newRow += "<input type='date' placeholder='MM/DD/YYYY' class='form-control' id='ffincanje' name='ffincanje' value='"+fechainput2+"'>";
+            newRow += "</div></div>";
+            divclub.innerHTML = newRow;
+            return
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener datos:', error);
+    });
+
+    
+}
+
+function limpiarCampos(){
+    var div = document.getElementById('dat_canje');
+    div.innerHTML = '';
+    document.getElementById('cedulaOcp').value="";
+    document.getElementById('primAp').value="";
+    document.getElementById('segAp').value="";
+    document.getElementById('primNm').value="";
+    document.getElementById('segNm').value="";
+    document.getElementById('dtOct1').value="";
+    document.getElementById('dtOct2').value="";
+}

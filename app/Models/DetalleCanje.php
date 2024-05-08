@@ -12,8 +12,9 @@ class DetalleCanje extends Model
     protected $fillable = [
         'id_ingreso',
         'id_club',
+        'cedula_canje',
         'nombre_club',
-        'fecha_incio_canje',
+        'fecha_inicio_canje',
         'fecha_fin_canje'
     ];
 }

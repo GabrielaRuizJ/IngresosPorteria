@@ -10,6 +10,11 @@ use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\TipoIngresoController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\IngresoController;
+use App\Http\Controllers\SocioController;
+use App\Http\Controllers\BloqueoController;
+use App\Http\Controllers\BloqueoSocioController;
+use App\Http\Controllers\SalidaController;
+
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,9 +80,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/parametros/tipoVehiculo',[TipoVehiculoController::class,'store'])->name('tipo_vehiculo.create');
 
     Route::get('/ingresos/ingreso',[IngresoController::class,'index'])->name('ingresos');
-    //Route::post('/ingresos/ingreso',[IngresoController::class,'store'])->name('ingreso.create');
-    Route::get('/ingresos/salida',[IngresoController::class,'select'])->name('ingreso.select');
+    Route::get('/ingresos/salida',[IngresoController::class,'ingresosHoy'])->name('salidas');
+    Route::post('/ingresos/salidaMasiva',[IngresoController::class,'salidaMSV'])->name('salidamasiva');
+    Route::post('/ingresos/salida',[SalidaController::class,'store'])->name('salida.create');
 
+    Route::get('/ingresos/listadoIngresos',[IngresoController::class,'busquedaIngresos'])->name('listadoIngresos');
+    Route::post('/ingresos/resultadobingresos',[IngresoController::class,'resultadoBusquedaIngresos'])->name('resBusquedaIngresos');
+    
+    Route::get('/socios/socios',[SocioController::class,'index'])->name('socios');
+
+    Route::get('/socios/bloqueos',[BloqueoController::class,'index'])->name('bloqueos');
+    Route::post('/socios/bloqueos',[BloqueoController::class,'store'])->name('bloqueo.create');
+    
+    Route::get('/socios/bloqueoSocio',[BloqueoSocioController::class,'index'])->name('bloqueo_socio');
+    
 });
 
 

@@ -13,6 +13,9 @@
             <div class="row">
                     <label>Tipo de vehiculo</label>
             </div>
+            <div class="row" >
+                <x-adminlte-input name="iduserlog" id="iduserlog"  value="{{ $userId }}"  hidden fgroup-class="col-md-6"/>
+            </div>
             <div class="row">
                 <div class="col">
                     @foreach ($vehiculos as $vehiculo)
@@ -40,6 +43,9 @@
                 </div>
             </div>
             <hr>
+            <div id="dat_canje">
+            </div>
+            <hr>
             <div class="row">
                 <label>Tipo de ingreso</label>
             </div>
@@ -53,7 +59,6 @@
                 <hr>
             </div>
             <hr>
-            <div id="detalles"></div>
             <div class="row" >
                 <hr>
                 <x-adminlte-input name="cedula" id="cedulaOcp" required label="Cedula del ocupante" fgroup-class="col-md-4"/>

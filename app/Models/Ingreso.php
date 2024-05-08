@@ -14,11 +14,9 @@ class Ingreso extends Model
         'hora_ingreso',
         'id_tipo_vehiculo',
         'id_tipo_ingreso',
+        'placa',
         'cedula',
         'nombre',
-        'estado',
-        'fecha_salida',
-        'hora_salida',
         'id_usuario_create'
     ];
 }
