@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Tipo_ingreso;
+use App\Models\Tipo_Ingreso;
 
 class tipo_ingresoSeeder extends Seeder
 {
