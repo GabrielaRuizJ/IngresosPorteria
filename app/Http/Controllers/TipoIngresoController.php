@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tipo_ingreso;
+use App\Models\TipoIngreso;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class TipoIngresoController extends Controller
 {
     public function index(){
-        $tipoingresos = Tipo_ingreso::all();
+        $tipoingresos = TipoIngreso::all();
         return view('parametros.tipoIngreso',compact('tipoingresos'));
     }
     public function store(Request $request){
@@ -24,7 +24,7 @@ class TipoIngresoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
             }else{
-                $tipoingreso = Tipo_Ingreso::create(['nombre_ingreso'=>$request->input('nombre_ingreso')]);
+                $tipoingreso = TipoIngreso::create(['nombre_ingreso'=>$request->input('nombre_ingreso')]);
                 
                 $request->session()->flash('mensaje', 'Tipo de ingreso creado correctamente');
                 return redirect()->route('tipo_ingreso');

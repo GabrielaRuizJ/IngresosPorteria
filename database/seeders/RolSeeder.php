@@ -64,6 +64,12 @@ class RolSeeder extends Seeder
         
         Permission::create(['name'=>'bloqueo_socio'])->syncRoles([$role1,$role2]);
         Permission::create(['name'=>'bloqueo_socio.create'])->syncRoles([$role1]);
-        
+
+        Permission::create(['name'=>'autorizado'])->syncRoles([$role1,$role2]);
+        Permission::create(['name'=>'autorizado.create'])->syncRoles([$role1]);
+        Permission::create(['name'=>'autorizado.delete'])->syncRoles([$role1]);
+
+        Permission::create(['name'=>'canjes'])->syncRoles([$role1]);
+   
     }
 }

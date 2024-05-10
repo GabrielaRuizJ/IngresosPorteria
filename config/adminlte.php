@@ -338,17 +338,6 @@ return [
             'icon'=>'fas fa-cogs',
             'submenu'=>[
                 [
-                    'text'=>'Paises',
-                    'route'=>'paises',
-                    'icon'=>'fas fa-flag',
-                    'can' =>'paises'
-                ],
-                [
-                    'text'=>'Ciudades',
-                    'route'=>'ciudades',
-                    'icon'=>'fas fa-city',
-                ],
-                [
                     'text'=>'Clubes',
                     'route'=>'clubes',
                     'icon'=>'fas fa-hotel',
@@ -394,6 +383,18 @@ return [
                     'route'=>'socios',
                     'icon'=>'fas fa-users',
                     'can' =>'socios'
+                ],
+                [
+                    'text'=>'Autorizado',
+                    'route'=>'autorizados',
+                    'icon'=>'fas fa-user-check',
+                    'can' =>'autorizado'
+                ],
+                [
+                    'text'=>'Canjes',
+                    'route'=>'canjes',
+                    'icon'=>'fas fa-people-arrows',
+                    'can' =>'canjes'
                 ],
             ]
         ],

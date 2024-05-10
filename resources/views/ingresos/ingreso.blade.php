@@ -26,7 +26,7 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col">
+                <div class="col-md-11">
                     <!-- Confirm Password -->
                         <x-input-label for="placa_v" :value="__('Placa del vehiculo')" />
                         <x-adminlte-input type="text"
@@ -40,6 +40,9 @@
                                         </x-slot>
                         </x-adminlte-input>
                         <x-input-error :messages="$errors->get('placa_v')" class="mt-2" />
+                </div>
+                <div class="col" style="align-self: center;">
+                    <x-adminlte-button onclick="fBorrarCampo()" style="width: 100%;height:3rem;" id="borrarCampo" icon="fas fa-times" theme="danger" />
                 </div>
             </div>
             <hr>
@@ -80,7 +83,7 @@
         <div class="row">
             <div class="col">
                 @can('ingreso.create')
-                    <x-adminlte-button btn-consulta style="width: 100%;height:5em" id="guardarIngreso" icon="fas fa-save" theme="success" label="Registrar ingreso" />
+                    <x-adminlte-button style="width: 100%;height:5em" id="guardarIngreso" icon="fas fa-save" theme="success" label="Registrar ingreso" />
                 @endcan
             </div>
         </div>

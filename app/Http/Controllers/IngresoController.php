@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Ingreso;
-use App\Models\Tipo_Ingreso;
-use App\Models\Tipo_Vehiculo;
+use App\Models\TipoIngreso;
+use App\Models\TipoVehiculo;
 use App\Models\Canje;
 use App\Models\Club;
 use App\Models\Autorizado;
@@ -22,8 +22,8 @@ use Illuminate\Database\Eloquent\Model;
 class IngresoController extends Controller
 {
     public function index(){
-        $ingresos = Tipo_ingreso::all();
-        $vehiculos = Tipo_Vehiculo::all();
+        $ingresos = TipoIngreso::all();
+        $vehiculos = TipoVehiculo::all();
         $userId = Auth::id();
         return view('ingresos.ingreso',compact('ingresos','vehiculos','userId'));
     }
@@ -55,7 +55,7 @@ class IngresoController extends Controller
         ->where('ingreso.estado', '=', true)
         ->get();
 
-        $ingresos = Tipo_ingreso::all();
+        $ingresos = TipoIngreso::all();
         return view('ingresos.salida',compact('veringresosHoy','ingresos'));
     }
 
@@ -110,8 +110,8 @@ class IngresoController extends Controller
     //Pagina de busqueda de ingresos
     public function busquedaIngresos(){
 
-        $tipo_ingresos = Tipo_ingreso::all();
-        $tipo_vehiculos = Tipo_vehiculo::all();
+        $tipo_ingresos = TipoIngreso::all();
+        $tipo_vehiculos = TipoVehiculo::all();
         
         return view('ingresos.listadoIngresos',compact('tipo_ingresos','tipo_vehiculos'));
     }
@@ -271,7 +271,7 @@ class IngresoController extends Controller
                 $userId = $request->input('iduserlog');
     
                 $nombre_persona = $primerApellido." ".$segundoApellido." ".$primerNombre." ".$segundoNombre;
-                $ingresos = Tipo_ingreso::findOrFail($tipoingreso);
+                $ingresos = TipoIngreso::findOrFail($tipoingreso);
                 $tipo_ingreso = $ingresos->nombre_ingreso;
                 $fecha = date("Y-m-d");
                

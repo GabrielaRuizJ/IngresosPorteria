@@ -13,12 +13,8 @@ class ClubController extends Controller
     public function index()
     {
         // Lógica para mostrar una lista
-        $clubes = DB::table('club')
-        ->join('ciudad','ciudad.id','=','club.id_ciudad')
-        ->select('ciudad.nombre as ciudad','club.id as id','club.nombre_club as nombre_club','club.direccion as direccion','club.telefono as telefono','club.email1 as email1')
-        ->get();
-        $ciudades = Ciudad::all();
-        return view('parametros.club',compact('clubes','ciudades'));
+        $clubes = Club::all();
+        return view('parametros.club',compact('clubes'));
     }
 
     public function store(Request $request)

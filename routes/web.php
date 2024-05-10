@@ -14,6 +14,8 @@ use App\Http\Controllers\SocioController;
 use App\Http\Controllers\BloqueoController;
 use App\Http\Controllers\BloqueoSocioController;
 use App\Http\Controllers\SalidaController;
+use App\Http\Controllers\AutorizadoController;
+use App\Http\Controllers\CanjeController;
 
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
@@ -93,6 +95,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/socios/bloqueos',[BloqueoController::class,'store'])->name('bloqueo.create');
     
     Route::get('/socios/bloqueoSocio',[BloqueoSocioController::class,'index'])->name('bloqueo_socio');
+
+    Route::get('/autorizados/autorizado',[AutorizadoController::class,'index'])->name('autorizados');
+    Route::post('/autorizados/autorizado',[AutorizadoController::class,'store'])->name('autorizado.create');
+
+    Route::get('/canjes/canje',[CanjeController::class,'index'])->name('canjes');
     
 });
 

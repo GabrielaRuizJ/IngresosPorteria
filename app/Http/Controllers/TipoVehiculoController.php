@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tipo_vehiculo;
+use App\Models\TipoVehiculo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class TipoVehiculoController extends Controller
 {
     public function index(){
-        $tipovehiculos = Tipo_vehiculo::all();
+        $tipovehiculos = TipoVehiculo::all();
         return view('parametros.tipoVehiculo',compact('tipovehiculos'));
     }
     public function store(Request $request){
@@ -25,7 +25,7 @@ class TipoVehiculoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
             }else{
-                $tipoingreso = Tipo_vehiculo::create(['nombre_vehiculo'=>$request->input('nombre_vehiculo')]);
+                $tipoingreso = TipoVehiculo::create(['nombre_vehiculo'=>$request->input('nombre_vehiculo')]);
                 $request->session()->flash('mensaje', 'Tipo de vehiculo creado correctamente');
                 return redirect()->route('tipo_vehiculo');
             }

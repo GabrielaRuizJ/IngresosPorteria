@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Autorizado extends Model
 {
     use HasFactory;
-    protected $table = 'ciudad';
+    protected $table = 'autorizado';
     protected $fillable = [
         'cedula_autorizado',
         'nombre_autorizado',

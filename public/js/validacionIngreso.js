@@ -23,6 +23,10 @@ checkboxesTingreso.forEach(function(checkbox) {
     });
 });
 
+function fBorrarCampo(){
+    document.getElementById("placa_v").value="";
+}
+
 const btn = document.querySelector("#guardarIngreso");
 const form = document.querySelector("#formIng");
 

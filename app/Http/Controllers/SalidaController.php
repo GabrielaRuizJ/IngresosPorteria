@@ -21,7 +21,7 @@ class SalidaController extends Controller
         ]);
 
         if($salidaIndv){
-            $request->session()->flash('mensaje', 'Bloqueo creado correctamente');
+            $request->session()->flash('mensaje', 'Salida realizada correctamente');
             return redirect()->route('salidas');
         } else {
             $request->session()->flash('errormensaje', 'Error al crear bloqueo. Por favor comuniquese con el administrador del sistema');
