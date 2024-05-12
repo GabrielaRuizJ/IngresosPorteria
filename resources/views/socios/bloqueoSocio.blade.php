@@ -33,21 +33,74 @@
         </tr>
     @endforeach
 </x-adminlte-datatable>
-<x-adminlte-modal id="myModal" title="Nuevo registro de bloqueo x socio" theme="primary"
+<x-adminlte-modal id="myModal" title="Nuevo registro de bloqueo por socio" theme="primary"
         icon="fas fa-user-lock" size='lg' disable-animations>
-        <form action="{{route('bloqueo.create')}}" method="POST">
+        <form action="{{route('bloqueo_socio.create')}}" id="formBloqueoxSocio" method="POST">
             @csrf
-                <div class="row">
-                    <x-adminlte-input name="nombrebloqueo" required label="Nombre del bloqueo" fgroup-class="col-md-6" disable-feedback/>
+            <div class="row">
+                <div class="col">
+                    <label for="listado_bloqueos">Tipo de bloqueo</label>
+                    <select name="listado_bloqueos" id="listado_bloqueos" class="form-control">
+                        <option value="">Lista de bloqueos</option>
+                        @foreach ($bloqueos as $datbloqueoadd)
+                            <option value="{{$datbloqueoadd->id}}">{{$datbloqueoadd->nombre_bloqueo}}</option>
+                        @endforeach
+                    </select>
                 </div>
-            @can('bloqueo.create')
-                <x-adminlte-button type="submit" label="Guardar bloqueo" theme="primary" icon="fas fa-save"/>
-            @endcan
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="accionBloqueo">Número de accion</label>
+                    <input type="text" id="accionBloqueo" name="accionBloqueo" class="form-control">
+                </div>
+                <div class="col" id="bloqueoCedulaDiv" >
+                    <label for="cedulaBloqueo">Número de cedula</label>
+                    <input type="text" id="cedulaBloqueo" name="cedulaBloqueo" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="bloqueoTodosAccion">Bloquear todo el nucleo</label>
+                    <input type="checkbox" id="bloqueoTodosAccion" name="bloqueoTodosAccion" class="form-control">
+                </div>
+                
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <label for="bloqueo_ingreso">Bloquear ingreso al club</label>
+                    <input class="form-control" type="checkbox" name="bloqueo_ingreso" id="bloqueo_ingreso">
+                </div>
+                <div class="col">
+                    <label for="bloqueo_consumo">Bloquear consumos</label>
+                    <input class="form-control" type="checkbox" name="bloqueo_consumo" id="bloqueo_consumo">
+                </div>
+                <div class="col">
+                    <label for="bloqueo_indf">Bloqueo indefinido</label>
+                    <input class="form-control" type="checkbox" name="bloqueo_indf" id="bloqueo_indf">
+                </div>
+            </div>
+            <br>
+            <div class="row" id="fecBloqueoIndf" style="display:none">
+                <div class="col">
+                    <label for="bloqueo_ingreso">Fecha de inicio del bloqueo</label>
+                    <input  disabled class="form-control" type="date" value="{{date('Y-m-d')}}" name="fecInicioBloqueo" id="fecInicioBloqueo">
+                </div>
+                <div class="col">
+                    <label for="bloqueo_indf">Fecha final del bloqueo</label>
+                    <input disabled  class="form-control" type="date" value="{{date('Y-m-d')}}" name="fecFinBloqueo" id="fecFinBloqueo">
+                </div>
+            </div>
         </form>
+        <hr>
+        <div class="col-md-12">
+            @can('bloqueo.create')
+                <x-adminlte-button style="width:100%" id="btnBloqueoxSocio" type="submit" label="Guardar bloqueo socio" theme="primary" icon="fas fa-save"/>
+            @endcan
+        </div>
     </x-adminlte-modal>
 @stop
 
 @section('js')
+    <script src="{{asset('/js/bloqueoSocio.js') }}"></script>
     @if(session()->has('mensaje'))
     <script>
         Swal.fire({

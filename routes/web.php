@@ -90,11 +90,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/ingresos/resultadobingresos',[IngresoController::class,'resultadoBusquedaIngresos'])->name('resBusquedaIngresos');
     
     Route::get('/socios/socios',[SocioController::class,'index'])->name('socios');
+    Route::post('/socios/socios',[SocioController::class,'store'])->name('socio.create');
 
     Route::get('/socios/bloqueos',[BloqueoController::class,'index'])->name('bloqueos');
     Route::post('/socios/bloqueos',[BloqueoController::class,'store'])->name('bloqueo.create');
     
     Route::get('/socios/bloqueoSocio',[BloqueoSocioController::class,'index'])->name('bloqueo_socio');
+    Route::post('/socios/bloqueoSocio',[BloqueoSocioController::class,'store'])->name('bloqueo_socio.create');
 
     Route::get('/autorizados/autorizado',[AutorizadoController::class,'index'])->name('autorizados');
     Route::post('/autorizados/autorizado',[AutorizadoController::class,'store'])->name('autorizado.create');

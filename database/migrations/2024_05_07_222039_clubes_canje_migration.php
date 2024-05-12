@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('clubes_canje', function (Blueprint $table) {
             $table->id();
             $table->string('club',100);
-            $table->string('pbx',20);
-            $table->string('correo',100);
+            $table->string('pbx',20)->nullable();
+            $table->string('correo',100)->nullable();
             $table->boolean('estado')->default(true);
             $table->timestamps();
         });

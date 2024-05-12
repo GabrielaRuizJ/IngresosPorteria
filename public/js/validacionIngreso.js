@@ -49,69 +49,133 @@ btn.addEventListener("click", (e) =>{
             break;  
         }
     }
+    console.log(valorIngresoeleccionado);
     cedula = document.getElementById("cedulaOcp").value;
     primAp = document.getElementById("primAp").value;
     segAp = document.getElementById("segAp").value;
     primNm = document.getElementById("primNm").value;
     segNm = document.getElementById("segNm").value;
-    if(valorCheckboxSeleccionado && placa && valorIngresoeleccionado && cedula && primAp && primNm){
-        
-        const formData = new FormData(document.getElementById('formIng'));
 
-        fetch('/IngresosPorteria/public/api/guardarIngreso', {
-            method: 'POST',  body: formData
-        }).then(response => {
-            if (!response.ok) { throw new Error('La solicitud no fue exitosa'); }
-            return response.json();
-        })
-        .then(data => {
-            if (Object.keys(data).length === 0 && data.constructor === Object) {
-                console.log('La respuesta está vacía');
-            } else {
-                if(data.respuesta == 404){
-                    crearCamposCanje();
-                }else if(data.respuesta == 300){
-                    Swal.fire({
-                        title:'Error',
-                        icon: 'error',
-                        text: data.datos
-                    });
-                }else if(data.respuesta == 301){
-                    Swal.fire({
-                        title: "El rango de fechas de canje ya ha vencido ",
-                        text:'Registrar nuevo rango de rechas',
-                        showDenyButton: true,
-                        showCancelButton: false,
-                        confirmButtonText: "Si",
-                        denyButtonText: "No"
-                      }).then((result) => {
-                        /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
-                            crearCamposCanje()
-                        }else{
-                            limpiarCampos()
-                        }
-                    });
-                }else if(data.respuesta == 200){
-                    Swal.fire({
-                        title:'Correcto',
-                        icon: 'success',
-                        text: "Ingreso registrado correctamente"
-                    });
-                    limpiarCampos()
+    if( valorIngresoeleccionado == 1 ) {
+        if(valorCheckboxSeleccionado && placa && cedula){
+            const formData = new FormData(document.getElementById('formIng'));
+        
+            fetch('/IngresosPorteria/public/api/guardarIngreso', {
+                method: 'POST',  body: formData
+            }).then(response => {
+                if (!response.ok) { throw new Error('La solicitud no fue exitosa'); }
+                return response.json();
+            })
+            .then(data => {
+                if (Object.keys(data).length === 0 && data.constructor === Object) {
+                    console.log('La respuesta está vacía');
+                } else {
+                    if(data.respuesta == 404){
+                        crearCamposCanje();
+                    }else if(data.respuesta == 300){
+                        Swal.fire({
+                            title:'Error',
+                            icon: 'error',
+                            text: data.datos
+                        });
+                    }else if(data.respuesta == 301){
+                        Swal.fire({
+                            title: "El rango de fechas de canje ya ha vencido ",
+                            text:'Registrar nuevo rango de rechas',
+                            showDenyButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: "Si",
+                            denyButtonText: "No"
+                          }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                crearCamposCanje()
+                            }else{
+                                limpiarCampos()
+                            }
+                        });
+                    }else if(data.respuesta == 200){
+                        Swal.fire({
+                            title:'Correcto',
+                            icon: 'success',
+                            text: "Ingreso registrado correctamente"
+                        });
+                        limpiarCampos()
+                    }
+                    console.log(data.respuesta)
                 }
-                console.log(data.respuesta)
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener datos:', error);
-        });
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+            });
+        }else{
+                Swal.fire({
+                    title:'Error',
+                    icon:'error',
+                    text:"Los datos no están completos"
+                });
+            
+        }
     }else{
-        Swal.fire({
-            title:'Error',
-            icon:'error',
-            text:"Los datos no están completos"
-        });
+        if(valorCheckboxSeleccionado && placa  && cedula && primAp && primNm){
+        
+            const formData = new FormData(document.getElementById('formIng'));
+    
+            fetch('/IngresosPorteria/public/api/guardarIngreso', {
+                method: 'POST',  body: formData
+            }).then(response => {
+                if (!response.ok) { throw new Error('La solicitud no fue exitosa'); }
+                return response.json();
+            })
+            .then(data => {
+                if (Object.keys(data).length === 0 && data.constructor === Object) {
+                    console.log('La respuesta está vacía');
+                } else {
+                    if(data.respuesta == 404){
+                        crearCamposCanje();
+                    }else if(data.respuesta == 300){
+                        Swal.fire({
+                            title:'Error',
+                            icon: 'error',
+                            text: data.datos
+                        });
+                    }else if(data.respuesta == 301){
+                        Swal.fire({
+                            title: "El rango de fechas de canje ya ha vencido ",
+                            text:'Registrar nuevo rango de rechas',
+                            showDenyButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: "Si",
+                            denyButtonText: "No"
+                          }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                crearCamposCanje()
+                            }else{
+                                limpiarCampos()
+                            }
+                        });
+                    }else if(data.respuesta == 200){
+                        Swal.fire({
+                            title:'Correcto',
+                            icon: 'success',
+                            text: "Ingreso registrado correctamente"
+                        });
+                        limpiarCampos()
+                    }
+                    console.log(data.respuesta)
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+            });
+        }else{
+            Swal.fire({
+                title:'Error',
+                icon:'error',
+                text:"Los datos no están completos"
+            });
+        }
     }
 
     

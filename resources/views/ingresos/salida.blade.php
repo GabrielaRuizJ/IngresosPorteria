@@ -108,6 +108,17 @@
 
 @section('js')
     <script src="{{asset('/js/salidasValidacion.js') }}"></script>
+    <script>
+           /* $('#table1').dataTable( {
+                    "language": {
+                        "url": "/js/Spanish.json"
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+            });*/
+    </script>
     @if(session()->has('mensaje'))
     <script>
         Swal.fire({

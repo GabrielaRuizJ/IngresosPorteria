@@ -11,9 +11,12 @@
     $heads = ['ID','cedula','nombre','accion','email','secuencia'];
 @endphp
 
-@can('socio.update')
+@can('socio.create')
     <div class="row float-right" style="margin-bottom: 10px">
-        <x-adminlte-button type="button" id="btnSyncSocios" label="Sincronizar datos" theme="primary" icon="fas fa-sync" class="float-right" />
+        <form action="{{route('socio.create')}}" id="syncSocios" method="post">
+            @csrf
+            <x-adminlte-button type="button" id="btnSyncSocios" label="Sincronizar datos" theme="primary" icon="fas fa-sync" class="float-right" />
+        </form>
     </div>
 @endcan
 {{-- Minimal example / fill data using the component slot --}}
@@ -36,10 +39,11 @@
     <script src="{{asset('/js/sincronizarSocios.js') }}"></script>
     @if(session()->has('mensaje'))
     <script>
+        const contenidoHTMLRes = decodeEntities("{{session('mensaje')}}")
         Swal.fire({
-            title:'Correcto',
-            icon:'success',
-            text:"{{session('mensaje')}}"
+            title:'Resultlado de sincronizacion',
+            icon:'info',
+            html:contenidoHTMLRes
         });
     </script>
     @endif

@@ -6,6 +6,7 @@ use App\Models\Club;
 use App\Models\Ciudad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 
 class ClubController extends Controller
@@ -17,6 +18,59 @@ class ClubController extends Controller
         return view('parametros.club',compact('clubes'));
     }
 
+    public function store(){
+        $response = Http::get('http://localhost/prueba/apiSyncClubes.php');
+        $data1 = json_decode($response);
+                    
+        if($data1->respuesta == 200){
+            $datos_api = $data1->datos;
+            $contClubUpdate = 0;
+            $contClubNew = 0;
+            $cont = 0;
+            $cedula_b = "";
+            foreach($datos_api as $dat_club ){
+                $buscarClub = Club::where('id', $dat_club->id)
+                ->update([
+                    'club' =>  $dat_club->club,
+                    'pbx' =>  $dat_club->pbx,
+                    'correo' =>  $dat_club->correo,
+                    'estado' =>  $dat_club->estado
+                ]);
+                if($buscarClub){
+                    $contClubUpdate++;
+                }else{
+                    $crearClub = Club::create([
+                        'id' =>  $dat_club->id,
+                        'club' =>  $dat_club->club,
+                        'pbx' =>  $dat_club->pbx,
+                        'correo' =>  $dat_club->correo,
+                        'estado' =>  $dat_club->estado
+                    ]);
+                    if($crearClub){
+                        $contClubNew++;
+                    }
+                   
+                }
+                $cont++;
+            }
+            if($cont)
+            $datos_respuesta = "<h4>Resultado de la sincronizacion</h4>";
+            $datos_respuesta .="<label>Total de clubes recibidos en el servicio: </label>".$cont;
+            $datos_respuesta .="<label>Total de clubes actualizados: </label>".$contClubUpdate;
+            $datos_respuesta .="<label>Total de clubes nuevos registrados: </label>".$contClubNew;
+
+            session()->flash('mensaje',$datos_respuesta);
+            return redirect()->route('clubes');
+            //dd($datos_respuesta);
+        }else{
+            $data = json_encode(array($data1->datos));
+            session()->flash('mensaje',json_encode($data));
+            return redirect()->route('clubes');
+            //dd($data);
+        }
+    }
+
+/*
     public function store(Request $request)
     {
         try{
@@ -48,7 +102,7 @@ class ClubController extends Controller
             dd($e->getMessage());
         }
     }
-
+*/
     public function edit($id){
         $clubdat = DB::table('club')
         ->join('ciudad','ciudad.id','=','club.id_ciudad')

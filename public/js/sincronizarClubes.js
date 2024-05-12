@@ -1,7 +1,7 @@
-const btn = document.querySelector("#btnSyncSocios");
+const btn = document.querySelector("#btnSyncClubes");
 
 btn.addEventListener("click", (e) =>{      
-  const form = document.querySelector("#syncSocios");
+  const form = document.querySelector("#syncClubes");
     Swal.fire({
         title: "Confirmación ",
         text:'¿Esta seguro que desea sincronizar los datos? Esta accion no puede se reversar',

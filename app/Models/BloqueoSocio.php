@@ -13,9 +13,6 @@ class BloqueoSocio extends Model
         'cedula',
         'accion',
         'tipo_bloqueo',
-        'fecha_inicio_bloqueo',
-        'fecha_inicio_bloqueo',
-        'fecha_fin_bloqueo',
         'indefinido',
         'bloqueo_consumo',
         'bloqueo_ingreso'
