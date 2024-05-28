@@ -8,7 +8,7 @@
 @endphp
 
 @section('content')
-<x-adminlte-datatable id="table1" :heads="$heads">
+<x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
    @foreach($canjes as $datcanjes)
         <tr>
             <td>{{ $datcanjes->id }}</td>

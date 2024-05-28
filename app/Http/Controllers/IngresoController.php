@@ -27,23 +27,7 @@ class IngresoController extends Controller
         $userId = Auth::id();
         return view('ingresos.ingreso',compact('ingresos','vehiculos','userId'));
     }
-    public function consultarIngreso(){
-        echo json_encode("hola");
-        /* try {
-            $url = env('URL_SERVER_API','http://localhost');
-            $documento = '1000127738';
-            $response = Http::get('http://localhost/prueba/api.php?documento='.$documento);
-            /$url = env('URL_SERVER_API','http://localhost');
-            $response = Http::post('http://localhost/prueba/api.php', [
-                'documento' => $documento,
-            ]);
-            $data = $response->json();
-            return $data;
-        } catch (\Exception $e) {
-            return $e;
-        }*/
-        
-    }
+
     public function ingresosHoy(){
         $fecha = date("Y-m-d");
         $veringresosHoy = DB::table('ingreso')

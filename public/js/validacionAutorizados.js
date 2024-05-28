@@ -32,3 +32,31 @@ btnAturizaCreate.addEventListener("click", (e) =>{
     }
 
 });
+
+
+function autorizadoElim(id,cedula,nombre1,nombre2,fecha1){
+    document.getElementById("datIdAut").value = id;
+    document.getElementById("datCedulaAut").value = cedula;
+    document.getElementById("datNomAAut").value = nombre1;
+    document.getElementById("datNomQAut").value = nombre2;
+    document.getElementById("datFIAut").value = fecha1;
+}
+
+const btnSalidaIndv = document.querySelector("#btnElimAut");
+
+btnSalidaIndv.addEventListener("click", (e) =>{  
+    const formElimAut = document.querySelector("#formElimAut");     
+    Swal.fire({
+        title: "Confirmación ",
+        text:'¿Esta seguro que desea eliminar esta autorizacion de ingreso? Esta accion no puede se reversar',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Si",
+        denyButtonText: "No"
+      }).then((result) => {
+  
+        if (result.isConfirmed) {
+            formElimAut.submit();
+        }
+    });
+})

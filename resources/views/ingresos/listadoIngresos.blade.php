@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Filtro de ingresos')
 @section('content_header')
     <h1><li class="fas fa-search"></li> Búsqueda de ingresos</li> </h1>
 @endsection

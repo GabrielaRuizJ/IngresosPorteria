@@ -100,6 +100,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/autorizados/autorizado',[AutorizadoController::class,'index'])->name('autorizados');
     Route::post('/autorizados/autorizado',[AutorizadoController::class,'store'])->name('autorizado.create');
+    Route::delete('/autorizados/autorizado',[AutorizadoController::class,'delete'])->name('autorizado.delete');
 
     Route::get('/canjes/canje',[CanjeController::class,'index'])->name('canjes');
     

@@ -12,7 +12,7 @@
     <x-adminlte-button label="Nuevo autorizado" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#myModal" class="float-right"/>
 @endcan
 <br><br>
-<x-adminlte-datatable id="table1" :heads="$heads">
+<x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
    @foreach($autorizados as $datautorizado)
         <tr>
             <td>{{ $datautorizado->id }}</td>
@@ -21,7 +21,13 @@
             <td>{{ $datautorizado->nombre_autoriza }}</td>
             <td>{{ $datautorizado->fecha_ingreso }}</td>
             <td>{{ $datautorizado->fecha_registro }}</td>
-            <td></td>
+            <td>
+                @can('autorizado.delete')
+                <a data-toggle="modal" data-target="#modalEliminarAut" onclick="autorizadoElim('{{$datautorizado->id}}','{{$datautorizado->cedula_autorizado}}','{{$datautorizado->nombre_autorizado}}','{{$datautorizado->nombre_autoriza}}','{{$datautorizado->fecha_ingreso}}')" href="#" class="btn btn-lg btn-default text-danger mx-1 shadow">
+                    <i class="fa fa-lg fa-fw fas fa-door-closed"></i>
+                </a>
+                @endcan
+            </td>
         </tr>
     @endforeach
 </x-adminlte-datatable>
@@ -58,7 +64,41 @@
                 <x-adminlte-button id="btnGuardarAutoriza" style="width: 100%" type="submit" label=" Guardar autorización" theme="primary" icon="fas fa-save"/>
             @endcan
         </div>
-    </x-adminlte-modal>
+</x-adminlte-modal>
+    
+<x-adminlte-modal id="modalEliminarAut" title="Eliminar registro de autorización" theme="primary"
+        icon="fas fa-user-check" size='lg' disable-animations>
+        <form action="{{route('autorizado.delete')}}" id="formElimAut" method="POST">
+            @csrf
+            @method('DELETE')
+                <div class="col">
+                    <x-adminlte-input readonly type="hidden" name="datIdAut" id="datIdAut" required fgroup-class="col-md-12" />
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <x-adminlte-input readonly type="text" name="datCedulaAut" id="datCedulaAut" required label="Cedula del autorizado" fgroup-class="col-md-12" />
+                    </div>
+                    <div class="col">
+                        <x-adminlte-input readonly type="text" name="datNomAAut" id="datNomAAut" required label="Nombre del autorizado" fgroup-class="col-md-12" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <x-adminlte-input readonly type="text" name="datNomQAut" id="datNomQAut" required label="Nombre de quien autoriza" fgroup-class="col-md-12" />
+                    </div>
+                    <div class="col">
+                        <x-adminlte-input readonly type="text" name="datFIAut" id="datFIAut" required label="Fecha de ingreso" fgroup-class="col-md-12" />
+                    </div>
+                </div>
+        </form>
+        <hr>
+        <div class="row-md-12">
+            @can('autorizado.delete')
+                <x-adminlte-button id="btnElimAut" style="width: 100%" type="submit" label="Eliminar autorización" theme="primary" icon="fas fa-save"/>
+            @endcan
+        </div>
+</x-adminlte-modal> 
+   
 @endsection
 
 

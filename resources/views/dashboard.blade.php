@@ -2,7 +2,7 @@
 @section('css')
 <link rel="stylesheet" href="css/admin_custom.css">
 @endsection
-@section('title', 'Dashboard')
+@section('title', 'Sistema de ingresos')
 
 @section('content_header')
     <h1>Dashboard</h1>

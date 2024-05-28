@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title','Ingresos')
+@section('title','Registro de ingresos')
 
 @section('content_header')
     <h1><li class="fas fa-door-open"></li>Realizar ingresos</h1>

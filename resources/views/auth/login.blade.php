@@ -1,55 +1,88 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-    <div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sistema de ingresos</title>
+	<link rel="stylesheet" href="{{asset('css/cssLogin.css')}}">
+    <script src="{{asset('js/fontAwesome.js')}}"></script>
+</head>
+<body>
+	<img class="wave" src="build/assets/images/wavePV.svg">
+	<div class="container">
+        <div class="img">
+			<img src="build/assets/images/logoLogin.svg">
+		</div>
+        <x-auth-session-status class="mb-4" :status="session('status')" />
         @if ($errors->any())
             <div class="alert-login alert-light-login" role="alert">
                 @foreach ($errors->all() as $error)
-                    <div>{{$error}}</div>
+                    <label>{{$error}}</label>
                 @endforeach
             </div>
         @endif
+        <div class="login-content">
+            
+            <form action="{{ route('login') }}" method="POST">
+                @csrf
+				<img src="build/assets/images/logoLogin.svg">
+				<h2 class="title">Bienvenido</h2>
+                <div class="input-div one">
+                    <div class="i">
+                            <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                      <x-input-label for="username" :value="__('Usuario')" />
+                      <x-text-input id="username" class="block mt-1 w-full input" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
+                      <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i"> 
+                         <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <x-input-label for="password" :value="__('Password')" />
+                        <x-text-input id="password" class="block mt-1 w-full input"
+                                        type="password"
+                                        name="password"
+                                        required autocomplete="current-password" />
+            
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    </div>
+                </div>
+                <div class="">
+                    <label for="remember_me" class="">
+                        <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
+                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Recordar datos') }}</span>
+                    </label>
+                </div>
+                <div class="">
+                    <x-primary-button class=" btn">
+                        {{ __('Ingresar') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </div>
     </div>
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('js')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="username" :value="__('Usuario')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <script type="text/javascript">
+        const inputs = document.querySelectorAll(".input");
+        function addcl(){
+            let parent = this.parentNode.parentNode;
+            parent.classList.add("focus");
+        }
+        function remcl(){
+            let parent = this.parentNode.parentNode;
+            if(this.value == ""){
+                parent.classList.remove("focus");
+            }
+        }
+        inputs.forEach(input => {
+            input.addEventListener("focus", addcl);
+            input.addEventListener("blur", remcl);
+        });
+    </script>
+@stop
+   
+</body>
+</html>

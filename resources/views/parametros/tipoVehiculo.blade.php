@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Tipos de vehiculos')
 @section('content_header')
 @can('tipoingreso.create')
     <x-adminlte-button label="Nueva tipo de vehiculo" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalciudad" class="float-right" />
@@ -16,7 +16,7 @@
             'ID','nombre del tipo de vehiculo','' ];
     @endphp
 
-<x-adminlte-datatable id="table1" :heads="$heads">
+<x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
     @foreach ($tipovehiculos as $tipovehiculo)
     <tr>
         <td>{{$tipovehiculo->id}}</td>

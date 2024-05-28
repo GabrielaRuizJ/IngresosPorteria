@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Bloqueo por socio')
 
 @section('content_header')
     <h1><li class="fas fa-user-lock"></li> Bloqueos de socios del sistema</h1>
@@ -18,7 +18,7 @@
     </div>
 @endcan
 {{-- Minimal example / fill data using the component slot --}}
-<x-adminlte-datatable id="table1" :heads="$heads">
+<x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
     @foreach ($bloqueo_socio as $datbloqueo_socio)
         <tr>
             <td>{{$datbloqueo_socio->id}}</td>

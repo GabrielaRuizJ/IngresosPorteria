@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Roles')
 
 @section('content_header')
     <h1><li class="fas fa-people-arrows"></li> Listado de roles</h1>

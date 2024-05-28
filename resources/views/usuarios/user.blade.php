@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Usuarios')
 
 @section('content_header')
     <h1><li class="fas fa-users"></li> Usuarios del sistema</h1>
@@ -27,7 +27,7 @@ $heads = [
 </div>
 @endcan
 {{-- Minimal example / fill data using the component slot --}}
-<x-adminlte-datatable id="table1" :heads="$heads">
+<x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
     @foreach($datos as $dato)
         <tr>
             <td>{{ $dato->id }}</td>

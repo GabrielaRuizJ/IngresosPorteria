@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Clubes')
 @section('content_header')
     <h1><li class="fas fa-hotel"></li> Listado de clubes para canje</h1>
 @endsection
@@ -15,7 +15,7 @@
     </form>
 @endcan
 <br><br>
-    <x-adminlte-datatable id="tableclub" :heads="$heads">
+    <x-adminlte-datatable id="tableclub" :heads="$heads" with-buttons>
         @foreach ($clubes as $club)
         <tr>
             <td>{{$club->id}}</td>

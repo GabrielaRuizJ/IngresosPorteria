@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Salidas')
 @section('content_header')
     <h1><li class="fas fa-door-open"></li>Personas dentro del club</li> </h1>
     <h3>Fecha: {{date('Y-m-d')}}</h3>
@@ -7,14 +7,16 @@
 @section('content')
     @php
         $heads = [
-            'ID','tipo de ingreso','cedula','nombre','vehiculo','placa','hora de ingreso','' ];
+            'ID','tipo de ingreso','cedula','nombre','vehiculo','placa','hora de ingreso','detalle','' ];
+        
     @endphp
 @can('salida.create')
 <div class="row float-right" style="margin-bottom: 10px">
     <x-adminlte-button label="Salida masiva del día" theme="primary" icon="fas fa-door-closed" data-toggle="modal" data-target="#modalSalidasMasivas" class="float-right" />
 </div>
 @endcan
-<x-adminlte-datatable id="table1" :heads="$heads">
+
+<x-adminlte-datatable id="table1" :heads="$heads"  with-buttons>
    @foreach($veringresosHoy as $dato)
         <tr>
             <td>{{ $dato->id }}</td>
@@ -24,6 +26,7 @@
             <td>{{ $dato->nombre_vehiculo }}</td>
             <td>{{ $dato->placa }}</td>
             <td>{{ $dato->hora_ingreso }}</td>
+            <td></td>
             <td>
                 @can('salida.create')
                 <a data-toggle="modal" data-target="#modalSalidaIndv" onclick="salidaIndv('{{$dato->id}}','{{$dato->nombre_ingreso}}','{{$dato->cedula}}','{{$dato->nombre}}','{{$dato->nombre_vehiculo}}','{{$dato->placa}}')" href="#" class="btn btn-lg btn-default text-danger mx-1 shadow">
@@ -108,17 +111,6 @@
 
 @section('js')
     <script src="{{asset('/js/salidasValidacion.js') }}"></script>
-    <script>
-           /* $('#table1').dataTable( {
-                    "language": {
-                        "url": "/js/Spanish.json"
-                    },
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
-            });*/
-    </script>
     @if(session()->has('mensaje'))
     <script>
         Swal.fire({
