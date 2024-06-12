@@ -4,7 +4,8 @@
     <h1><li class="fas fa-user-check"></li> Listado de personas autorizadas</li> </h1>
 @endsection
 @php
-    $heads = ['ID','cedula','nombre','nombre ','Fecha de ingreso','Fecha de registro','' ];
+    $heads = ['ID','cedula','nombre','nombre ','Fecha inicio de ingreso','Fecha fin de ingreso','Fecha de registro','' ];
+    $contador = 0;
 @endphp
 
 @section('content')
@@ -14,18 +15,27 @@
 <br><br>
 <x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
    @foreach($autorizados as $datautorizado)
+        @php
+            $contador++;
+        @endphp
         <tr>
             <td>{{ $datautorizado->id }}</td>
             <td>{{ $datautorizado->cedula_autorizado }}</td>
             <td>{{ $datautorizado->nombre_autorizado }}</td>
             <td>{{ $datautorizado->nombre_autoriza }}</td>
             <td>{{ $datautorizado->fecha_ingreso }}</td>
-            <td>{{ $datautorizado->fecha_registro }}</td>
+            <td>{{ $datautorizado->fecha_fin_ingreso }}</td>
+            <td>{{ $datautorizado->created_at }}</td>
             <td>
                 @can('autorizado.delete')
-                <a data-toggle="modal" data-target="#modalEliminarAut" onclick="autorizadoElim('{{$datautorizado->id}}','{{$datautorizado->cedula_autorizado}}','{{$datautorizado->nombre_autorizado}}','{{$datautorizado->nombre_autoriza}}','{{$datautorizado->fecha_ingreso}}')" href="#" class="btn btn-lg btn-default text-danger mx-1 shadow">
-                    <i class="fa fa-lg fa-fw fas fa-door-closed"></i>
-                </a>
+                    <form method="POST" action="{{route('autorizado.delete')}}" id="formElimAut{{$contador}}" name="formElimAut{{$contador}}" >
+                        @csrf
+                        @method('delete')
+                        <input type="hidden" name="datIdAut" id="datIdAut" value="{{$datautorizado->id}}">
+                        <input type="hidden" name="datFIAut" id="datFIAut" value="{{$datautorizado->fecha_ingreso}}">
+                        <input type="hidden" name="datFFIAut" id="datFFIAut" value="{{$datautorizado->fecha_fin_ingreso}}">
+                    </form>
+                    <button onclick="elimAuth({{$contador}})" type="button" id="btnElimAut{{$contador}}" name="btnElimAut{{$contador}}" class="btn text-dark bg-light border border-danger"><i class="fas fa-times"></i> </button>
                 @endcan
             </td>
         </tr>
@@ -45,16 +55,20 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <x-adminlte-input type="text" name="docautoriza" id="docautoriza" required label="Cédula de quien autoriza" fgroup-class="col-md-12" />
+                        <x-adminlte-input type="text" name="docautoriza" id="docautoriza" readonly required label="Cédula de quien autoriza" fgroup-class="col-md-12" value="{{$cedulaId}}" />
                     </div>
                     <div class="col">
-                        <x-adminlte-input type="text" name="nomautoriza" id="nomautoriza" required label="Nombre de quien autoriza" fgroup-class="col-md-12" />
+                        <x-adminlte-input type="text" name="nomautoriza" id="nomautoriza" readonly required label="Nombre de quien autoriza" fgroup-class="col-md-12" value="{{$nameId}}" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="fechaIngreso">Fecha de ingreso</label>
+                        <label for="fechaIngreso">Fecha inicio de autorización</label>
                         <input type="date" class="form-control" value="{{date("Y-m-d")}}" id="fechaIngreso" name="fechaIngreso" required fgroup-class="col-md-12" />
+                    </div>
+                    <div class="col">
+                        <label for="fechaFIngreso">Fecha fin de autorización</label>
+                        <input type="date" class="form-control" value="{{date("Y-m-d")}}" id="fechaFIngreso" name="fechaFIngreso" required fgroup-class="col-md-12" />
                     </div>
                 </div>
         </form>
@@ -65,40 +79,7 @@
             @endcan
         </div>
 </x-adminlte-modal>
-    
-<x-adminlte-modal id="modalEliminarAut" title="Eliminar registro de autorización" theme="primary"
-        icon="fas fa-user-check" size='lg' disable-animations>
-        <form action="{{route('autorizado.delete')}}" id="formElimAut" method="POST">
-            @csrf
-            @method('DELETE')
-                <div class="col">
-                    <x-adminlte-input readonly type="hidden" name="datIdAut" id="datIdAut" required fgroup-class="col-md-12" />
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <x-adminlte-input readonly type="text" name="datCedulaAut" id="datCedulaAut" required label="Cedula del autorizado" fgroup-class="col-md-12" />
-                    </div>
-                    <div class="col">
-                        <x-adminlte-input readonly type="text" name="datNomAAut" id="datNomAAut" required label="Nombre del autorizado" fgroup-class="col-md-12" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <x-adminlte-input readonly type="text" name="datNomQAut" id="datNomQAut" required label="Nombre de quien autoriza" fgroup-class="col-md-12" />
-                    </div>
-                    <div class="col">
-                        <x-adminlte-input readonly type="text" name="datFIAut" id="datFIAut" required label="Fecha de ingreso" fgroup-class="col-md-12" />
-                    </div>
-                </div>
-        </form>
-        <hr>
-        <div class="row-md-12">
-            @can('autorizado.delete')
-                <x-adminlte-button id="btnElimAut" style="width: 100%" type="submit" label="Eliminar autorización" theme="primary" icon="fas fa-save"/>
-            @endcan
-        </div>
-</x-adminlte-modal> 
-   
+
 @endsection
 
 

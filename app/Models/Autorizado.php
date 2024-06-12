@@ -14,6 +14,8 @@ class Autorizado extends Model
         'nombre_autorizado',
         'cedula_autoriza',
         'nombre_autoriza',
-        'fecha_ingreso'
+        'fecha_ingreso',
+        'fecha_fin_ingreso',
+        'id_usuario_update'
     ];
 }

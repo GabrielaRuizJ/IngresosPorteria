@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('socios', function (Blueprint $table) {
+        Schema::create('log', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula',30);
-            $table->string('nombre',100);
-            $table->string('accion',10);
-            $table->string('email',100);
-            $table->integer('secuencia')->unsigned();
-            $table->boolean('estado')->default(true);
+            $table->date('fecha')->useCurrent();
+            $table->string('accion',90);
+            $table->string('tabla_accion',50);
+            $table->integer('id_usuario')->unsigned();
+            $table->string('nombre_usuario',90);
+            $table->string('comentarios',100);
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('log');
     }
 };

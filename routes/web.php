@@ -12,7 +12,7 @@ use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\IngresoController;
 use App\Http\Controllers\SocioController;
 use App\Http\Controllers\BloqueoController;
-use App\Http\Controllers\BloqueoSocioController;
+use App\Http\Controllers\BloqueoIngresoController;
 use App\Http\Controllers\SalidaController;
 use App\Http\Controllers\AutorizadoController;
 use App\Http\Controllers\CanjeController;
@@ -94,9 +94,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/socios/bloqueos',[BloqueoController::class,'index'])->name('bloqueos');
     Route::post('/socios/bloqueos',[BloqueoController::class,'store'])->name('bloqueo.create');
-    
-    Route::get('/socios/bloqueoSocio',[BloqueoSocioController::class,'index'])->name('bloqueo_socio');
-    Route::post('/socios/bloqueoSocio',[BloqueoSocioController::class,'store'])->name('bloqueo_socio.create');
+    Route::delete('/socios/bloqueos',[BloqueoController::class,'delete'])->name('bloqueo.delete');
+
+    Route::get('/parametros/bloqueoIngreso',[BloqueoIngresoController::class,'index'])->name('bloqueo_ingreso');
+    Route::post('/parametros/bloqueoIngreso',[BloqueoIngresoController::class,'store'])->name('bloqueo_ingreso.create');
+    Route::delete('/parametros/bloqueoIngreso',[BloqueoIngresoController::class,'delete'])->name('bloqueo_ingreso.delete');
 
     Route::get('/autorizados/autorizado',[AutorizadoController::class,'index'])->name('autorizados');
     Route::post('/autorizados/autorizado',[AutorizadoController::class,'store'])->name('autorizado.create');

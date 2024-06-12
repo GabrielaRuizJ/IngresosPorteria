@@ -8,17 +8,9 @@
 
 @section('content')
 @php
-    $heads = ['ID','cedula','nombre','accion','email','secuencia'];
+    $heads = ['ID','cedula','nombre','accion','email','secuencia','estado'];
 @endphp
 
-@can('socio.create')
-    <div class="row float-right" style="margin-bottom: 10px">
-        <form action="{{route('socio.create')}}" id="syncSocios" method="post">
-            @csrf
-            <x-adminlte-button type="button" id="btnSyncSocios" label="Sincronizar datos" theme="primary" icon="fas fa-sync" class="float-right" />
-        </form>
-    </div>
-@endcan
 {{-- Minimal example / fill data using the component slot --}}
 <x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
     @foreach ($socios as $datsocios)
@@ -29,6 +21,13 @@
             <td>{{$datsocios->accion}}</td>
             <td>{{$datsocios->email}}</td>
             <td>{{$datsocios->secuencia}}</td>
+            <td>
+                @if ($datsocios->estado == 1)
+                    <b>Activo</b>
+                @else
+                    <b>Inactivo</b>
+                @endif
+            </td>
         </tr>
     @endforeach
 </x-adminlte-datatable>

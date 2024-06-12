@@ -2,35 +2,20 @@ var bloqueoIndefBtn = document.getElementById('bloqueo_indf');
 
 bloqueoIndefBtn.addEventListener('change', function(event) {
     if (bloqueoIndefBtn.checked) {
-        document.getElementById("fecBloqueoIndf").style.display = "initial";
-        document.getElementById("fecInicioBloqueo").disabled = false; 
-        document.getElementById("fecFinBloqueo").disabled = false; 
-    }else{
         document.getElementById("fecBloqueoIndf").style.display = "none";
         document.getElementById("fecInicioBloqueo").disabled = true; 
         document.getElementById("fecFinBloqueo").disabled = true; 
-
-    }
-});
-
-var bloqueoTodosNucleo = document.getElementById('bloqueoTodosAccion');
-
-bloqueoTodosNucleo.addEventListener('change', function(event) {
-    if (bloqueoTodosNucleo.checked) {
-        document.getElementById("bloqueoCedulaDiv").style.visibility = "hidden";
-        document.getElementById("cedulaBloqueo").disabled = false; 
     }else{
-        document.getElementById("bloqueoCedulaDiv").style.visibility = "initial";
-        document.getElementById("cedulaBloqueo").disabled = false; 
-        document.getElementById("bloqueoTodosAccion").checked = false; 
-
+        document.getElementById("fecBloqueoIndf").style.display = "initial";
+        document.getElementById("fecInicioBloqueo").disabled = false; 
+        document.getElementById("fecFinBloqueo").disabled = false; 
     }
 });
 
 const btnBloqueoSocio = document.getElementById("btnBloqueoxSocio");
 
 btnBloqueoSocio.addEventListener("click", (e) =>{      
-    const form = document.querySelector("#formBloqueoxSocio");
+    const form = document.querySelector("#formBloqueoxPersona");
 
     Swal.fire({
         title: "Confirmación ",
@@ -48,3 +33,19 @@ btnBloqueoSocio.addEventListener("click", (e) =>{
 
 })
 
+function elimBloqueo(contador){
+    var formElimBloq = document.getElementById("formElimBloq"+contador); 
+    Swal.fire({
+        title: "Confirmación ",
+        text:'¿Esta seguro que desea desactivar este bloqueo? Esta accion no puede se reversar',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Si",
+        denyButtonText: "No"
+      }).then((result) => {
+  
+        if (result.isConfirmed) {
+            formElimBloq.submit();
+        }
+    });
+}

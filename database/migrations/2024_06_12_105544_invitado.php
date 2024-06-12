@@ -13,18 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('autorizado', function (Blueprint $table) {
+        Schema::create('invitados', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula_autorizado',30);
-            $table->string('nombre_autorizado',100);
-            $table->string('cedula_autoriza',30);
-            $table->string('nombre_autoriza',100);
-            $table->boolean('estado')->default(true);
+            $table->string('doc_anfitrion',20);
+            $table->string('nombre_anfitrion',80);
+            $table->string('doc_invitado',30);
+            $table->string('nombre_invitado',80);
             $table->date('fecha_ingreso')->nullable();
-            $table->date('fecha_fin_ingreso')->nullable();
-            $table->integer('id_usuario_update')->unsigned();
             $table->timestamps();
         });
+		
     }
 
     /**
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('autorizado');
+        Schema::dropIfExists('invitados');
     }
 };

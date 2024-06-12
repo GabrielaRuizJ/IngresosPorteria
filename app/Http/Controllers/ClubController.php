@@ -17,7 +17,9 @@ class ClubController extends Controller
         $clubes = Club::all();
         return view('parametros.club',compact('clubes'));
     }
-
+#Codigo comentado porque no se insertan ni modifican 
+#datos de los clubes para canje desde el sistema    
+/*
     public function store(){
         $response = Http::get('http://localhost/prueba/apiSyncClubes.php');
         $data1 = json_decode($response);
@@ -70,39 +72,7 @@ class ClubController extends Controller
         }
     }
 
-/*
-    public function store(Request $request)
-    {
-        try{
-            $validator = Validator::make($request->all(),[
-                'nombre_club'=>'required',
-                'dir_club'=>'required',
-                'tel_club'=>'required',
-                'email_club'=>'required',
-                'ciudad'=>'required',
-            ]);
 
-            if($validator->fails()){
-                return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-            }else{
-                $club = Club::create([
-                    'nombre_club'=>$request->nombre_club,
-                    'direccion'=>$request->dir_club,
-                    'telefono'=>$request->tel_club,
-                    'email1'=>$request->email_club,
-                    'id_ciudad'=>$request->ciudad
-                ]);
-                $request->session()->flash('mensaje', 'Club creado correctamente');
-                return redirect()->route('clubes');
-            }
-        }catch(\Exception $e){
-            dd($e->getMessage());
-        }
-    }
-*/
     public function edit($id){
         $clubdat = DB::table('club')
         ->join('ciudad','ciudad.id','=','club.id_ciudad')
@@ -152,5 +122,5 @@ class ClubController extends Controller
             dd($e->getMessage());
         }
     }
-
+*/
 }

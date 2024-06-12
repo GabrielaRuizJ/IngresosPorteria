@@ -409,10 +409,10 @@ return [
                     'can' =>'bloqueos'
                 ],
                 [
-                    'text'=>'Bloqueos x Socio',
-                    'route'=>'bloqueo_socio',
+                    'text'=>'Bloqueo de ingresos',
+                    'route'=>'bloqueo_ingreso',
                     'icon'=>'fas fa-user-lock',
-                    'can' =>'bloqueo_socio'
+                    'can' =>'bloqueo_ingreso'
                 ],
             ]
         ],

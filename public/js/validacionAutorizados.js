@@ -8,8 +8,9 @@ btnAturizaCreate.addEventListener("click", (e) =>{
     var campo3 = document.getElementById("docautoriza").value;
     var campo4 = document.getElementById("nomautoriza").value;
     var campo5 = document.getElementById("fechaIngreso").value;
+    var campo6 = document.getElementById("fechaFIngreso").value;
 
-    if(campo1 && campo2 && campo3 && campo4 && campo5){
+    if(campo1 && campo2 && campo3 && campo4 && campo5 && campo6){
         Swal.fire({
             title: "Confirmación ",
             text:'¿Desea autorizar este ingreso?',
@@ -33,19 +34,8 @@ btnAturizaCreate.addEventListener("click", (e) =>{
 
 });
 
-
-function autorizadoElim(id,cedula,nombre1,nombre2,fecha1){
-    document.getElementById("datIdAut").value = id;
-    document.getElementById("datCedulaAut").value = cedula;
-    document.getElementById("datNomAAut").value = nombre1;
-    document.getElementById("datNomQAut").value = nombre2;
-    document.getElementById("datFIAut").value = fecha1;
-}
-
-const btnSalidaIndv = document.querySelector("#btnElimAut");
-
-btnSalidaIndv.addEventListener("click", (e) =>{  
-    const formElimAut = document.querySelector("#formElimAut");     
+function elimAuth(contador){
+    var formElimAut = document.getElementById("formElimAut"+contador); 
     Swal.fire({
         title: "Confirmación ",
         text:'¿Esta seguro que desea eliminar esta autorizacion de ingreso? Esta accion no puede se reversar',
@@ -59,4 +49,4 @@ btnSalidaIndv.addEventListener("click", (e) =>{
             formElimAut.submit();
         }
     });
-})
+}

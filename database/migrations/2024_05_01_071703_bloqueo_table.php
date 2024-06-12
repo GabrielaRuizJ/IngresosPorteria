@@ -16,6 +16,15 @@ return new class extends Migration
         Schema::create('bloqueo', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_bloqueo');
+            $table->boolean('estado')->default(true);
+            $table->unsignedBigInteger('id_usuario_create');
+            $table->foreign('id_usuario_create')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->unsignedBigInteger('id_usuario_update')->nullable();
+            $table->foreign('id_usuario_update')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }

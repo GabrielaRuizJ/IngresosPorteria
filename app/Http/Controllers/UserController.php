@@ -9,6 +9,8 @@ use App\Imports\UsuarioImport;
 use App\Imports\UsuarioCollectionImport;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Log;
 
 class UserController extends Controller
 {
@@ -20,12 +22,21 @@ class UserController extends Controller
     public function store(Request $request){
 
         $datos = User::all();
+
+        $userDat = Auth::user();
+        $userIdLog = $userDat->id;
+        $userName = $userDat->name;
+        $fechaLog = date("Y-m-d H:i:s");
+        
         if ($request->hasFile('user_import')) {
 
             try{
                 $validator = Validator::make($request->all(), [
                     'user_import' => 'required|mimes:csv,txt|max:10240',
                 ]);
+
+               
+
                 if ($validator->fails()) {
                     return redirect()
                         ->back()
@@ -51,6 +62,15 @@ class UserController extends Controller
                                 }
                             }
                         }
+
+                        $guardarLog = Log::create([
+                            'fecha'   => $fechaLog,
+                            'accion'  =>'Insert',
+                            'tabla_accion' => 'Usuarios',
+                            'id_usuario' => $userIdLog,
+                            'nombre_usuario' => $userName,
+                            'comentarios'=>'Importar usuarios del sistema'
+                        ]);
 
                         $request->session()->flash('mensaje', 'Los datos fueron importados con exito ');
                         return redirect()->route('user');
@@ -81,6 +101,16 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                     'estado'=> $request->estado,
                 ]);
+                $nlogUser = $request->name;
+                $guardarLog = Log::create([
+                    'fecha'   => $fechaLog,
+                    'accion'  =>'Insert',
+                    'tabla_accion' => 'Usuarios',
+                    'id_usuario' => $userIdLog,
+                    'nombre_usuario' => $userName,
+                    'comentarios'=>'Agregar usuario al sistema documento #'.$cedula
+                ]);
+
                 $request->session()->flash('mensaje', 'Usuario creado correctamente');
                 return redirect()->route('user');
         }
@@ -101,6 +131,11 @@ class UserController extends Controller
                 'cedula'=>'required|unique:users,username,'.$id,
                 'email'=>'required',
             ]);
+
+            $userDat = Auth::user();
+            $userIdLog = $userDat->id;
+            $userName = $userDat->name;
+            $fechaLog = date("Y-m-d H:i:s");
 
             if ($validator->fails()) {
                 return redirect()
@@ -129,6 +164,16 @@ class UserController extends Controller
                 $user = User::findOrFail($id);
                 $roles = Role::all();
                 $roles_usuario  = $user->roles->pluck('id')->toArray();
+
+                $guardarLog = Log::create([
+                    'fecha'   => $fechaLog,
+                    'accion'  =>'Update',
+                    'tabla_accion' => 'Usuarios',
+                    'id_usuario' => $userIdLog,
+                    'nombre_usuario' => $userName,
+                    'comentarios'=>'Actualizar datos del usuario con ID #'.$id
+                ]);
+
                 $request->session()->flash('mensaje', 'Datos modificados correctamente');
                 return redirect()->route('user')->with('user','roles','roles_usuario');
             }

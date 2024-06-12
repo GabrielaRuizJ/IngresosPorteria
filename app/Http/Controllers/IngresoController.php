@@ -7,9 +7,11 @@ use App\Models\TipoVehiculo;
 use App\Models\Canje;
 use App\Models\Club;
 use App\Models\Autorizado;
-use App\Models\DetalleCanje;
 use App\Models\Socio;
+use App\Models\Invitado;
 use App\Models\BloqueoSocio;
+use App\Models\Log;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Carbon;
@@ -48,6 +50,11 @@ class IngresoController extends Controller
         $tiposalida = $request->input('tiposalidaTodos');
         $userId = Auth::id();
 
+        $userDat = Auth::user();
+        $userIdLog = $userDat->id;
+        $userName = $userDat->name;
+        $fechaLog = date("Y-m-d H:i:s");
+
         if($tiposalida){
 
             $fecha = date("Y-m-d");
@@ -59,6 +66,15 @@ class IngresoController extends Controller
             ]);
 
             if ($salidaMasiva > 0) {
+                $guardarLog = Log::create([
+                    'fecha'   => $fechaLog,
+                    'accion'  =>'Insert',
+                    'tabla_accion' => 'Ingreso',
+                    'id_usuario' => $userIdLog,
+                    'nombre_usuario' => $userName,
+                    'comentarios'=>'Salida masiva de personas del sistema'
+                ]);
+                
                 $request->session()->flash('mensaje', 'Salida masiva realizada correctamente');
                 return redirect()->route('salidas');
             } else {
@@ -81,6 +97,14 @@ class IngresoController extends Controller
             ]);
 
             if ($salidaIndv > 0) {
+                $guardarLog = Log::create([
+                    'fecha'   => $fechaLog,
+                    'accion'  =>'Update',
+                    'tabla_accion' => 'Ingreso',
+                    'id_usuario' => $userIdLog,
+                    'nombre_usuario' => $userName,
+                    'comentarios'=>'Salida masiva x tipos de ingreso '.$tipossalida
+                ]);
                 $request->session()->flash('mensaje', 'Salida masiva realizada correctamente');
                 return redirect()->route('salidas');
             } else {
@@ -258,17 +282,19 @@ class IngresoController extends Controller
                 $ingresos = TipoIngreso::findOrFail($tipoingreso);
                 $tipo_ingreso = $ingresos->nombre_ingreso;
                 $fecha = date("Y-m-d");
-               
-                //$data = json_encode( $tipo_ingreso);
-           
+
+                $userDat = User::find($userId);
+                $userIdLog = $userDat->id;
+                $userName = $userDat->name;
+                $fechaLog = date("Y-m-d H:i:s");
     
                 if($tipo_ingreso == "Socio"){
-    
+
                     $consulta = DB::table('socios')
                     ->where('cedula',"=", $cedula)
                     ->get();
                     $arraydat = array();
-    
+
                     if($consulta->count() > 0){
     
                         $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
@@ -277,11 +303,12 @@ class IngresoController extends Controller
                         ->get();
 
                         if($consulta2->count() > 0){
-                            //$datos_respuesta = "Socio bloqueado: ".$consulta2[0]->bloqueo_ingreso;
                             if($consulta2[0]->bloqueo_ingreso){
                                 if($consulta2[0]->indefinido){
+                                    $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar");
+                                }else{
                                     $fActBlqSocio = date("Y-m-d");
-                                    //$fecha >= $consulta2->fecha_inicio_canje && $fecha <= $consulta2->fecha_fin_canje
+                                    
                                     if( $fActBlqSocio >= $consulta2[0]->fecha_inicio_bloqueo && $fActBlqSocio <= $consulta2[0]->fecha_fin_bloqueo ){
                                         $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar en las fechas del ".$consulta2[0]->fecha_inicio_bloqueo." al ".$consulta2[0]->fecha_fin_bloqueo);
                                     }else{
@@ -300,15 +327,21 @@ class IngresoController extends Controller
                                         ]);
                 
                                         if($crearIngreso){
-                                            $datos_respuesta = "Correcto ";
+                                            $guardarLog = Log::create([
+                                                'fecha'   => $fechaLog,
+                                                'accion'  =>'Insert',
+                                                'tabla_accion' => 'Ingreso',
+                                                'id_usuario' => $userIdLog,
+                                                'nombre_usuario' => $userName,
+                                                'comentarios'=>'Ingreso socio documento #'.$cedula
+                                            ]);
+                                            $datos_respuesta = "Correcto";
                                             $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
                                         }else{
                                             $datos_respuesta = "Error insertando datos: ";
                                             $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                                         }
                                     }
-                                }else{
-                                    $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar ");
                                 }
                             }else{
                                 $fechaIngreso = date("Y-m-d");
@@ -326,6 +359,14 @@ class IngresoController extends Controller
                                 ]);
         
                                 if($crearIngreso){
+                                    $guardarLog = Log::create([
+                                        'fecha'   => $fechaLog,
+                                        'accion'  =>'Insert',
+                                        'tabla_accion' => 'Ingreso',
+                                        'id_usuario' => $userIdLog,
+                                        'nombre_usuario' => $userName,
+                                        'comentarios'=>'Ingreso socio documento #'.$cedula
+                                    ]);
                                     $datos_respuesta = "Correcto ";
                                     $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
                                 }else{
@@ -353,6 +394,14 @@ class IngresoController extends Controller
                             ]);
     
                             if($crearIngreso){
+                                $guardarLog = Log::create([
+                                    'fecha'   => $fechaLog,
+                                    'accion'  =>'Insert',
+                                    'tabla_accion' => 'Ingreso',
+                                    'id_usuario' => $userIdLog,
+                                    'nombre_usuario' => $userName,
+                                    'comentarios'=>'Ingreso socio documento #'.$cedula
+                                ]);
                                 $datos_respuesta = "Correcto ";
                                 $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
                             }else{
@@ -366,16 +415,15 @@ class IngresoController extends Controller
                     }
     
                     $data = $arraydat;
-    
                 }else if($tipo_ingreso == "Invitado" ){
-                    
-                    $response = Http::get('http://localhost/prueba/apiInvitado.php?documento='.$cedula);
-                    $data1 = json_decode($response);
-                    
-                    if($data1->respuesta == 200){
-    
-                        $fechaIngreso = date("Y-m-d");
-                        $hora_Ingreso = date("H:m:s");
+
+                    $fechaIngreso = date("Y-m-d");
+                    $hora_Ingreso = date("H:m:s");
+                    $response = Invitado::where('doc_invitado',$cedula)
+                        ->where('fecha_ingreso',$fechaIngreso)
+                        ->get();
+
+                    if($response){
                         $crearIngreso = Ingreso::create([
                             'fecha_ingreso'=>$fechaIngreso,
                             'hora_ingreso'=>$hora_Ingreso,
@@ -387,6 +435,14 @@ class IngresoController extends Controller
                             'id_usuario_create'=>$userId
                         ]);
                         if($crearIngreso){
+                            $guardarLog = Log::create([
+                                'fecha'   => $fechaLog,
+                                'accion'  =>'Insert',
+                                'tabla_accion' => 'Ingreso',
+                                'id_usuario' => $userIdLog,
+                                'nombre_usuario' => $userName,
+                                'comentarios'=>'Ingreso invitado documento #'.$cedula
+                            ]);
                             $datos_respuesta = "Ingreso de invitado reistrado correctamente";
                             $data = array("respuesta"=>200,"datos"=>$datos_respuesta);
                         }else{
@@ -394,11 +450,12 @@ class IngresoController extends Controller
                             $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
                         }
                     }else{
-                        $data = json_encode(array($data1->respuesta,$data1->datos));
+                        $datos_respuesta = "No hay registro de invitado";
+                        $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
                     }
-    
+
                 }else if($tipo_ingreso == "Autorizado" ){
-    
+
                     $consulta = DB::table('autorizado')
                     ->where('cedula_autorizado',"=", $cedula)
                     ->where('fecha_ingreso',"=", $fecha )
@@ -420,10 +477,18 @@ class IngresoController extends Controller
                             'id_usuario_create'=>$userId
                         ]);
                         if($crearIngreso){
-                            $datos_respuesta = $consulta[0]->cedula_autoriza." - ".$consulta[0]->nombre_autorizado;
+                            $guardarLog = Log::create([
+                                'fecha'   => $fechaLog,
+                                'accion'  =>'Insert',
+                                'tabla_accion' => 'Ingreso',
+                                'id_usuario' => $userIdLog,
+                                'nombre_usuario' => $userName,
+                                'comentarios'=>'Ingreso autorizado documento #'.$cedula
+                            ]);
+                            $datos_respuesta = "Canje registrado correctamente";
                             $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
                         }else{
-                            $datos_respuesta = "Error insertando invitado";
+                            $datos_respuesta = "Error insertando autorizado";
                             $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                         }
                         
@@ -433,9 +498,7 @@ class IngresoController extends Controller
                     }
     
                     $data = $arraydat;
-    
                 }else if($tipo_ingreso == "Canje" ){
-    
                     $idclub = $request->input('idclubcanje');
                     $finiciocanje = $request->input('finiciocanje');
                     $ffincanje = $request->input('ffincanje');
@@ -466,7 +529,7 @@ class IngresoController extends Controller
                             $nuevoIngresoId = $crearIngreso->id;
                             $nombre_club = Club::find($idclub);
                             $nombre_club = $nombre_club->club;
-                            $detalle_canje = DetalleCanje::create([
+                            $detalle_canje = Canje::create([
                                 'id_ingreso'=>$nuevoIngresoId,
                                 'id_club'=>$idclub,
                                 'cedula_canje'=>$cedula,
@@ -476,6 +539,14 @@ class IngresoController extends Controller
                             ]);
     
                             if($crearIngreso && $detalle_canje){
+                                $guardarLog = Log::create([
+                                    'fecha'   => $fechaLog,
+                                    'accion'  =>'Insert',
+                                    'tabla_accion' => 'Ingreso',
+                                    'id_usuario' => $userIdLog,
+                                    'nombre_usuario' => $userName,
+                                    'comentarios'=>'Ingreso canje documento #'.$cedula
+                                ]);
                                 $datos_r=array("Canje registrado correctamente");  
                                 $data = array("respuesta"=>200,"datos"=>$datos_r);
                             }else{
@@ -510,7 +581,7 @@ class IngresoController extends Controller
                                 ]);
                                 $nuevoIngresoId = $crearIngreso->id;
         
-                                $detalle_canje = DetalleCanje::create([
+                                $detalle_canje = Canje::create([
                                     'id_ingreso'=>$nuevoIngresoId,
                                     'id_club'=>$consulta2->id_club,
                                     'cedula_canje'=>$cedula,
@@ -520,6 +591,14 @@ class IngresoController extends Controller
                                 ]);
         
                                 if($crearIngreso && $detalle_canje){
+                                    $guardarLog = Log::create([
+                                        'fecha'   => $fechaLog,
+                                        'accion'  =>'Insert',
+                                        'tabla_accion' => 'Ingreso',
+                                        'id_usuario' => $userIdLog,
+                                        'nombre_usuario' => $userName,
+                                        'comentarios'=>'Ingreso canje documento #'.$cedula
+                                    ]);
                                     $datos_r=array("Canje registrado correctamente");  
                                     $data = array("respuesta"=>200,"datos"=>$datos_r);
                                 }else{
@@ -540,9 +619,7 @@ class IngresoController extends Controller
                         }
                         
                     }
-    
-                    /*$datos_r = array("respuesta"=>200,"datos"=>"aca -".$idclub.$finiciocanje.$ffincanje);
-                    $data = json_encode($datos_r);*/
+                    
                 }else{
     
                     $datos_r = array("respuesta"=>300,"datos"=>"No existe el tipo de ingreso");

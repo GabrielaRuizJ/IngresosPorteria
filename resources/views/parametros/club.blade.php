@@ -1,19 +1,13 @@
 @extends('adminlte::page')
 @section('title','Clubes')
 @section('content_header')
-    <h1><li class="fas fa-hotel"></li> Listado de clubes para canje</h1>
+    <h1><li class="fas fa-hotel"></li>Clubes para canje</h1>
 @endsection
 @section('content')
     @php
         $heads = [
             'ID','nombre','pbx','correo','estado'];
     @endphp
-@can('club.create')
-    <form action="{{route('club.create')}}" id="syncClubes" method="post">
-        @csrf
-        <x-adminlte-button type="button" id="btnSyncClubes" label="Sincronizar datos" theme="primary" icon="fas fa-sync" class="float-right" />
-    </form>
-@endcan
 <br><br>
     <x-adminlte-datatable id="tableclub" :heads="$heads" with-buttons>
         @foreach ($clubes as $club)

@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bloqueo extends Model
+class Log extends Model
 {
+    protected $table="log";
     use HasFactory;
-    protected $table = 'bloqueo';
     protected $fillable = [
-        'nombre_bloqueo',
-        'estado',
-        'id_usuario_create',
-        'id_usuario_update'
+        'fecha',
+        'accion',
+        'tabla_accion',
+        'id_usuario',
+        'nombre_usuario',
+        'comentarios'
     ];
 }
