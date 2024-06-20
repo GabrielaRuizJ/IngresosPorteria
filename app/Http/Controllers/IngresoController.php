@@ -316,84 +316,6 @@ class IngresoController extends Controller
             
                             if($consulta->count() > 0){
             
-                                $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
-                                ->orderByDesc('id')
-                                //->first();
-                                ->get();
-            
-                                if($consulta2->count() > 0){
-                                    if($consulta2[0]->bloqueo_ingreso){
-                                        if($consulta2[0]->indefinido){
-                                            $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar");
-                                        }else{
-                                            $fActBlqSocio = date("Y-m-d");
-                                            
-                                            if( $fActBlqSocio >= $consulta2[0]->fecha_inicio_bloqueo && $fActBlqSocio <= $consulta2[0]->fecha_fin_bloqueo ){
-                                                $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar en las fechas del ".$consulta2[0]->fecha_inicio_bloqueo." al ".$consulta2[0]->fecha_fin_bloqueo);
-                                            }else{
-                                                $fechaIngreso = date("Y-m-d");
-                                                $hora_Ingreso = date("H:m:s");
-            
-                                                $crearIngreso = Ingreso::create([
-                                                    'fecha_ingreso'=>$fechaIngreso,
-                                                    'hora_ingreso'=>$hora_Ingreso,
-                                                    'id_tipo_vehiculo'=>$tipovehiculo,
-                                                    'id_tipo_ingreso'=>$tipoingreso,
-                                                    'placa'=>$placa, 
-                                                    'cedula'=>$cedula,
-                                                    'nombre'=>$consulta[0]->nombre,
-                                                    'id_usuario_create'=>$userId
-                                                ]);
-                        
-                                                if($crearIngreso){
-                                                    $guardarLog = Log::create([
-                                                        'fecha'   => $fechaLog,
-                                                        'accion'  =>'Insert',
-                                                        'tabla_accion' => 'Ingreso',
-                                                        'id_usuario' => $userIdLog,
-                                                        'nombre_usuario' => $userName,
-                                                        'comentarios'=>'Ingreso socio documento #'.$cedula
-                                                    ]);
-                                                    $datos_respuesta = "Correcto";
-                                                    $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                                                }else{
-                                                    $datos_respuesta = "Error insertando datos: ";
-                                                    $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                                                }
-                                            }
-                                        }
-                                    }else{
-                                        $fechaIngreso = date("Y-m-d");
-                                        $hora_Ingreso = date("H:m:s");
-            
-                                        $crearIngreso = Ingreso::create([
-                                            'fecha_ingreso'=>$fechaIngreso,
-                                            'hora_ingreso'=>$hora_Ingreso,
-                                            'id_tipo_vehiculo'=>$tipovehiculo,
-                                            'id_tipo_ingreso'=>$tipoingreso,
-                                            'placa'=>$placa, 
-                                            'cedula'=>$cedula,
-                                            'nombre'=>$consulta[0]->nombre,
-                                            'id_usuario_create'=>$userId
-                                        ]);
-                
-                                        if($crearIngreso){
-                                            $guardarLog = Log::create([
-                                                'fecha'   => $fechaLog,
-                                                'accion'  =>'Insert',
-                                                'tabla_accion' => 'Ingreso',
-                                                'id_usuario' => $userIdLog,
-                                                'nombre_usuario' => $userName,
-                                                'comentarios'=>'Ingreso socio documento #'.$cedula
-                                            ]);
-                                            $datos_respuesta = "Correcto ";
-                                            $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                                        }else{
-                                            $datos_respuesta = "Error insertando datos: ";
-                                            $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                                        }
-                                    }
-                                }else{
                                     $fechaIngreso = date("Y-m-d");
                                     $hora_Ingreso = date("H:m:s");
             
@@ -427,13 +349,14 @@ class IngresoController extends Controller
                                         $datos_respuesta = "Error insertando datos: ";
                                         $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                                     }
-                                }
+                                
                             }else{
                                 $datos_respuesta = "No hay registro del socio";
                                 $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                             }
             
                             $data = $arraydat;
+
                         }else if($tipo_ingreso == "Invitado" ){
             
                             $fechaIngreso = date("Y-m-d");
@@ -688,62 +611,19 @@ class IngresoController extends Controller
                     if($tipo_ingreso == "Socio"){
     
                         $consulta = DB::table('socios')
-                        ->where('cedula',"=", $cedula)
-                        ->get();
-                        $arraydat = array();
-        
-                        if($consulta->count() > 0){
-        
-                            $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
-                            ->orderByDesc('id')
-                            //->first();
+                            ->where('cedula',"=", $cedula)
                             ->get();
-        
-                            if($consulta2->count() > 0){
-                                if($consulta2[0]->bloqueo_ingreso){
-                                    if($consulta2[0]->indefinido){
-                                        $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar");
-                                    }else{
-                                        $fActBlqSocio = date("Y-m-d");
-                                        
-                                        if( $fActBlqSocio >= $consulta2[0]->fecha_inicio_bloqueo && $fActBlqSocio <= $consulta2[0]->fecha_fin_bloqueo ){
-                                            $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar en las fechas del ".$consulta2[0]->fecha_inicio_bloqueo." al ".$consulta2[0]->fecha_fin_bloqueo);
-                                        }else{
-                                            $fechaIngreso = date("Y-m-d");
-                                            $hora_Ingreso = date("H:m:s");
-        
-                                            $crearIngreso = Ingreso::create([
-                                                'fecha_ingreso'=>$fechaIngreso,
-                                                'hora_ingreso'=>$hora_Ingreso,
-                                                'id_tipo_vehiculo'=>$tipovehiculo,
-                                                'id_tipo_ingreso'=>$tipoingreso,
-                                                'placa'=>$placa, 
-                                                'cedula'=>$cedula,
-                                                'nombre'=>$consulta[0]->nombre,
-                                                'id_usuario_create'=>$userId
-                                            ]);
-                    
-                                            if($crearIngreso){
-                                                $guardarLog = Log::create([
-                                                    'fecha'   => $fechaLog,
-                                                    'accion'  =>'Insert',
-                                                    'tabla_accion' => 'Ingreso',
-                                                    'id_usuario' => $userIdLog,
-                                                    'nombre_usuario' => $userName,
-                                                    'comentarios'=>'Ingreso socio documento #'.$cedula
-                                                ]);
-                                                $datos_respuesta = "Correcto";
-                                                $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                                            }else{
-                                                $datos_respuesta = "Error insertando datos: ";
-                                                $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                                            }
-                                        }
-                                    }
-                                }else{
+                            $arraydat = array();
+            
+                            if($consulta->count() > 0){
+            
                                     $fechaIngreso = date("Y-m-d");
                                     $hora_Ingreso = date("H:m:s");
-        
+            
+                                    if(!$nombre_persona){
+                                        $nombre_persona = $consulta[0]->nombre;
+                                    }
+            
                                     $crearIngreso = Ingreso::create([
                                         'fecha_ingreso'=>$fechaIngreso,
                                         'hora_ingreso'=>$hora_Ingreso,
@@ -751,7 +631,7 @@ class IngresoController extends Controller
                                         'id_tipo_ingreso'=>$tipoingreso,
                                         'placa'=>$placa, 
                                         'cedula'=>$cedula,
-                                        'nombre'=>$consulta[0]->nombre,
+                                        'nombre'=>$nombre_persona,
                                         'id_usuario_create'=>$userId
                                     ]);
             
@@ -770,48 +650,13 @@ class IngresoController extends Controller
                                         $datos_respuesta = "Error insertando datos: ";
                                         $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                                     }
-                                }
+                                
                             }else{
-                                $fechaIngreso = date("Y-m-d");
-                                $hora_Ingreso = date("H:m:s");
-        
-                                if(!$nombre_persona){
-                                    $nombre_persona = $consulta[0]->nombre;
-                                }
-        
-                                $crearIngreso = Ingreso::create([
-                                    'fecha_ingreso'=>$fechaIngreso,
-                                    'hora_ingreso'=>$hora_Ingreso,
-                                    'id_tipo_vehiculo'=>$tipovehiculo,
-                                    'id_tipo_ingreso'=>$tipoingreso,
-                                    'placa'=>$placa, 
-                                    'cedula'=>$cedula,
-                                    'nombre'=>$nombre_persona,
-                                    'id_usuario_create'=>$userId
-                                ]);
-        
-                                if($crearIngreso){
-                                    $guardarLog = Log::create([
-                                        'fecha'   => $fechaLog,
-                                        'accion'  =>'Insert',
-                                        'tabla_accion' => 'Ingreso',
-                                        'id_usuario' => $userIdLog,
-                                        'nombre_usuario' => $userName,
-                                        'comentarios'=>'Ingreso socio documento #'.$cedula
-                                    ]);
-                                    $datos_respuesta = "Correcto ";
-                                    $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                                }else{
-                                    $datos_respuesta = "Error insertando datos: ";
-                                    $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                                }
+                                $datos_respuesta = "No hay registro del socio";
+                                $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                             }
-                        }else{
-                            $datos_respuesta = "No hay registro del socio";
-                            $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                        }
-        
-                        $data = $arraydat;
+            
+                            $data = $arraydat;
                     }else if($tipo_ingreso == "Invitado" ){
         
                         $fechaIngreso = date("Y-m-d");
@@ -1065,130 +910,52 @@ class IngresoController extends Controller
                 if($tipo_ingreso == "Socio"){
     
                     $consulta = DB::table('socios')
-                    ->where('cedula',"=", $cedula)
-                    ->get();
-                    $arraydat = array();
-    
-                    if($consulta->count() > 0){
-    
-                        $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
-                        ->orderByDesc('id')
-                        //->first();
-                        ->get();
-    
-                        if($consulta2->count() > 0){
-                            if($consulta2[0]->bloqueo_ingreso){
-                                if($consulta2[0]->indefinido){
-                                    $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar");
-                                }else{
-                                    $fActBlqSocio = date("Y-m-d");
-                                    
-                                    if( $fActBlqSocio >= $consulta2[0]->fecha_inicio_bloqueo && $fActBlqSocio <= $consulta2[0]->fecha_fin_bloqueo ){
-                                        $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar en las fechas del ".$consulta2[0]->fecha_inicio_bloqueo." al ".$consulta2[0]->fecha_fin_bloqueo);
-                                    }else{
-                                        $fechaIngreso = date("Y-m-d");
-                                        $hora_Ingreso = date("H:m:s");
-    
-                                        $crearIngreso = Ingreso::create([
-                                            'fecha_ingreso'=>$fechaIngreso,
-                                            'hora_ingreso'=>$hora_Ingreso,
-                                            'id_tipo_vehiculo'=>$tipovehiculo,
-                                            'id_tipo_ingreso'=>$tipoingreso,
-                                            'placa'=>$placa, 
-                                            'cedula'=>$cedula,
-                                            'nombre'=>$consulta[0]->nombre,
-                                            'id_usuario_create'=>$userId
-                                        ]);
-                
-                                        if($crearIngreso){
-                                            $guardarLog = Log::create([
-                                                'fecha'   => $fechaLog,
-                                                'accion'  =>'Insert',
-                                                'tabla_accion' => 'Ingreso',
-                                                'id_usuario' => $userIdLog,
-                                                'nombre_usuario' => $userName,
-                                                'comentarios'=>'Ingreso socio documento #'.$cedula
-                                            ]);
-                                            $datos_respuesta = "Correcto";
-                                            $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                                        }else{
-                                            $datos_respuesta = "Error insertando datos: ";
-                                            $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                                        }
+                            ->where('cedula',"=", $cedula)
+                            ->get();
+                            $arraydat = array();
+            
+                            if($consulta->count() > 0){
+            
+                                    $fechaIngreso = date("Y-m-d");
+                                    $hora_Ingreso = date("H:m:s");
+            
+                                    if(!$nombre_persona){
+                                        $nombre_persona = $consulta[0]->nombre;
                                     }
-                                }
-                            }else{
-                                $fechaIngreso = date("Y-m-d");
-                                $hora_Ingreso = date("H:m:s");
-    
-                                $crearIngreso = Ingreso::create([
-                                    'fecha_ingreso'=>$fechaIngreso,
-                                    'hora_ingreso'=>$hora_Ingreso,
-                                    'id_tipo_vehiculo'=>$tipovehiculo,
-                                    'id_tipo_ingreso'=>$tipoingreso,
-                                    'placa'=>$placa, 
-                                    'cedula'=>$cedula,
-                                    'nombre'=>$consulta[0]->nombre,
-                                    'id_usuario_create'=>$userId
-                                ]);
-        
-                                if($crearIngreso){
-                                    $guardarLog = Log::create([
-                                        'fecha'   => $fechaLog,
-                                        'accion'  =>'Insert',
-                                        'tabla_accion' => 'Ingreso',
-                                        'id_usuario' => $userIdLog,
-                                        'nombre_usuario' => $userName,
-                                        'comentarios'=>'Ingreso socio documento #'.$cedula
+            
+                                    $crearIngreso = Ingreso::create([
+                                        'fecha_ingreso'=>$fechaIngreso,
+                                        'hora_ingreso'=>$hora_Ingreso,
+                                        'id_tipo_vehiculo'=>$tipovehiculo,
+                                        'id_tipo_ingreso'=>$tipoingreso,
+                                        'placa'=>$placa, 
+                                        'cedula'=>$cedula,
+                                        'nombre'=>$nombre_persona,
+                                        'id_usuario_create'=>$userId
                                     ]);
-                                    $datos_respuesta = "Correcto ";
-                                    $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                                }else{
-                                    $datos_respuesta = "Error insertando datos: ";
-                                    $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                                }
-                            }
-                        }else{
-                            $fechaIngreso = date("Y-m-d");
-                            $hora_Ingreso = date("H:m:s");
-    
-                            if(!$nombre_persona){
-                                $nombre_persona = $consulta[0]->nombre;
-                            }
-    
-                            $crearIngreso = Ingreso::create([
-                                'fecha_ingreso'=>$fechaIngreso,
-                                'hora_ingreso'=>$hora_Ingreso,
-                                'id_tipo_vehiculo'=>$tipovehiculo,
-                                'id_tipo_ingreso'=>$tipoingreso,
-                                'placa'=>$placa, 
-                                'cedula'=>$cedula,
-                                'nombre'=>$nombre_persona,
-                                'id_usuario_create'=>$userId
-                            ]);
-    
-                            if($crearIngreso){
-                                $guardarLog = Log::create([
-                                    'fecha'   => $fechaLog,
-                                    'accion'  =>'Insert',
-                                    'tabla_accion' => 'Ingreso',
-                                    'id_usuario' => $userIdLog,
-                                    'nombre_usuario' => $userName,
-                                    'comentarios'=>'Ingreso socio documento #'.$cedula
-                                ]);
-                                $datos_respuesta = "Correcto ";
-                                $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+            
+                                    if($crearIngreso){
+                                        $guardarLog = Log::create([
+                                            'fecha'   => $fechaLog,
+                                            'accion'  =>'Insert',
+                                            'tabla_accion' => 'Ingreso',
+                                            'id_usuario' => $userIdLog,
+                                            'nombre_usuario' => $userName,
+                                            'comentarios'=>'Ingreso socio documento #'.$cedula
+                                        ]);
+                                        $datos_respuesta = "Correcto ";
+                                        $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                    }else{
+                                        $datos_respuesta = "Error insertando datos: ";
+                                        $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                    }
+                                
                             }else{
-                                $datos_respuesta = "Error insertando datos: ";
+                                $datos_respuesta = "No hay registro del socio";
                                 $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
                             }
-                        }
-                    }else{
-                        $datos_respuesta = "No hay registro del socio";
-                        $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
-                    }
-    
-                    $data = $arraydat;
+            
+                            $data = $arraydat;
                 }else if($tipo_ingreso == "Invitado" ){
     
                     $fechaIngreso = date("Y-m-d");

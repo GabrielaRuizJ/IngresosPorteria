@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('estado')->default(true);
             $table->date('fecha_ingreso')->nullable();
             $table->date('fecha_fin_ingreso')->nullable();
-            $table->integer('id_usuario_update')->unsigned();
+            $table->integer('id_usuario_update')->unsigned()->nullable();
             $table->timestamps();
         });
     }
