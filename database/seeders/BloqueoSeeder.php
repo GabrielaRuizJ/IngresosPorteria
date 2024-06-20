@@ -15,6 +15,9 @@ class BloqueoSeeder extends Seeder
      */
     public function run()
     {
-        Bloqueo::create(['nombre_bloqueo'=>'Pago cartera']);
+        Bloqueo::create([
+            'nombre_bloqueo'=>'Pago cartera',
+            'id_usuario_create'=>'1'
+        ]);
     }
 }
