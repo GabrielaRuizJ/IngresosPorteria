@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Editar Clubes')
 @section('content_header')
     <h1>Editar datos de: {{$club->nombre_club}} </h1>
 @endsection

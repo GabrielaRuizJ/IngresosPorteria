@@ -37,7 +37,7 @@
                             <label for="tiposalida{{$indice}}">{{$dat_ingreso->nombre_ingreso}}</label>
                         </div>
                         <div class="col">
-                            <input type="checkbox" class="form-control"  value="{{$dat_ingreso->id}}" name="tiposalida" id="tiposalida{{$indice}}">
+                            <input type="checkbox" class="form-control"  value="{{$dat_ingreso->id}}" name="tiposalida[]" id="tiposalida{{$indice}}">
                         </div> 
                     </div> 
                     <hr>
@@ -47,7 +47,7 @@
                             <label for="tiposalida{{$indice}}">{{$dat_ingreso->nombre_ingreso}}</label>
                         </div>
                         <div class="col">
-                            <input type="checkbox" class="form-control" value="{{$dat_ingreso->id}}" name="tiposalida" id="tiposalida{{$indice}}">
+                            <input type="checkbox" class="form-control" value="{{$dat_ingreso->id}}" name="tiposalida[]" id="tiposalida{{$indice}}">
                         </div> 
                     
                 @endif
@@ -68,7 +68,7 @@
                             <label for="tipovehiculo{{$indice2}}">{{$dat_vehiculo->nombre_vehiculo}}</label>
                         </div>
                         <div class="col">
-                            <input type="checkbox" class="form-control"  value="{{$dat_vehiculo->id}}" name="tipovehiculo" id="tipovehiculo{{$indice2}}">
+                            <input type="checkbox" class="form-control"  value="{{$dat_vehiculo->id}}" name="tipovehiculo[]" id="tipovehiculo{{$indice2}}">
                         </div> 
                     <hr>
                 @else
@@ -82,7 +82,7 @@
                                 <label for="tipovehiculo{{$indice2}}">{{$dat_vehiculo->nombre_vehiculo}}</label>
                             </div>
                             <div class="col">
-                                <input type="checkbox" class="form-control"  value="{{$dat_vehiculo->id}}" name="tipovehiculo" id="tipovehiculo{{$indice2}}">
+                                <input type="checkbox" class="form-control"  value="{{$dat_vehiculo->id}}" name="tipovehiculo[]" id="tipovehiculo{{$indice2}}">
                             </div> 
                         </div>
                         <hr>
@@ -91,7 +91,7 @@
                                     <label for="tipovehiculo{{$indice2}}">{{$dat_vehiculo->nombre_vehiculo}}</label>
                                 </div>
                                 <div class="col">
-                                    <input type="checkbox" class="form-control" value="{{$dat_vehiculo->id}}" name="tipovehiculo" id="tipovehiculo{{$indice2}}">
+                                    <input type="checkbox" class="form-control" value="{{$dat_vehiculo->id}}" name="tipovehiculo[]" id="tipovehiculo{{$indice2}}">
                                 </div> 
                             </div> 
                             <hr>

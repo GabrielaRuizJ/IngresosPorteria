@@ -396,6 +396,12 @@ return [
                     'icon'=>'fas fa-people-arrows',
                     'can' =>'canjes'
                 ],
+                [
+                    'text'=>'Invitados',
+                    'route'=>'invitados',
+                    'icon'=>'fas fa-user-friends',
+                    'can' =>'invitados'
+                ],
             ]
         ],
         [
@@ -425,6 +431,12 @@ return [
                     'route'=>'listadoIngresos',
                     'icon'=>'fas fa-search',
                     'can' =>'ingreso.find'
+                ],
+                [
+                    'text'=>'Registro de logs',
+                    'route'=>'log',
+                    'icon'=>'fas fa-shoe-prints',
+                    'can' =>'log'
                 ],
             ]
         ],

@@ -21,10 +21,10 @@
             <hr>
             <label>*Roles disponibles para agregar al permiso {{$permiso->name}}*</label>
 
-            @foreach ($rolesAsignados as $permissionrole => $nombre)
+            @foreach ($rolesAsignados as $permissionrole )
                     <div class="form-check">
-                        <input type="checkbox" checked name="id_rol[]" value="{{$nombre->name }}">
-                        <label>{{ $nombre->name}}</label>
+                        <input type="checkbox" checked name="id_rol[]" value="{{$permissionrole->name }}">
+                        <label>{{ $permissionrole->name}}</label>
                     </div> 
             @endforeach
             @foreach ($rolesDisponibles as $roledispo)

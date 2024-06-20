@@ -34,9 +34,6 @@ class UserController extends Controller
                 $validator = Validator::make($request->all(), [
                     'user_import' => 'required|mimes:csv,txt|max:10240',
                 ]);
-
-               
-
                 if ($validator->fails()) {
                     return redirect()
                         ->back()
@@ -62,18 +59,23 @@ class UserController extends Controller
                                 }
                             }
                         }
-
-                        $guardarLog = Log::create([
-                            'fecha'   => $fechaLog,
-                            'accion'  =>'Insert',
-                            'tabla_accion' => 'Usuarios',
-                            'id_usuario' => $userIdLog,
-                            'nombre_usuario' => $userName,
-                            'comentarios'=>'Importar usuarios del sistema'
-                        ]);
-
-                        $request->session()->flash('mensaje', 'Los datos fueron importados con exito ');
-                        return redirect()->route('user');
+                        if($usuariosData){
+                            $guardarLog = Log::create([
+                                'fecha'   => $fechaLog,
+                                'accion'  =>'Insert',
+                                'tabla_accion' => 'Usuarios',
+                                'id_usuario' => $userIdLog,
+                                'nombre_usuario' => $userName,
+                                'comentarios'=>'Importar usuarios del sistema'
+                            ]);
+    
+                            $request->session()->flash('mensaje', 'Los datos fueron importados con exito ');
+                            return redirect()->route('user');
+                        }else{
+                            $request->session()->flash('errormensaje', 'Error importando usuarios');
+                            return redirect()->route('user');
+                        }
+                        
 
                     }catch (\Exception $e) {
                         dd($e->getMessage());
@@ -101,18 +103,23 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                     'estado'=> $request->estado,
                 ]);
-                $nlogUser = $request->name;
-                $guardarLog = Log::create([
-                    'fecha'   => $fechaLog,
-                    'accion'  =>'Insert',
-                    'tabla_accion' => 'Usuarios',
-                    'id_usuario' => $userIdLog,
-                    'nombre_usuario' => $userName,
-                    'comentarios'=>'Agregar usuario al sistema documento #'.$cedula
-                ]);
-
-                $request->session()->flash('mensaje', 'Usuario creado correctamente');
-                return redirect()->route('user');
+                if($user){
+                    $nlogUser = $request->name;
+                    $guardarLog = Log::create([
+                        'fecha'   => $fechaLog,
+                        'accion'  =>'Insert',
+                        'tabla_accion' => 'Usuarios',
+                        'id_usuario' => $userIdLog,
+                        'nombre_usuario' => $userName,
+                        'comentarios'=>'Agregar usuario al sistema documento #'.$cedula
+                    ]);
+    
+                    $request->session()->flash('mensaje', 'Usuario creado correctamente');                
+                    return redirect()->route('user');
+                }else{
+                    $request->session()->flash('errormensaje', 'Error Creando usuario');
+                    return redirect()->route('user');
+                }
         }
     }
 

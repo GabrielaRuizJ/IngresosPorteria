@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Ciudades')
 @section('content_header')
 @can('ciudad.create')
     <x-adminlte-button label="Nueva ciudad" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalciudad" class="float-right" />

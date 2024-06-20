@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Países')
 @section('content_header')
     <h1>Listado de paises</h1>
 @endsection

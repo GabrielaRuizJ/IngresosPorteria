@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -38,20 +39,39 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+    
+        $userDat = Auth::user();
+        $userIdLog = $userDat->id;
+        $userName = $userDat->name;
+        $fechaLog = date("Y-m-d H:i:s");
+
         $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
             'cedula' => $request->cedula,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'estado'=> $request->estado,
+            'password' => Hash::make($request->password)
         ]);
-
+        
+        if($user){
+            $nlogUser = $request->name;
+                    $guardarLog = Log::create([
+                        'fecha'   => $fechaLog,
+                        'accion'  =>'Insert',
+                        'tabla_accion' => 'Usuarios',
+                        'id_usuario' => $userIdLog,
+                        'nombre_usuario' => $userName,
+                        'comentarios'=>'Agregar usuario al sistema documento #'.$request->cedula
+            ]);
+            $request->session()->flash('mensaje', 'Usuario creado correctamente');
+            return redirect()->route('user');
+        }else{
+            $request->session()->flash('errormensaje', 'Error Creando usuario');
+            return redirect()->route('user');
+        }
         //event(new Registered($user));
 
         //Auth::login($user);
-        //return redirect(RouteServiceProvider::HOME);
-
-        return redirect()->route('user');
+        //return redirect(RouteServiceProvider::HOME);        
     }
 }

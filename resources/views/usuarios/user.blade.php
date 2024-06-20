@@ -150,7 +150,7 @@ $heads = [
     <form action="{{route('user.import')}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="row-md-12">
-            <x-adminlte-input-file required name="user_import" igroup-size="sm" placeholder="Choose a file...">
+            <x-adminlte-input-file required name="user_import" id="user_import" igroup-size="sm" placeholder="Choose a file...">
                 <x-slot name="f">
                     <div class="input-group-text bg-lightblue">
                         <i class="fas fa-upload"></i>
@@ -167,6 +167,15 @@ $heads = [
 
 @section('js')
     @if(session()->has('mensaje'))
+    <script>
+        Swal.fire({
+            title:'Correcto',
+            icon:'success',
+            text:"{{session('mensaje')}}"
+        });
+    </script>
+    @endif
+    @if(session()->has('errormensaje'))
     <script>
         Swal.fire({
             title:'Correcto',

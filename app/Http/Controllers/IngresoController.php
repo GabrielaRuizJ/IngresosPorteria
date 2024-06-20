@@ -9,7 +9,7 @@ use App\Models\Club;
 use App\Models\Autorizado;
 use App\Models\Socio;
 use App\Models\Invitado;
-use App\Models\BloqueoSocio;
+use App\Models\BloqueoIngreso;
 use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-
+use DateTime;
 
 class IngresoController extends Controller
 {
@@ -135,46 +135,41 @@ class IngresoController extends Controller
         $tipos_ingresos = $request->input('tiposalida',[]);
         // Convertir a array si no lo es
         if (!is_array($tipos_ingresos)) { $tipos_ingresos = [$tipos_ingresos]; }
-
+       
         $tipos_vehiculo = $request->input('tipovehiculo',[]);
         // Convertir a array si no lo es 
         if (!is_array($tipos_vehiculo)) { $tipos_vehiculo = [$tipos_vehiculo]; }
 
         if($fecha_inicio > $fecha_fin){
-
             $request->session()->flash('errormensaje', 'La fecha inicial de la búsqueda no puede ser mayor a al fecha final de la búsqueda');
             return redirect()->route('listadoIngresos');
-
         }else{
-
-            //Si hay rango de fechas y tipo de ingresos
             if($fecha_inicio && $fecha_fin && $tipos_ingresos && !$tipos_vehiculo){
-
+                //Si hay rango de fechas y tipo de ingresos
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
-                ->select('ingreso.id as id','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
-                'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.cedula as cedula','ingreso.nombre as nombre')
+                ->select('ingreso.id as id','ingreso.cedula as cedula','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
+                'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.nombre as nombre')
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
                 ->whereIn('ingreso.id_tipo_ingreso', $tipos_ingresos)
                 //;
                 ->get();
-
-                $busquedaIngresos = DB::table('tipo_ingreso')
-                ->select('tipo_ingreso.id as id','tipo_ingreso.nombre_ingreso as nombre_ingreso')
-                ->whereIn('tipo_ingreso.id', $tipos_ingresos)
-                ->get();
-
                 //dd($busqueda);
                 //dd("Aca 1 ".$tipos_ingresos);
+                $busquedaIngresos = DB::table('tipo_ingreso')
+                    ->select('tipo_ingreso.id as id','tipo_ingreso.nombre_ingreso as nombre_ingreso')
+                    ->whereIn('tipo_ingreso.id', $tipos_ingresos)
+                    ->get();
                 $restipobusqueda = 1;
+    
                 return view('ingresos.resultadosBusqueda',compact('restipobusqueda','busqueda','fecha_inicio','fecha_fin','busquedaIngresos'));
                 
             }
-
+    
             //Si hay rango de fechas y tipo de vehiculos
             if($fecha_inicio && $fecha_fin && $tipos_vehiculo && !$tipos_ingresos){
-
+    
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
@@ -184,21 +179,21 @@ class IngresoController extends Controller
                 ->whereIn('ingreso.id_tipo_vehiculo', $tipos_vehiculo)
                 //;
                 ->get();
-
+    
                 $busquedaVehiculos= DB::table('tipo_vehiculo')
                 ->select('tipo_vehiculo.id as id','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo')
                 ->whereIn('tipo_vehiculo.id', $tipos_vehiculo)
                 ->get();
-
+    
                 //dd($busqueda);
                 //dd("Aca 2 ".$tipos_vehiculo);
                 $restipobusqueda = 2;
                 return view('ingresos.resultadosBusqueda',compact('restipobusqueda','busqueda','fecha_inicio','fecha_fin','busquedaVehiculos'));
             }
-
+    
             //Si hay rango de fechas, tipo de ingreso y tipo de vehiculos
             if($fecha_inicio && $fecha_fin && $tipos_ingresos && $tipos_vehiculo){
-
+    
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
@@ -207,43 +202,42 @@ class IngresoController extends Controller
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
                 ->whereIn('ingreso.id_tipo_ingreso', $tipos_ingresos)
                 ->whereIn('ingreso.id_tipo_vehiculo', $tipos_vehiculo)
-                ;
-                //->get();
+                
+                ->get();
                 //dd($busqueda);
                 //dd("Aca 3 ".$tipos_ingresos." - ".$tipos_vehiculo);
                 $busquedaIngresos = DB::table('tipo_ingreso')
                 ->select('tipo_ingreso.id as id','tipo_ingreso.nombre_ingreso as nombre_ingreso')
                 ->whereIn('tipo_ingreso.id', $tipos_ingresos)
                 ->get();
-
+                
                 $busquedaVehiculos= DB::table('tipo_vehiculo')
                 ->select('tipo_vehiculo.id as id','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo')
                 ->whereIn('tipo_vehiculo.id', $tipos_vehiculo)
                 ->get();
-
+                
                 $restipobusqueda = 3;
                 return view('ingresos.resultadosBusqueda',compact('restipobusqueda','busqueda','fecha_inicio','fecha_fin','busquedaIngresos','busquedaVehiculos'));
-
+    
             }
-
+    
             //Si hay rango de fechas pero no tipos de ingreso ni vehiculo
             //Busca todos los ingresos en el rango de fechas con todos los tipos de vehiculos e ingresos
             if($fecha_inicio && $fecha_fin && !$tipos_ingresos && !$tipos_vehiculo){
-                
+                    
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
                 ->select('ingreso.id as id','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
                 'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.cedula as cedula','ingreso.nombre as nombre')
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
-                ;
-                //->get();
+                //;
+                ->get();
                 //dd($busqueda);
                 $restipobusqueda = 4;
-                return view('ingresos.resultadosBusqueda',compact('restipobusqueda','busqueda'));
+                return view('ingresos.resultadosBusqueda',compact('restipobusqueda','busqueda','fecha_inicio','fecha_fin'));
             }
-
-        }      
+        }    
     }
 
     public function store(Request $request){
@@ -264,7 +258,6 @@ class IngresoController extends Controller
 
             }else{
 
-                $url = env('URL_SERVER_API','http://localhost');
 
                 $tipovehiculo = $request->input('tipov');
                 $placa = $request->input('placa');
@@ -287,7 +280,19 @@ class IngresoController extends Controller
                 $userIdLog = $userDat->id;
                 $userName = $userDat->name;
                 $fechaLog = date("Y-m-d H:i:s");
-    
+
+                $buscarBloqueoP = BloqueoIngreso::where('cedula')
+                ->where('estado',true)
+                ->orderByDesc('id','desc')
+                ->first();
+                
+                $tipoBloqPersona = $buscarBloqueoP->indefinido;
+                $tipoBloqPersona = $buscarBloqueoP->bloqueo_ingreso;
+                
+                if($buscarBloqueoP){
+                    //Hay un bloqueo
+                }
+
                 if($tipo_ingreso == "Socio"){
 
                     $consulta = DB::table('socios')
@@ -419,35 +424,69 @@ class IngresoController extends Controller
 
                     $fechaIngreso = date("Y-m-d");
                     $hora_Ingreso = date("H:m:s");
+
+                    $primerDiaM = new datetime('first day of this month'); 
+                    $primerDiaM = $primerDiaM->format('Y-m-d');
+
+                    $ultimoDiaM = new datetime('last day of this month'); 
+                    $ultimoDiaM = $ultimoDiaM->format('Y-m-d');
+
+                    $primerDiaA = new datetime('first day of January'); 
+                    $primerDiaA = $primerDiaA->format('Y-m-d');
+
+                    $ultimoDiaA = new datetime('last day of December'); 
+                    $ultimoDiaA = $ultimoDiaA->format('Y-m-d');
+                    //dd($primerDiaM." - ".$ultimoDiaM." - ".$primerDiaA." - ".$ultimoDiaA);
                     $response = Invitado::where('doc_invitado',$cedula)
                         ->where('fecha_ingreso',$fechaIngreso)
                         ->get();
 
                     if($response){
-                        $crearIngreso = Ingreso::create([
-                            'fecha_ingreso'=>$fechaIngreso,
-                            'hora_ingreso'=>$hora_Ingreso,
-                            'id_tipo_vehiculo'=>$tipovehiculo,
-                            'id_tipo_ingreso'=>$tipoingreso,
-                            'placa'=>$placa, 
-                            'cedula'=>$cedula,
-                            'nombre'=>$nombre_persona,
-                            'id_usuario_create'=>$userId
-                        ]);
-                        if($crearIngreso){
-                            $guardarLog = Log::create([
-                                'fecha'   => $fechaLog,
-                                'accion'  =>'Insert',
-                                'tabla_accion' => 'Ingreso',
-                                'id_usuario' => $userIdLog,
-                                'nombre_usuario' => $userName,
-                                'comentarios'=>'Ingreso invitado documento #'.$cedula
-                            ]);
-                            $datos_respuesta = "Ingreso de invitado reistrado correctamente";
-                            $data = array("respuesta"=>200,"datos"=>$datos_respuesta);
-                        }else{
-                            $datos_respuesta = "Error insertando invitado";
+                        //Buscar ingresos del invitado x mes
+                        $contadorInvitadoMes = Ingreso::where('cedula', $cedula)
+                        ->where('id_tipo_ingreso',2)
+                        ->whereBetween('fecha_ingreso', [$primerDiaM, $ultimoDiaM])
+                        ->count();
+                        $contadorInvitadoYear = Ingreso::where('cedula', $cedula)
+                        ->where('id_tipo_ingreso',2)
+                        ->whereBetween('fecha_ingreso', [$primerDiaA, $ultimoDiaA])
+                        ->count();
+
+                        if(($contadorInvitadoMes >= 2) || ($contadorInvitadoYear>=24)){
+                            //Ya ingresó dos veces al mes o 24 en el año
+                            if($contadorInvitadoMes >= 2){
+                                $datos_respuesta = "Error insertando invitado. La persona ya ha ingresado 2 veces en el mes ";
+                            }else{
+                                $datos_respuesta = "Error insertando invitado. La persona ya ha ingresado 24 veces en el año ";
+                            }
                             $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                        }else{
+                            //No ha ingresado dos veces al mes o 24 en el año
+                            $crearIngreso = Ingreso::create([
+                                'fecha_ingreso'=>$fechaIngreso,
+                                'hora_ingreso'=>$hora_Ingreso,
+                                'id_tipo_vehiculo'=>$tipovehiculo,
+                                'id_tipo_ingreso'=>$tipoingreso,
+                                'placa'=>$placa, 
+                                'cedula'=>$cedula,
+                                'nombre'=>$nombre_persona,
+                                'id_usuario_create'=>$userId
+                            ]);
+                            if($crearIngreso){
+                                $guardarLog = Log::create([
+                                    'fecha'   => $fechaLog,
+                                    'accion'  =>'Insert',
+                                    'tabla_accion' => 'Ingreso',
+                                    'id_usuario' => $userIdLog,
+                                    'nombre_usuario' => $userName,
+                                    'comentarios'=>'Ingreso invitado documento #'.$cedula
+                                ]);
+                                $datos_respuesta = "Ingreso de invitado reistrado correctamente";
+                                $data = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                            }else{
+                                $datos_respuesta = "Error insertando invitado";
+                                $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                            }
                         }
                     }else{
                         $datos_respuesta = "No hay registro de invitado";

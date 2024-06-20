@@ -73,8 +73,10 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'autorizado.delete'])->syncRoles([$role1]);
 
         Permission::create(['name'=>'canjes'])->syncRoles([$role1]);
+        Permission::create(['name'=>'invitados'])->syncRoles([$role1]);
 
         Permission::create(['name'=>'log'])->syncRoles([$role1]);
+        Permission::create(['name'=>'log.find'])->syncRoles([$role1]);
    
     }
 }

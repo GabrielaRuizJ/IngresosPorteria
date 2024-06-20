@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CanjeController extends Controller
 {
-     public function index(){
+    public function index(){
         $canjes = Canje::select('ingreso.nombre as nombre_canje', 'detalle_canje.*')
         ->join('ingreso', 'ingreso.id', '=', 'detalle_canje.id_ingreso')
         ->get();

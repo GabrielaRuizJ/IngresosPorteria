@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Autorizados')
 @section('content_header')
     <h1><li class="fas fa-user-check"></li> Listado de personas autorizadas</li> </h1>
 @endsection

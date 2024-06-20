@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Editar Ciudades')
 @section('content_header')
     <h1>Editar ciudad</h1>
 @endsection

@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title','Dashboard')
+@section('title','Canjes')
 @section('content_header')
     <h1><li class="fas fa-user-check"></li> Listado de canjes registrados</li> </h1>
 @endsection
