@@ -281,11 +281,10 @@ class IngresoController extends Controller
                 $userName = $userDat->name;
                 $fechaLog = date("Y-m-d H:i:s");
 
-                $buscarBloqueoP = BloqueoIngreso::where('cedula')
+                $buscarBloqueoP = BloqueoIngreso::where('cedula',$cedula)
                 ->where('estado',true)
                 ->orderByDesc('id','desc')
                 ->first();
-                
             if($buscarBloqueoP){
                 //Hay un bloqueo
                 $tipoBloqPersona1 = $buscarBloqueoP->indefinido;
@@ -299,7 +298,6 @@ class IngresoController extends Controller
                     //Tiene bloqueo de ingreso
                     $tipoBloqPersona3 = $buscarBloqueoP->fecha_inicio_bloqueo;
                     $tipoBloqPersona4 = $buscarBloqueoP->fecha_fin_bloqueo;
-
                     if( ($fecha>= $tipoBloqPersona3 ) && ($fecha<= $tipoBloqPersona4) ){
                         //Todavia esta bloqueado
                         $datos_r = array("respuesta"=>300,"datos"=>"La persona esta bloqueada para ingresar hasta el día ".$tipoBloqPersona4);
