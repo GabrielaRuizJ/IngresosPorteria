@@ -309,8 +309,7 @@ class IngresoController extends Controller
                         //Ya no está bloqueado
                         if($tipo_ingreso == "Socio"){
     
-                            $consulta = DB::table('socios')
-                            ->where('cedula',"=", $cedula)
+                            $consulta = Socio::where('cedula',"=", $cedula)
                             ->get();
                             $arraydat = array();
             
@@ -610,9 +609,8 @@ class IngresoController extends Controller
                     //No tiene bloqueo de ingreso
                     if($tipo_ingreso == "Socio"){
     
-                        $consulta = DB::table('socios')
-                            ->where('cedula',"=", $cedula)
-                            ->get();
+                        $consulta = Socio::where('cedula',"=", $cedula)
+                        ->get();
                             $arraydat = array();
             
                             if($consulta->count() > 0){
@@ -623,7 +621,7 @@ class IngresoController extends Controller
                                     //if(!$nombre_persona){
                                         $nombre_persona = $consulta[0]->nombre;
                                     //}
-            
+
                                     $crearIngreso = Ingreso::create([
                                         'fecha_ingreso'=>$fechaIngreso,
                                         'hora_ingreso'=>$hora_Ingreso,
@@ -909,8 +907,7 @@ class IngresoController extends Controller
             }else{                
                 if($tipo_ingreso == "Socio"){
     
-                    $consulta = DB::table('socios')
-                            ->where('cedula',"=", $cedula)
+                        $consulta = Socio::where('cedula',"=", $cedula)
                             ->get();
                             $arraydat = array();
             
