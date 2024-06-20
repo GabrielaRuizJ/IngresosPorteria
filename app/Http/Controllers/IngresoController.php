@@ -286,27 +286,796 @@ class IngresoController extends Controller
                 ->orderByDesc('id','desc')
                 ->first();
                 
-                $tipoBloqPersona = $buscarBloqueoP->indefinido;
-                $tipoBloqPersona = $buscarBloqueoP->bloqueo_ingreso;
+            if($buscarBloqueoP){
+                //Hay un bloqueo
+                $tipoBloqPersona1 = $buscarBloqueoP->indefinido;
+                $tipoBloqPersona2 = $buscarBloqueoP->bloqueo_ingreso;
+                if($tipoBloqPersona1 && $tipoBloqPersona2 ){
+                    //Tiene bloqueo indefinido y bloqueo de ingreso
+                    $datos_r = array("respuesta"=>300,"datos"=>"La persona esta bloqueada indefinidamente para ingresar");
+                    $data = json_encode($datos_r);
+                    return $data;
+                }else if($tipoBloqPersona2){
+                    //Tiene bloqueo de ingreso
+                    $tipoBloqPersona3 = $buscarBloqueoP->fecha_inicio_bloqueo;
+                    $tipoBloqPersona4 = $buscarBloqueoP->fecha_fin_bloqueo;
+
+                    if( ($fecha>= $tipoBloqPersona3 ) && ($fecha<= $tipoBloqPersona4) ){
+                        //Todavia esta bloqueado
+                        $datos_r = array("respuesta"=>300,"datos"=>"La persona esta bloqueada para ingresar hasta el día ".$tipoBloqPersona4);
+                        $data = json_encode($datos_r);
+                        return $data;
+                    }else{
+                        //Ya no está bloqueado
+                        if($tipo_ingreso == "Socio"){
+    
+                            $consulta = DB::table('socios')
+                            ->where('cedula',"=", $cedula)
+                            ->get();
+                            $arraydat = array();
+            
+                            if($consulta->count() > 0){
+            
+                                $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
+                                ->orderByDesc('id')
+                                //->first();
+                                ->get();
+            
+                                if($consulta2->count() > 0){
+                                    if($consulta2[0]->bloqueo_ingreso){
+                                        if($consulta2[0]->indefinido){
+                                            $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar");
+                                        }else{
+                                            $fActBlqSocio = date("Y-m-d");
+                                            
+                                            if( $fActBlqSocio >= $consulta2[0]->fecha_inicio_bloqueo && $fActBlqSocio <= $consulta2[0]->fecha_fin_bloqueo ){
+                                                $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar en las fechas del ".$consulta2[0]->fecha_inicio_bloqueo." al ".$consulta2[0]->fecha_fin_bloqueo);
+                                            }else{
+                                                $fechaIngreso = date("Y-m-d");
+                                                $hora_Ingreso = date("H:m:s");
+            
+                                                $crearIngreso = Ingreso::create([
+                                                    'fecha_ingreso'=>$fechaIngreso,
+                                                    'hora_ingreso'=>$hora_Ingreso,
+                                                    'id_tipo_vehiculo'=>$tipovehiculo,
+                                                    'id_tipo_ingreso'=>$tipoingreso,
+                                                    'placa'=>$placa, 
+                                                    'cedula'=>$cedula,
+                                                    'nombre'=>$consulta[0]->nombre,
+                                                    'id_usuario_create'=>$userId
+                                                ]);
+                        
+                                                if($crearIngreso){
+                                                    $guardarLog = Log::create([
+                                                        'fecha'   => $fechaLog,
+                                                        'accion'  =>'Insert',
+                                                        'tabla_accion' => 'Ingreso',
+                                                        'id_usuario' => $userIdLog,
+                                                        'nombre_usuario' => $userName,
+                                                        'comentarios'=>'Ingreso socio documento #'.$cedula
+                                                    ]);
+                                                    $datos_respuesta = "Correcto";
+                                                    $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                                }else{
+                                                    $datos_respuesta = "Error insertando datos: ";
+                                                    $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                                }
+                                            }
+                                        }
+                                    }else{
+                                        $fechaIngreso = date("Y-m-d");
+                                        $hora_Ingreso = date("H:m:s");
+            
+                                        $crearIngreso = Ingreso::create([
+                                            'fecha_ingreso'=>$fechaIngreso,
+                                            'hora_ingreso'=>$hora_Ingreso,
+                                            'id_tipo_vehiculo'=>$tipovehiculo,
+                                            'id_tipo_ingreso'=>$tipoingreso,
+                                            'placa'=>$placa, 
+                                            'cedula'=>$cedula,
+                                            'nombre'=>$consulta[0]->nombre,
+                                            'id_usuario_create'=>$userId
+                                        ]);
                 
-                if($buscarBloqueoP){
-                    //Hay un bloqueo
+                                        if($crearIngreso){
+                                            $guardarLog = Log::create([
+                                                'fecha'   => $fechaLog,
+                                                'accion'  =>'Insert',
+                                                'tabla_accion' => 'Ingreso',
+                                                'id_usuario' => $userIdLog,
+                                                'nombre_usuario' => $userName,
+                                                'comentarios'=>'Ingreso socio documento #'.$cedula
+                                            ]);
+                                            $datos_respuesta = "Correcto ";
+                                            $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                        }else{
+                                            $datos_respuesta = "Error insertando datos: ";
+                                            $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                        }
+                                    }
+                                }else{
+                                    $fechaIngreso = date("Y-m-d");
+                                    $hora_Ingreso = date("H:m:s");
+            
+                                    if(!$nombre_persona){
+                                        $nombre_persona = $consulta[0]->nombre;
+                                    }
+            
+                                    $crearIngreso = Ingreso::create([
+                                        'fecha_ingreso'=>$fechaIngreso,
+                                        'hora_ingreso'=>$hora_Ingreso,
+                                        'id_tipo_vehiculo'=>$tipovehiculo,
+                                        'id_tipo_ingreso'=>$tipoingreso,
+                                        'placa'=>$placa, 
+                                        'cedula'=>$cedula,
+                                        'nombre'=>$nombre_persona,
+                                        'id_usuario_create'=>$userId
+                                    ]);
+            
+                                    if($crearIngreso){
+                                        $guardarLog = Log::create([
+                                            'fecha'   => $fechaLog,
+                                            'accion'  =>'Insert',
+                                            'tabla_accion' => 'Ingreso',
+                                            'id_usuario' => $userIdLog,
+                                            'nombre_usuario' => $userName,
+                                            'comentarios'=>'Ingreso socio documento #'.$cedula
+                                        ]);
+                                        $datos_respuesta = "Correcto ";
+                                        $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                    }else{
+                                        $datos_respuesta = "Error insertando datos: ";
+                                        $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                    }
+                                }
+                            }else{
+                                $datos_respuesta = "No hay registro del socio";
+                                $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                            }
+            
+                            $data = $arraydat;
+                        }else if($tipo_ingreso == "Invitado" ){
+            
+                            $fechaIngreso = date("Y-m-d");
+                            $hora_Ingreso = date("H:m:s");
+            
+                            $primerDiaM = new datetime('first day of this month'); 
+                            $primerDiaM = $primerDiaM->format('Y-m-d');
+            
+                            $ultimoDiaM = new datetime('last day of this month'); 
+                            $ultimoDiaM = $ultimoDiaM->format('Y-m-d');
+            
+                            $primerDiaA = new datetime('first day of January'); 
+                            $primerDiaA = $primerDiaA->format('Y-m-d');
+            
+                            $ultimoDiaA = new datetime('last day of December'); 
+                            $ultimoDiaA = $ultimoDiaA->format('Y-m-d');
+                            //dd($primerDiaM." - ".$ultimoDiaM." - ".$primerDiaA." - ".$ultimoDiaA);
+                            $response = Invitado::where('doc_invitado',$cedula)
+                                ->where('fecha_ingreso',$fechaIngreso)
+                                ->get();
+            
+                            if($response){
+                                //Buscar ingresos del invitado x mes
+                                $contadorInvitadoMes = Ingreso::where('cedula', $cedula)
+                                ->where('id_tipo_ingreso',2)
+                                ->whereBetween('fecha_ingreso', [$primerDiaM, $ultimoDiaM])
+                                ->count();
+                                $contadorInvitadoYear = Ingreso::where('cedula', $cedula)
+                                ->where('id_tipo_ingreso',2)
+                                ->whereBetween('fecha_ingreso', [$primerDiaA, $ultimoDiaA])
+                                ->count();
+            
+                                if(($contadorInvitadoMes >= 2) || ($contadorInvitadoYear>=24)){
+                                    //Ya ingresó dos veces al mes o 24 en el año
+                                    if($contadorInvitadoMes >= 2){
+                                        $datos_respuesta = "Error insertando invitado. La persona ya ha ingresado 2 veces en el mes ";
+                                    }else{
+                                        $datos_respuesta = "Error insertando invitado. La persona ya ha ingresado 24 veces en el año ";
+                                    }
+                                    $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                }else{
+                                    //No ha ingresado dos veces al mes o 24 en el año
+                                    $crearIngreso = Ingreso::create([
+                                        'fecha_ingreso'=>$fechaIngreso,
+                                        'hora_ingreso'=>$hora_Ingreso,
+                                        'id_tipo_vehiculo'=>$tipovehiculo,
+                                        'id_tipo_ingreso'=>$tipoingreso,
+                                        'placa'=>$placa, 
+                                        'cedula'=>$cedula,
+                                        'nombre'=>$nombre_persona,
+                                        'id_usuario_create'=>$userId
+                                    ]);
+                                    if($crearIngreso){
+                                        $guardarLog = Log::create([
+                                            'fecha'   => $fechaLog,
+                                            'accion'  =>'Insert',
+                                            'tabla_accion' => 'Ingreso',
+                                            'id_usuario' => $userIdLog,
+                                            'nombre_usuario' => $userName,
+                                            'comentarios'=>'Ingreso invitado documento #'.$cedula
+                                        ]);
+                                        $datos_respuesta = "Ingreso de invitado reistrado correctamente";
+                                        $data = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                    }else{
+                                        $datos_respuesta = "Error insertando invitado";
+                                        $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                    }
+                                }
+                            }else{
+                                $datos_respuesta = "No hay registro de invitado";
+                                $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                            }
+            
+                        }else if($tipo_ingreso == "Autorizado" ){
+            
+                            $consulta = DB::table('autorizado')
+                            ->where('cedula_autorizado',"=", $cedula)
+                            ->where('fecha_ingreso',"=", $fecha )
+                            ->where('estado',"=", 1 )
+                            ->get();
+            
+                            if($consulta->count() > 0){
+                                
+                                $fechaIngreso = date("Y-m-d");
+                                $hora_Ingreso = date("H:m:s");
+                                $crearIngreso = Ingreso::create([
+                                    'fecha_ingreso'=>$fechaIngreso,
+                                    'hora_ingreso'=>$hora_Ingreso,
+                                    'id_tipo_vehiculo'=>$tipovehiculo,
+                                    'id_tipo_ingreso'=>$tipoingreso,
+                                    'placa'=>$placa, 
+                                    'cedula'=>$cedula,
+                                    'nombre'=>$nombre_persona,
+                                    'id_usuario_create'=>$userId
+                                ]);
+                                if($crearIngreso){
+                                    $guardarLog = Log::create([
+                                        'fecha'   => $fechaLog,
+                                        'accion'  =>'Insert',
+                                        'tabla_accion' => 'Ingreso',
+                                        'id_usuario' => $userIdLog,
+                                        'nombre_usuario' => $userName,
+                                        'comentarios'=>'Ingreso autorizado documento #'.$cedula
+                                    ]);
+                                    $datos_respuesta = "Canje registrado correctamente";
+                                    $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                }else{
+                                    $datos_respuesta = "Error insertando autorizado";
+                                    $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                }
+                                
+                            }else{
+                                $datos_respuesta = "No existe registro para autorizar ingreso";
+                                $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                            }
+            
+                            $data = $arraydat;
+                        }else if($tipo_ingreso == "Canje" ){
+                            $idclub = $request->input('idclubcanje');
+                            $finiciocanje = $request->input('finiciocanje');
+                            $ffincanje = $request->input('ffincanje');
+                            
+                            $datos_r=array($idclub,$finiciocanje,$ffincanje);  
+                            $data = array("respuesta"=>300,"datos"=>$datos_r);
+                            if( ($idclub) && ($finiciocanje) && ($ffincanje)){
+            
+                                $fechaIngreso = date("Y-m-d");
+                                $hora_Ingreso = date("H:m:s");
+            
+                                if($finiciocanje > $ffincanje){
+            
+                                    $datos_r=array("Rango de fechas incorrecto ");  
+                                    $data = array("respuesta"=>300,"datos"=>$datos_r);
+            
+                                }else{
+                                    $crearIngreso = Ingreso::create([
+                                        'fecha_ingreso'=>$fechaIngreso,
+                                        'hora_ingreso'=>$hora_Ingreso,
+                                        'id_tipo_vehiculo'=>$tipovehiculo,
+                                        'id_tipo_ingreso'=>$tipoingreso,
+                                        'placa'=>$placa, 
+                                        'cedula'=>$cedula,
+                                        'nombre'=>$nombre_persona,
+                                        'id_usuario_create'=>$userId
+                                    ]);
+                                    $nuevoIngresoId = $crearIngreso->id;
+                                    $nombre_club = Club::find($idclub);
+                                    $nombre_club = $nombre_club->club;
+                                    $detalle_canje = Canje::create([
+                                        'id_ingreso'=>$nuevoIngresoId,
+                                        'id_club'=>$idclub,
+                                        'cedula_canje'=>$cedula,
+                                        'nombre_club'=>$nombre_club,
+                                        'fecha_inicio_canje'=>$finiciocanje,
+                                        'fecha_fin_canje'=>$ffincanje
+                                    ]);
+            
+                                    if($crearIngreso && $detalle_canje){
+                                        $guardarLog = Log::create([
+                                            'fecha'   => $fechaLog,
+                                            'accion'  =>'Insert',
+                                            'tabla_accion' => 'Ingreso',
+                                            'id_usuario' => $userIdLog,
+                                            'nombre_usuario' => $userName,
+                                            'comentarios'=>'Ingreso canje documento #'.$cedula
+                                        ]);
+                                        $datos_r=array("Canje registrado correctamente");  
+                                        $data = array("respuesta"=>200,"datos"=>$datos_r);
+                                    }else{
+                                        $datos_r=array("Error guardando registro de canje ");  
+                                        $data = array("respuesta"=>300,"datos"=>$datos_r);
+                                    }
+                                }
+            
+                            }else{
+            
+                                //No hay datos, validar si el canje tiene rango disponible 
+                                $consulta2 = DB::table('detalle_canje')
+                                ->where('cedula_canje',"=", $cedula)
+                                ->orderByDesc('id')
+                                ->first(); 
+                                if($consulta2){
+            
+                                    if( $fecha >= $consulta2->fecha_inicio_canje && $fecha <= $consulta2->fecha_fin_canje ){
+                                        $idclub = $request->input('idclubcanje');
+                                        $fechaIngreso = date("Y-m-d");
+                                        $hora_Ingreso = date("H:m:s");
+                
+                                        $crearIngreso = Ingreso::create([
+                                            'fecha_ingreso'=>$fechaIngreso,
+                                            'hora_ingreso'=>$hora_Ingreso,
+                                            'id_tipo_vehiculo'=>$tipovehiculo,
+                                            'id_tipo_ingreso'=>$tipoingreso,
+                                            'placa'=>$placa, 
+                                            'cedula'=>$cedula,
+                                            'nombre'=>$nombre_persona,
+                                            'id_usuario_create'=>$userId
+                                        ]);
+                                        $nuevoIngresoId = $crearIngreso->id;
+                
+                                        $detalle_canje = Canje::create([
+                                            'id_ingreso'=>$nuevoIngresoId,
+                                            'id_club'=>$consulta2->id_club,
+                                            'cedula_canje'=>$cedula,
+                                            'nombre_club'=>$consulta2->nombre_club,
+                                            'fecha_inicio_canje'=>$consulta2->fecha_inicio_canje,
+                                            'fecha_fin_canje'=>$consulta2->fecha_fin_canje
+                                        ]);
+                
+                                        if($crearIngreso && $detalle_canje){
+                                            $guardarLog = Log::create([
+                                                'fecha'   => $fechaLog,
+                                                'accion'  =>'Insert',
+                                                'tabla_accion' => 'Ingreso',
+                                                'id_usuario' => $userIdLog,
+                                                'nombre_usuario' => $userName,
+                                                'comentarios'=>'Ingreso canje documento #'.$cedula
+                                            ]);
+                                            $datos_r=array("Canje registrado correctamente");  
+                                            $data = array("respuesta"=>200,"datos"=>$datos_r);
+                                        }else{
+                                            $datos_r=array("Error guardando registro de canje ");  
+                                            $data = array("respuesta"=>300,"datos"=>$datos_r);
+                                        }
+                
+                                    }else{
+                                        $datos_r=array("Rango de fechas vencido");  
+                                        $data = array("respuesta"=>301,"datos"=>$datos_r); 
+                                    }
+            
+                                }else{
+                                    
+                                    $datos_r = array("No hay registro de canje");  
+                                    $data = array("respuesta"=>404,"datos"=>$datos_r); 
+            
+                                }
+                                
+                            }
+                            
+                        }else{
+            
+                            $datos_r = array("respuesta"=>300,"datos"=>"No existe el tipo de ingreso");
+                            $data = json_encode($datos_r);
+            
+                        }
+                        
+                        return $data;
+                    }
+
+                }else if(!$tipoBloqPersona2){
+                    //No tiene bloqueo de ingreso
+                    if($tipo_ingreso == "Socio"){
+    
+                        $consulta = DB::table('socios')
+                        ->where('cedula',"=", $cedula)
+                        ->get();
+                        $arraydat = array();
+        
+                        if($consulta->count() > 0){
+        
+                            $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
+                            ->orderByDesc('id')
+                            //->first();
+                            ->get();
+        
+                            if($consulta2->count() > 0){
+                                if($consulta2[0]->bloqueo_ingreso){
+                                    if($consulta2[0]->indefinido){
+                                        $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar");
+                                    }else{
+                                        $fActBlqSocio = date("Y-m-d");
+                                        
+                                        if( $fActBlqSocio >= $consulta2[0]->fecha_inicio_bloqueo && $fActBlqSocio <= $consulta2[0]->fecha_fin_bloqueo ){
+                                            $arraydat = array("respuesta"=>300,"datos"=>"Socio bloqueado para ingresar en las fechas del ".$consulta2[0]->fecha_inicio_bloqueo." al ".$consulta2[0]->fecha_fin_bloqueo);
+                                        }else{
+                                            $fechaIngreso = date("Y-m-d");
+                                            $hora_Ingreso = date("H:m:s");
+        
+                                            $crearIngreso = Ingreso::create([
+                                                'fecha_ingreso'=>$fechaIngreso,
+                                                'hora_ingreso'=>$hora_Ingreso,
+                                                'id_tipo_vehiculo'=>$tipovehiculo,
+                                                'id_tipo_ingreso'=>$tipoingreso,
+                                                'placa'=>$placa, 
+                                                'cedula'=>$cedula,
+                                                'nombre'=>$consulta[0]->nombre,
+                                                'id_usuario_create'=>$userId
+                                            ]);
+                    
+                                            if($crearIngreso){
+                                                $guardarLog = Log::create([
+                                                    'fecha'   => $fechaLog,
+                                                    'accion'  =>'Insert',
+                                                    'tabla_accion' => 'Ingreso',
+                                                    'id_usuario' => $userIdLog,
+                                                    'nombre_usuario' => $userName,
+                                                    'comentarios'=>'Ingreso socio documento #'.$cedula
+                                                ]);
+                                                $datos_respuesta = "Correcto";
+                                                $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                            }else{
+                                                $datos_respuesta = "Error insertando datos: ";
+                                                $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    $fechaIngreso = date("Y-m-d");
+                                    $hora_Ingreso = date("H:m:s");
+        
+                                    $crearIngreso = Ingreso::create([
+                                        'fecha_ingreso'=>$fechaIngreso,
+                                        'hora_ingreso'=>$hora_Ingreso,
+                                        'id_tipo_vehiculo'=>$tipovehiculo,
+                                        'id_tipo_ingreso'=>$tipoingreso,
+                                        'placa'=>$placa, 
+                                        'cedula'=>$cedula,
+                                        'nombre'=>$consulta[0]->nombre,
+                                        'id_usuario_create'=>$userId
+                                    ]);
+            
+                                    if($crearIngreso){
+                                        $guardarLog = Log::create([
+                                            'fecha'   => $fechaLog,
+                                            'accion'  =>'Insert',
+                                            'tabla_accion' => 'Ingreso',
+                                            'id_usuario' => $userIdLog,
+                                            'nombre_usuario' => $userName,
+                                            'comentarios'=>'Ingreso socio documento #'.$cedula
+                                        ]);
+                                        $datos_respuesta = "Correcto ";
+                                        $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                    }else{
+                                        $datos_respuesta = "Error insertando datos: ";
+                                        $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                    }
+                                }
+                            }else{
+                                $fechaIngreso = date("Y-m-d");
+                                $hora_Ingreso = date("H:m:s");
+        
+                                if(!$nombre_persona){
+                                    $nombre_persona = $consulta[0]->nombre;
+                                }
+        
+                                $crearIngreso = Ingreso::create([
+                                    'fecha_ingreso'=>$fechaIngreso,
+                                    'hora_ingreso'=>$hora_Ingreso,
+                                    'id_tipo_vehiculo'=>$tipovehiculo,
+                                    'id_tipo_ingreso'=>$tipoingreso,
+                                    'placa'=>$placa, 
+                                    'cedula'=>$cedula,
+                                    'nombre'=>$nombre_persona,
+                                    'id_usuario_create'=>$userId
+                                ]);
+        
+                                if($crearIngreso){
+                                    $guardarLog = Log::create([
+                                        'fecha'   => $fechaLog,
+                                        'accion'  =>'Insert',
+                                        'tabla_accion' => 'Ingreso',
+                                        'id_usuario' => $userIdLog,
+                                        'nombre_usuario' => $userName,
+                                        'comentarios'=>'Ingreso socio documento #'.$cedula
+                                    ]);
+                                    $datos_respuesta = "Correcto ";
+                                    $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                }else{
+                                    $datos_respuesta = "Error insertando datos: ";
+                                    $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                }
+                            }
+                        }else{
+                            $datos_respuesta = "No hay registro del socio";
+                            $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                        }
+        
+                        $data = $arraydat;
+                    }else if($tipo_ingreso == "Invitado" ){
+        
+                        $fechaIngreso = date("Y-m-d");
+                        $hora_Ingreso = date("H:m:s");
+        
+                        $primerDiaM = new datetime('first day of this month'); 
+                        $primerDiaM = $primerDiaM->format('Y-m-d');
+        
+                        $ultimoDiaM = new datetime('last day of this month'); 
+                        $ultimoDiaM = $ultimoDiaM->format('Y-m-d');
+        
+                        $primerDiaA = new datetime('first day of January'); 
+                        $primerDiaA = $primerDiaA->format('Y-m-d');
+        
+                        $ultimoDiaA = new datetime('last day of December'); 
+                        $ultimoDiaA = $ultimoDiaA->format('Y-m-d');
+                        //dd($primerDiaM." - ".$ultimoDiaM." - ".$primerDiaA." - ".$ultimoDiaA);
+                        $response = Invitado::where('doc_invitado',$cedula)
+                            ->where('fecha_ingreso',$fechaIngreso)
+                            ->get();
+        
+                        if($response){
+                            //Buscar ingresos del invitado x mes
+                            $contadorInvitadoMes = Ingreso::where('cedula', $cedula)
+                            ->where('id_tipo_ingreso',2)
+                            ->whereBetween('fecha_ingreso', [$primerDiaM, $ultimoDiaM])
+                            ->count();
+                            $contadorInvitadoYear = Ingreso::where('cedula', $cedula)
+                            ->where('id_tipo_ingreso',2)
+                            ->whereBetween('fecha_ingreso', [$primerDiaA, $ultimoDiaA])
+                            ->count();
+        
+                            if(($contadorInvitadoMes >= 2) || ($contadorInvitadoYear>=24)){
+                                //Ya ingresó dos veces al mes o 24 en el año
+                                if($contadorInvitadoMes >= 2){
+                                    $datos_respuesta = "Error insertando invitado. La persona ya ha ingresado 2 veces en el mes ";
+                                }else{
+                                    $datos_respuesta = "Error insertando invitado. La persona ya ha ingresado 24 veces en el año ";
+                                }
+                                $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                            }else{
+                                //No ha ingresado dos veces al mes o 24 en el año
+                                $crearIngreso = Ingreso::create([
+                                    'fecha_ingreso'=>$fechaIngreso,
+                                    'hora_ingreso'=>$hora_Ingreso,
+                                    'id_tipo_vehiculo'=>$tipovehiculo,
+                                    'id_tipo_ingreso'=>$tipoingreso,
+                                    'placa'=>$placa, 
+                                    'cedula'=>$cedula,
+                                    'nombre'=>$nombre_persona,
+                                    'id_usuario_create'=>$userId
+                                ]);
+                                if($crearIngreso){
+                                    $guardarLog = Log::create([
+                                        'fecha'   => $fechaLog,
+                                        'accion'  =>'Insert',
+                                        'tabla_accion' => 'Ingreso',
+                                        'id_usuario' => $userIdLog,
+                                        'nombre_usuario' => $userName,
+                                        'comentarios'=>'Ingreso invitado documento #'.$cedula
+                                    ]);
+                                    $datos_respuesta = "Ingreso de invitado reistrado correctamente";
+                                    $data = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                                }else{
+                                    $datos_respuesta = "Error insertando invitado";
+                                    $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                                }
+                            }
+                        }else{
+                            $datos_respuesta = "No hay registro de invitado";
+                            $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                        }
+        
+                    }else if($tipo_ingreso == "Autorizado" ){
+        
+                        $consulta = DB::table('autorizado')
+                        ->where('cedula_autorizado',"=", $cedula)
+                        ->where('fecha_ingreso',"=", $fecha )
+                        ->where('estado',"=", 1 )
+                        ->get();
+        
+                        if($consulta->count() > 0){
+                            
+                            $fechaIngreso = date("Y-m-d");
+                            $hora_Ingreso = date("H:m:s");
+                            $crearIngreso = Ingreso::create([
+                                'fecha_ingreso'=>$fechaIngreso,
+                                'hora_ingreso'=>$hora_Ingreso,
+                                'id_tipo_vehiculo'=>$tipovehiculo,
+                                'id_tipo_ingreso'=>$tipoingreso,
+                                'placa'=>$placa, 
+                                'cedula'=>$cedula,
+                                'nombre'=>$nombre_persona,
+                                'id_usuario_create'=>$userId
+                            ]);
+                            if($crearIngreso){
+                                $guardarLog = Log::create([
+                                    'fecha'   => $fechaLog,
+                                    'accion'  =>'Insert',
+                                    'tabla_accion' => 'Ingreso',
+                                    'id_usuario' => $userIdLog,
+                                    'nombre_usuario' => $userName,
+                                    'comentarios'=>'Ingreso autorizado documento #'.$cedula
+                                ]);
+                                $datos_respuesta = "Canje registrado correctamente";
+                                $arraydat = array("respuesta"=>200,"datos"=>$datos_respuesta);
+                            }else{
+                                $datos_respuesta = "Error insertando autorizado";
+                                $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                            }
+                            
+                        }else{
+                            $datos_respuesta = "No existe registro para autorizar ingreso";
+                            $arraydat = array("respuesta"=>300,"datos"=>$datos_respuesta);
+                        }
+        
+                        $data = $arraydat;
+                    }else if($tipo_ingreso == "Canje" ){
+                        $idclub = $request->input('idclubcanje');
+                        $finiciocanje = $request->input('finiciocanje');
+                        $ffincanje = $request->input('ffincanje');
+                        
+                        $datos_r=array($idclub,$finiciocanje,$ffincanje);  
+                        $data = array("respuesta"=>300,"datos"=>$datos_r);
+                        if( ($idclub) && ($finiciocanje) && ($ffincanje)){
+        
+                            $fechaIngreso = date("Y-m-d");
+                            $hora_Ingreso = date("H:m:s");
+        
+                            if($finiciocanje > $ffincanje){
+        
+                                $datos_r=array("Rango de fechas incorrecto ");  
+                                $data = array("respuesta"=>300,"datos"=>$datos_r);
+        
+                            }else{
+                                $crearIngreso = Ingreso::create([
+                                    'fecha_ingreso'=>$fechaIngreso,
+                                    'hora_ingreso'=>$hora_Ingreso,
+                                    'id_tipo_vehiculo'=>$tipovehiculo,
+                                    'id_tipo_ingreso'=>$tipoingreso,
+                                    'placa'=>$placa, 
+                                    'cedula'=>$cedula,
+                                    'nombre'=>$nombre_persona,
+                                    'id_usuario_create'=>$userId
+                                ]);
+                                $nuevoIngresoId = $crearIngreso->id;
+                                $nombre_club = Club::find($idclub);
+                                $nombre_club = $nombre_club->club;
+                                $detalle_canje = Canje::create([
+                                    'id_ingreso'=>$nuevoIngresoId,
+                                    'id_club'=>$idclub,
+                                    'cedula_canje'=>$cedula,
+                                    'nombre_club'=>$nombre_club,
+                                    'fecha_inicio_canje'=>$finiciocanje,
+                                    'fecha_fin_canje'=>$ffincanje
+                                ]);
+        
+                                if($crearIngreso && $detalle_canje){
+                                    $guardarLog = Log::create([
+                                        'fecha'   => $fechaLog,
+                                        'accion'  =>'Insert',
+                                        'tabla_accion' => 'Ingreso',
+                                        'id_usuario' => $userIdLog,
+                                        'nombre_usuario' => $userName,
+                                        'comentarios'=>'Ingreso canje documento #'.$cedula
+                                    ]);
+                                    $datos_r=array("Canje registrado correctamente");  
+                                    $data = array("respuesta"=>200,"datos"=>$datos_r);
+                                }else{
+                                    $datos_r=array("Error guardando registro de canje ");  
+                                    $data = array("respuesta"=>300,"datos"=>$datos_r);
+                                }
+                            }
+        
+                        }else{
+        
+                            //No hay datos, validar si el canje tiene rango disponible 
+                            $consulta2 = DB::table('detalle_canje')
+                            ->where('cedula_canje',"=", $cedula)
+                            ->orderByDesc('id')
+                            ->first(); 
+                            if($consulta2){
+        
+                                if( $fecha >= $consulta2->fecha_inicio_canje && $fecha <= $consulta2->fecha_fin_canje ){
+                                    $idclub = $request->input('idclubcanje');
+                                    $fechaIngreso = date("Y-m-d");
+                                    $hora_Ingreso = date("H:m:s");
+            
+                                    $crearIngreso = Ingreso::create([
+                                        'fecha_ingreso'=>$fechaIngreso,
+                                        'hora_ingreso'=>$hora_Ingreso,
+                                        'id_tipo_vehiculo'=>$tipovehiculo,
+                                        'id_tipo_ingreso'=>$tipoingreso,
+                                        'placa'=>$placa, 
+                                        'cedula'=>$cedula,
+                                        'nombre'=>$nombre_persona,
+                                        'id_usuario_create'=>$userId
+                                    ]);
+                                    $nuevoIngresoId = $crearIngreso->id;
+            
+                                    $detalle_canje = Canje::create([
+                                        'id_ingreso'=>$nuevoIngresoId,
+                                        'id_club'=>$consulta2->id_club,
+                                        'cedula_canje'=>$cedula,
+                                        'nombre_club'=>$consulta2->nombre_club,
+                                        'fecha_inicio_canje'=>$consulta2->fecha_inicio_canje,
+                                        'fecha_fin_canje'=>$consulta2->fecha_fin_canje
+                                    ]);
+            
+                                    if($crearIngreso && $detalle_canje){
+                                        $guardarLog = Log::create([
+                                            'fecha'   => $fechaLog,
+                                            'accion'  =>'Insert',
+                                            'tabla_accion' => 'Ingreso',
+                                            'id_usuario' => $userIdLog,
+                                            'nombre_usuario' => $userName,
+                                            'comentarios'=>'Ingreso canje documento #'.$cedula
+                                        ]);
+                                        $datos_r=array("Canje registrado correctamente");  
+                                        $data = array("respuesta"=>200,"datos"=>$datos_r);
+                                    }else{
+                                        $datos_r=array("Error guardando registro de canje ");  
+                                        $data = array("respuesta"=>300,"datos"=>$datos_r);
+                                    }
+            
+                                }else{
+                                    $datos_r=array("Rango de fechas vencido");  
+                                    $data = array("respuesta"=>301,"datos"=>$datos_r); 
+                                }
+        
+                            }else{
+                                
+                                $datos_r = array("No hay registro de canje");  
+                                $data = array("respuesta"=>404,"datos"=>$datos_r); 
+        
+                            }
+                            
+                        }
+                        
+                    }else{
+        
+                        $datos_r = array("respuesta"=>300,"datos"=>"No existe el tipo de ingreso");
+                        $data = json_encode($datos_r);
+        
+                    }
+                    
+                    return $data;
                 }
 
+            }else{                
                 if($tipo_ingreso == "Socio"){
-
+    
                     $consulta = DB::table('socios')
                     ->where('cedula',"=", $cedula)
                     ->get();
                     $arraydat = array();
-
+    
                     if($consulta->count() > 0){
     
                         $consulta2 = BloqueoSocio::where('cedula',"=", $cedula)
                         ->orderByDesc('id')
                         //->first();
                         ->get();
-
+    
                         if($consulta2->count() > 0){
                             if($consulta2[0]->bloqueo_ingreso){
                                 if($consulta2[0]->indefinido){
@@ -319,7 +1088,7 @@ class IngresoController extends Controller
                                     }else{
                                         $fechaIngreso = date("Y-m-d");
                                         $hora_Ingreso = date("H:m:s");
-
+    
                                         $crearIngreso = Ingreso::create([
                                             'fecha_ingreso'=>$fechaIngreso,
                                             'hora_ingreso'=>$hora_Ingreso,
@@ -351,7 +1120,7 @@ class IngresoController extends Controller
                             }else{
                                 $fechaIngreso = date("Y-m-d");
                                 $hora_Ingreso = date("H:m:s");
-
+    
                                 $crearIngreso = Ingreso::create([
                                     'fecha_ingreso'=>$fechaIngreso,
                                     'hora_ingreso'=>$hora_Ingreso,
@@ -382,11 +1151,11 @@ class IngresoController extends Controller
                         }else{
                             $fechaIngreso = date("Y-m-d");
                             $hora_Ingreso = date("H:m:s");
-
+    
                             if(!$nombre_persona){
                                 $nombre_persona = $consulta[0]->nombre;
                             }
-
+    
                             $crearIngreso = Ingreso::create([
                                 'fecha_ingreso'=>$fechaIngreso,
                                 'hora_ingreso'=>$hora_Ingreso,
@@ -421,26 +1190,26 @@ class IngresoController extends Controller
     
                     $data = $arraydat;
                 }else if($tipo_ingreso == "Invitado" ){
-
+    
                     $fechaIngreso = date("Y-m-d");
                     $hora_Ingreso = date("H:m:s");
-
+    
                     $primerDiaM = new datetime('first day of this month'); 
                     $primerDiaM = $primerDiaM->format('Y-m-d');
-
+    
                     $ultimoDiaM = new datetime('last day of this month'); 
                     $ultimoDiaM = $ultimoDiaM->format('Y-m-d');
-
+    
                     $primerDiaA = new datetime('first day of January'); 
                     $primerDiaA = $primerDiaA->format('Y-m-d');
-
+    
                     $ultimoDiaA = new datetime('last day of December'); 
                     $ultimoDiaA = $ultimoDiaA->format('Y-m-d');
                     //dd($primerDiaM." - ".$ultimoDiaM." - ".$primerDiaA." - ".$ultimoDiaA);
                     $response = Invitado::where('doc_invitado',$cedula)
                         ->where('fecha_ingreso',$fechaIngreso)
                         ->get();
-
+    
                     if($response){
                         //Buscar ingresos del invitado x mes
                         $contadorInvitadoMes = Ingreso::where('cedula', $cedula)
@@ -451,7 +1220,7 @@ class IngresoController extends Controller
                         ->where('id_tipo_ingreso',2)
                         ->whereBetween('fecha_ingreso', [$primerDiaA, $ultimoDiaA])
                         ->count();
-
+    
                         if(($contadorInvitadoMes >= 2) || ($contadorInvitadoYear>=24)){
                             //Ya ingresó dos veces al mes o 24 en el año
                             if($contadorInvitadoMes >= 2){
@@ -492,9 +1261,9 @@ class IngresoController extends Controller
                         $datos_respuesta = "No hay registro de invitado";
                         $data = array("respuesta"=>300,"datos"=>$datos_respuesta);
                     }
-
+    
                 }else if($tipo_ingreso == "Autorizado" ){
-
+    
                     $consulta = DB::table('autorizado')
                     ->where('cedula_autorizado',"=", $cedula)
                     ->where('fecha_ingreso',"=", $fecha )
@@ -668,6 +1437,8 @@ class IngresoController extends Controller
                 
                 return $data;
             }
+        }
+
         } catch (\Exception $e) {
             return $e;
         }
