@@ -319,9 +319,9 @@ class IngresoController extends Controller
                                     $fechaIngreso = date("Y-m-d");
                                     $hora_Ingreso = date("H:m:s");
             
-                                    if(!$nombre_persona){
+                                    //if(!$nombre_persona){
                                         $nombre_persona = $consulta[0]->nombre;
-                                    }
+                                    //}
             
                                     $crearIngreso = Ingreso::create([
                                         'fecha_ingreso'=>$fechaIngreso,
@@ -620,9 +620,9 @@ class IngresoController extends Controller
                                     $fechaIngreso = date("Y-m-d");
                                     $hora_Ingreso = date("H:m:s");
             
-                                    if(!$nombre_persona){
+                                    //if(!$nombre_persona){
                                         $nombre_persona = $consulta[0]->nombre;
-                                    }
+                                    //}
             
                                     $crearIngreso = Ingreso::create([
                                         'fecha_ingreso'=>$fechaIngreso,
@@ -919,9 +919,9 @@ class IngresoController extends Controller
                                     $fechaIngreso = date("Y-m-d");
                                     $hora_Ingreso = date("H:m:s");
             
-                                    if(!$nombre_persona){
+                                    //if(!$nombre_persona){
                                         $nombre_persona = $consulta[0]->nombre;
-                                    }
+                                    //}
             
                                     $crearIngreso = Ingreso::create([
                                         'fecha_ingreso'=>$fechaIngreso,
