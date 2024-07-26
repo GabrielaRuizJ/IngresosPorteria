@@ -16,31 +16,13 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'=>'Gabriela Ruiz',
-            'username'=>'rgabyj',
-            'cedula'=>'1000127738',
-            'email'=>'gabrielazenm@gmail.com',
-            'password'=>bcrypt('1000127738'),
-            'estado'=>true
-        ])->assignRole('Admin');
-
-        User::create([
-            'name'=>'Administrador del sistema',
-            'username'=>'administrador',
+            'name'=>'Administrador',
+            'username'=>'admin',
             'cedula'=>'8320023721',
             'email'=>'sistemas@clubpuebloviejo.com',
             'password'=>bcrypt('832002372'),
             'estado'=>true
         ])->assignRole('Admin');
-
-        User::create([
-            'name'=>'Gerencia',
-            'username'=>'gerencia',
-            'cedula'=>'832002372',
-            'email'=>'sistemas@clubpuebloviejo.com',
-            'password'=>bcrypt('832002372'),
-            'estado'=>true
-        ])->assignRole('Gerencia');
         
     }
 }

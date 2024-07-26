@@ -27,7 +27,7 @@ $heads = [
         </div>
     @endif
 </div>
-    <x-adminlte-datatable id="table1" :heads="$heads">
+    <x-adminlte-datatable id="table1" :heads="$heads"  with-buttons>
         @foreach ($permisos as $indice => $permiso)
             <tr>
                 <td>{{$permiso->id}}</td>

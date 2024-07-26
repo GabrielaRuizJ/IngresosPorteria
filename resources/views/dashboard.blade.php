@@ -18,7 +18,9 @@
                         <h3>Ingresos</h3>
                     </div>
                     <div class="card-body">
-                        <a href="{{ route('ingresos') }}" class="btn btn-primary"><li class="fas fa-door-open"></li> Realizar ingresos</a>
+                        @can('ingresos')
+                            <a href="{{ route('ingresos') }}" class="btn btn-primary"><li class="fas fa-door-open"></li> Realizar ingresos</a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -28,7 +30,9 @@
                         <h3>Salidas</h3>
                     </div>
                     <div class="card-body">
+                        @can('salidas')
                         <a href="{{ route('salidas') }}" class="btn btn-primary"><li class="fas fa-door-open"></li> Realizar salidas</a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -41,7 +45,9 @@
                         <h3>Consultas</h3>
                     </div>
                     <div class="card-body">
-                        <x-adminlte-button label="Consultar datos del sistema" icon="fas fa-search" theme="primary" />
+                        @can('log')
+                        <a href="{{ route('log') }}" class="btn btn-primary"><li class="fas fa-search"></li> Consultar de logs del sistema</a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -51,7 +57,9 @@
                         <h3>Reportes</h3>
                     </div>
                     <div class="card-body">
-                        <x-adminlte-button label="Descargar reportes" icon="fas fa-print" theme="primary" />
+                        @can('ingreso.find')
+                        <a href="{{ route('listadoIngresos') }}" class="btn btn-primary"><li class="fas fa-print"></li> Descargar reportes</a>
+                        @endcan
                     </div>
                 </div>
             </div>

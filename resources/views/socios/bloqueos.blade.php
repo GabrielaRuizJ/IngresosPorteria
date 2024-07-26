@@ -3,7 +3,7 @@
 @section('title', 'Bloqueos')
 
 @section('content_header')
-    <h1><li class="fas fa-user-slash"></li>Bloqueos de socios del sistema</h1>
+    <h1><li class="fas fa-user-slash"></li>Tipos de bloqueos del sistema</h1>
 @stop
 
 @section('content')

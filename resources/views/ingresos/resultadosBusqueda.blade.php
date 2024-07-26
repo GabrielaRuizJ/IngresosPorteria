@@ -38,7 +38,7 @@
 
     @php
         $heads = [
-            'ID','tipo de ingreso','cedula','nombre','hora de ingreso','vehiculo','placa' ];
+            'ID','tipo de ingreso','cedula','nombre','fecha de ingreso','hora de ingreso','vehiculo','placa' ];
     @endphp
 
 <x-adminlte-datatable id="table1" :heads="$heads" with-buttons>
@@ -48,6 +48,7 @@
         <td>{{ $datBusqueda->nombre_ingreso }}</td>
         <td>{{ $datBusqueda->cedula }}</td>
         <td>{{ $datBusqueda->nombre }}</td>
+        <td>{{ $datBusqueda->fecha }}</td>
         <td>{{ $datBusqueda->hora_ingreso }}</td>
         <td>{{ $datBusqueda->nombre_vehiculo }}</td>
         <td>{{ $datBusqueda->placa }}</td>

@@ -30,7 +30,7 @@ $heads = [
     @endif
 </div>
 {{-- Minimal example / fill data using the component slot --}}
-    <x-adminlte-datatable id="table1" :heads="$heads">
+    <x-adminlte-datatable id="table1" :heads="$heads"  with-buttons>
         @foreach ($roles as $role)
             <tr>
                 <td>{{$role->id}}</td>

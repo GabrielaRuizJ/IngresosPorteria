@@ -149,7 +149,7 @@ class IngresoController extends Controller
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
-                ->select('ingreso.id as id','ingreso.cedula as cedula','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
+                ->select('ingreso.id as id','ingreso.cedula as cedula','ingreso.fecha_ingreso','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
                 'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.nombre as nombre')
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
                 ->whereIn('ingreso.id_tipo_ingreso', $tipos_ingresos)
@@ -173,7 +173,7 @@ class IngresoController extends Controller
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
-                ->select('ingreso.id as id','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
+                ->select('ingreso.id as id','ingreso.fecha_ingreso as fecha','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
                 'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.cedula as cedula','ingreso.nombre as nombre')
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
                 ->whereIn('ingreso.id_tipo_vehiculo', $tipos_vehiculo)
@@ -197,7 +197,7 @@ class IngresoController extends Controller
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
-                ->select('ingreso.id as id','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
+                ->select('ingreso.id as id','ingreso.fecha_ingreso as fecha','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
                 'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.cedula as cedula','ingreso.nombre as nombre')
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
                 ->whereIn('ingreso.id_tipo_ingreso', $tipos_ingresos)
@@ -228,7 +228,7 @@ class IngresoController extends Controller
                 $busqueda = DB::table('ingreso')
                 ->join('tipo_vehiculo','ingreso.id_tipo_vehiculo','=','tipo_vehiculo.id')
                 ->join('tipo_ingreso','ingreso.id_tipo_ingreso','=','tipo_ingreso.id')
-                ->select('ingreso.id as id','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
+                ->select('ingreso.id as id','ingreso.fecha_ingreso as fecha','ingreso.hora_ingreso as hora_ingreso','tipo_vehiculo.nombre_vehiculo as nombre_vehiculo',
                 'tipo_ingreso.nombre_ingreso as nombre_ingreso','ingreso.placa as placa','ingreso.cedula as cedula','ingreso.nombre as nombre')
                 ->whereBetween('ingreso.fecha_ingreso',[$fecha_inicio, $fecha_fin])
                 //;

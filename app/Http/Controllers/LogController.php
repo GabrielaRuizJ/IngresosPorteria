@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Log;
+use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
 {
@@ -21,8 +22,9 @@ class LogController extends Controller
                 $request->session()->flash('errormensaje', 'La fecha de inicio de búsqueda no puede ser mayor a la fecha fin de la búsqueda');
                 return redirect()->route('log');
             }else{
-                $logs = Log::whereBetween('fecha',[$fecha_inicioB, $fecha_finB])
-                ->get();
+                $logs = Log::whereBetween('fecha',[$fecha_inicioB, $fecha_finB])->get();
+                //$logs = DB::table('log')->whereBetween('fecha', [$fecha_inicioB, $fecha_finB])->get();
+                //dd($logs);
                 if($logs){
                     return view("log.logResultados",compact('logs'));
                 }else{

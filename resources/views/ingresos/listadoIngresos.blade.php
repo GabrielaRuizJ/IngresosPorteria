@@ -102,7 +102,7 @@
                 @endphp
             @endforeach
             <div class="row-md-12">
-                @can('salida.create')
+                @can('ingreso.find')
                     <x-adminlte-button type="submit" style="width:100%;padding: 15px 0px;" label="Realizar búsqueda" theme="primary" icon="fas fa-search"/>
                 @endcan
             </div>
