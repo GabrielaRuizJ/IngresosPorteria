@@ -32,7 +32,7 @@ class UserController extends Controller
 
             try{
                 $validator = Validator::make($request->all(), [
-                    'user_import' => 'required|mimes:csv,txt|max:10240',
+                    'user_import' => 'required|mimes:csv|max:10240',
                 ]);
                 if ($validator->fails()) {
                     return redirect()
@@ -43,23 +43,10 @@ class UserController extends Controller
                     try{
 
                         $user_import_dat  = $request->file('user_import');
-                        /*Excel::import(new UsuarioImport,$user_import_dat);  */
-
-                        $import = new UsuarioCollectionImport;
+                        $import = new UsuarioImport;
                         $collection = Excel::import($import,$user_import_dat);
-                        $usuariosData = $import->getUsuariosData();
-
-                        foreach ($usuariosData as $usuarioData) {                            
-                            $usuario = User::where('cedula', $usuarioData['cedula'])->first();
-                            if ($usuario) {
-                                $rolNombre = $usuarioData['rol'];
-                                $rol = Role::where('name', $rolNombre)->first();
-                                if ($rol) {
-                                    $usuario->assignRole($rol);
-                                }
-                            }
-                        }
-                        if($usuariosData){
+                        
+                        if($collection){
                             $guardarLog = Log::create([
                                 'fecha'   => $fechaLog,
                                 'accion'  =>'Insert',

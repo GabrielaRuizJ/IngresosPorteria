@@ -61,14 +61,14 @@ $heads = [
                     <div class="row">
                         <div class="col">
                             <div class="form-check">
-                                <input type="checkbox" name="id_permiso[]" value="{{ $permiso->id }}">
+                                <input type="checkbox" name="id_permiso[]" value="{{ $permiso->name }}">
                                 <label>{{ $permiso->name}}</label>
                             </div>
                         </div>
                 @else
                         <div class="col">
                             <div class="form-check">
-                                <input type="checkbox" name="id_permiso[]" value="{{ $permiso->id }}">
+                                <input type="checkbox" name="id_permiso[]" value="{{ $permiso->name }}">
                                 <label>{{ $permiso->name}}</label>
                             </div> 
                         </div>

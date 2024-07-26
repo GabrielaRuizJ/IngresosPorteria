@@ -49,10 +49,14 @@ class PermissionController extends Controller
         $permiso = Permission::findOrFail($id);
         $rolesAsignados = $permiso->roles;
         $roles = Role::select('id', 'name')->get();
-        $rolesDisponibles = $roles->reject(function ($rol) use ($rolesAsignados) {
-            return $rolesAsignados->has($rol->id);
-        });
+
+        $rolesDisponibles = Role::all()->diff($rolesAsignados);
+
+        //$rolesDisponibles = $roles->reject(function ($rol) use ($rolesAsignados) {
+        //    return $rolesAsignados->has($rol->id);
+        //});
         return view('usuarios.permisoEdit',compact('permiso','rolesAsignados','rolesDisponibles'));
+
     }
 
     public function update(Request $request,$id){

@@ -5,27 +5,23 @@ namespace App\Imports;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class UsuarioImport implements ToModel
+class UsuarioImport implements ToModel,WithHeadingRow
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    protected $usuariosData = [];
     public function model(array $row)
     {
         return new User([
-            'name'=>$row[0],
-            'username'=>$row[1],
-            'cedula'=>$row[2],
-            'email'=>$row[3],
-            'password'=>Hash::make($row[2])
+            'name'     => $row['name'],
+            'username' => $row['username'],
+            'cedula'   => $row['cedula'],
+            'email'    => $row['email'],
+            'password' => Hash::make($row['cedula']),
         ]);
-    }
-    public function getUsuariosData()
-    {
-        return $this->usuariosData;
     }
 }
